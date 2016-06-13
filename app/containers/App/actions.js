@@ -1,4 +1,5 @@
 import {
+  SET_RECORD_ACTIVE,
   LOAD_REPOS,
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS_ERROR,
@@ -6,6 +7,13 @@ import {
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
 } from './constants'
+
+export function setRecordActive(id) {
+  return {
+    type: SET_RECORD_ACTIVE,
+    id,
+  }
+}
 
 export function loadRecords() {
   return {

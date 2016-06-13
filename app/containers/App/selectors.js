@@ -78,5 +78,5 @@ export {
   selectTippyTop,
   selectOhFuck,
   selectRecords,
-  SelectActive,
+  selectActive,
 }

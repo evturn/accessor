@@ -1,4 +1,5 @@
 import {
+  SET_RECORD_ACTIVE,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS,
   LOAD_RECORDS_ERROR,
@@ -6,12 +7,14 @@ import {
   LOAD_REPOS,
   LOAD_REPOS_ERROR,
 } from './constants'
+
 import { fromJS } from 'immutable'
 
 const initialState = fromJS({
   loading: false,
   error: false,
   records: false,
+  active: false,
   currentUser: false,
   userData: fromJS({
     repositories: false,
@@ -20,6 +23,10 @@ const initialState = fromJS({
 
 function homeReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_RECORD_ACTIVE:
+      return state
+        .set('active', action.id)
+
     case LOAD_RECORDS:
       return state
         .set('loading', true)
