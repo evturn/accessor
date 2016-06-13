@@ -2,9 +2,11 @@ import { createSelector } from 'reselect'
 
 const selectGlobal = _ => state => state.get('global')
 
-const selectRecords = _ => createSelector(
-  selectGlobal(),
-  globalState => globalState.get('records').toJS()
+const selectRecords = _ => (
+  createSelector(
+    selectGlobal(),
+    globalState => globalState.get('records')
+  )
 )
 
 const selectOhFuck = e => (

@@ -2,7 +2,30 @@ import {
   LOAD_REPOS,
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS_ERROR,
+  LOAD_RECORDS,
+  LOAD_RECORDS_SUCCESS,
+  LOAD_RECORDS_ERROR,
 } from './constants'
+
+export function loadRecords() {
+  return {
+    type: LOAD_RECORDS,
+  }
+}
+
+export function recordsLoaded(records) {
+  return {
+    type: LOAD_RECORDS_SUCCESS,
+    records,
+  }
+}
+
+export function recordsLoadingError(error) {
+  return {
+    type: LOAD_RECORDS_ERROR,
+    error,
+  }
+}
 
 export function loadRepos() {
   return {

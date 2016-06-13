@@ -1,15 +1,43 @@
 /* eslint-disable no-constant-condition */
 import { take, call, put, select } from 'redux-saga/effects'
 
-import { LOAD_REPOS } from 'containers/App/constants'
-import { reposLoaded, repoLoadingError } from 'containers/App/actions'
+import {
+  LOAD_RECORDS,
+  LOAD_REPOS,
+} from 'containers/App/constants'
+
+import {
+  recordsLoaded,
+  recordsLoadingError,
+  reposLoaded,
+  repoLoadingError
+} from 'containers/App/actions'
 
 import request from 'utils/request'
 import { selectUsername } from 'containers/HomePage/selectors'
+import { selectRecords } from 'containers/App/selectors'
 
 export default [
   getGithubData,
+  getRecords
 ]
+
+export function* getRecords() {
+  console.log('GETTING RECORDS')
+  while (true) {
+    yield take(LOAD_RECORDS)
+    const records = yield select(selectRecords())
+    const recs = yield call(request, '/api')
+    console.log('GETTING RECORDS')
+    console.log('GETTING RECORDS')
+    if (recs.err === undefined || recs.err === null) {
+      yield put(recordsLoaded(recs.data, records))
+    } else {
+      console.log(recs.err.response) // eslint-disable-line no-console
+      yield put(repoLoadingError(recs.err))
+    }
+  }
+}
 
 export function* getGithubData() {
   while (true) {

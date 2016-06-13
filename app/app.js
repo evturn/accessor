@@ -12,12 +12,10 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import FontFaceObserver from 'fontfaceobserver'
 import useScroll from 'react-router-scroll'
 import configureStore from './store'
-import fetch from './utils/fetch'
 
 import {
   selectLocationState,
-  selectTippyTop,
-  selectOhFuck,
+  selectTippyTop
 } from 'containers/App/selectors'
 
 import App from 'containers/App'
@@ -37,10 +35,6 @@ const locationSelector = {
   selectLocationState: selectLocationState()
 }
 
-const initializeStore = initialState => (
-  configureStore(initialState, browserHistory)
-)
-
 const configureHistory = store => (
   syncHistoryWithStore(
     browserHistory,
@@ -54,27 +48,20 @@ const setRootRoute = store => ({
   childRoutes: createRoutes(store)
 })
 
-const fetchJSON = _ => {
-  fetch('/api')
-    .then(initializeStore)
-    .then(store => render(store, configureHistory(store), setRootRoute(store)))
-    .catch(selectOhFuck)
-}
+const store = configureStore({}, browserHistory)
+const history = configureHistory(store)
+const rootRoute = setRootRoute(store)
 
-function render(store, history, rootRoute) {
-  ReactDOM.render(
-    <Provider store={store}>
-      <Router
-        history={history}
-        routes={rootRoute}
-        render={applyRouterMiddleware(useScroll(selectTippyTop))}
-      />
-    </Provider>,
-    document.getElementById('app')
-  )
-}
-
-fetchJSON()
+ReactDOM.render(
+  <Provider store={store}>
+    <Router
+      history={history}
+      routes={rootRoute}
+      render={applyRouterMiddleware(useScroll(selectTippyTop))}
+    />
+  </Provider>,
+  document.getElementById('app')
+)
 
 import { install } from 'offline-plugin/runtime'
 install()

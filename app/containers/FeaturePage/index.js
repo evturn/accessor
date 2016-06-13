@@ -7,15 +7,19 @@ import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import { createSelector } from 'reselect'
 
+import { loadRecords } from '../App/actions'
 import {
+  selectRecords,
   selectLoading,
   selectError,
-  selectRecords,
-} from 'containers/App/selectors'
+  selectOhFuck,
+} from '../App/selectors'
 
 import Button from 'components/Button'
 import H1 from 'components/H1'
 import List from 'components/List'
+
+import LoadingIndicator from 'components/LoadingIndicator'
 import {
   RecordMap,
   Record,
@@ -24,6 +28,9 @@ import {
 import styles from './styles.css'
 
 export class FeaturePage extends Component {
+  componentDidMount() {
+    this.props.loadRecords()
+  }
 
   openRoute = route => {
     this.props.changeRoute(route)
@@ -38,13 +45,17 @@ export class FeaturePage extends Component {
       <div>
         <H1 className={styles.header}>X</H1>
         <ul className={styles.list}>
-          {this.props.records.map((x, i) => (
-            <div
-              key={i}
-              className={styles.rootRecord}>
-              <Record record={x} />
-            </div>
-          ))}
+          {(this.props.loading) ? (
+            <List component={LoadingIndicator} />
+          ) : (this.props.records !== false) ? (
+            this.props.records.map((x, i) => (
+              <div
+                key={i}
+                className={styles.rootRecord}>
+                <Record record={x} />
+              </div>
+            ))
+          ) : null }
         </ul>
         <Button handleRoute={this.openHomePage}>Home</Button>
       </div>
@@ -53,14 +64,22 @@ export class FeaturePage extends Component {
 }
 FeaturePage.propTypes = {
   changeRoute: PropTypes.func,
+  loading: PropTypes.bool,
+  error: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.bool,
+  ]),
   records: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
+  loadRecords: PropTypes.func,
 }
 
 const mapDispatchToProps = dispatch => ({
   changeRoute: url => dispatch(push(url)),
+  loadRecords: _ => dispatch(loadRecords()),
+  dispatch,
 })
 
 export default connect(

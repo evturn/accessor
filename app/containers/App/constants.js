@@ -1,3 +1,6 @@
 export const LOAD_REPOS = 'boilerplate/App/LOAD_REPOS'
 export const LOAD_REPOS_SUCCESS = 'boilerplate/App/LOAD_REPOS_SUCCESS'
 export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR'
+export const LOAD_RECORDS = 'boilerplate/App/LOAD_RECORDS'
+export const LOAD_RECORDS_SUCCESS = 'boilerplate/App/LOAD_RECORDS_SUCCESS'
+export const LOAD_RECORDS_ERROR = 'boilerplate/App/LOAD_RECORDS_ERROR'
