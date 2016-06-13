@@ -15,7 +15,7 @@ import {
 
 import request from 'utils/request'
 import { selectUsername } from 'containers/HomePage/selectors'
-import { selectRecords } from 'containers/App/selectors'
+import { selectCollection } from 'containers/HomePage/selectors'
 
 export default [
   getGithubData,
@@ -23,13 +23,11 @@ export default [
 ]
 
 export function* getRecords() {
-  console.log('GETTING RECORDS')
   while (true) {
     yield take(LOAD_RECORDS)
-    const records = yield select(selectRecords())
+    const records = yield select(selectCollection())
     const recs = yield call(request, '/api')
-    console.log('GETTING RECORDS')
-    console.log('GETTING RECORDS')
+
     if (recs.err === undefined || recs.err === null) {
       yield put(recordsLoaded(recs.data, records))
     } else {
