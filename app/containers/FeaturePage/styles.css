@@ -1,0 +1,26 @@
+.list {
+  font-family: Georgia, Times, 'Times New Roman', serif;
+  padding-left: 1.75em;
+}
+
+.listItem {
+  margin: 1em 0;
+}
+
+.listItemTitle {
+  font-weight: bold;
+}
+
+.header {
+  text-align: center;
+  font-weight: 300;
+  font-size: 50px;
+}
+
+.rootRecord {
+  border-bottom: 1px solid #ccc;
+}
+
+.rootRecord:first-child {
+  border-top: 1px solid #ccc;
+}

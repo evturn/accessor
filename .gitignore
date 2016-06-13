@@ -1,0 +1,15 @@
+.DS_Store
+npm-debug.log
+.idea
+
+coverage
+build
+node_modules
+stats.json
+.travis.yml
+.gitattributes
+.editorconfig
+appveyor.yml
+internals
+tests
+*.test.js
