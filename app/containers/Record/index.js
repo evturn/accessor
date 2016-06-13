@@ -1,23 +1,34 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 
 import styles from './styles.css'
 
 const NestedRecords = ({ children }) => (
-  <ul>{children.map((x, i) => (
-    <Record key={i} {...x} />
-  ))}</ul>
+  <ul>{
+    children.map((x, i) => (
+      <Record key={i} {...x} />
+    ))
+  }</ul>
 )
 
 class Record extends Component {
+  enterDetailView = id => {
+    console.log(id)
+  }
+
   render() {
     return (
-      <li className={styles.li}>
+      <li
+        className={styles.li}
+        onClick={_ => this.enterDetailView(this.props.id)}>
         <div className={styles.title}>{this.props.title}</div>
-        <div className={styles.more}>{this.props.more}</div>
-        { this.props.children
-            ? <NestedRecords children={this.props.children} />
-            : null
-        }
+        <div className={styles.shut}>
+          <div className={styles.more}>{this.props.more}</div>
+          { this.props.children
+              ? <NestedRecords children={this.props.children} />
+              : null
+          }
+        </div>
       </li>
     )
   }

@@ -2,6 +2,13 @@ import { createSelector } from 'reselect'
 
 const selectGlobal = _ => state => state.get('global')
 
+const selectActive = _ => (
+  createSelector(
+    selectGlobal(),
+    globalState => globalState.get('active')
+  )
+)
+
 const selectRecords = _ => (
   createSelector(
     selectGlobal(),
@@ -71,4 +78,5 @@ export {
   selectTippyTop,
   selectOhFuck,
   selectRecords,
+  SelectActive,
 }
