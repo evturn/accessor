@@ -20,14 +20,11 @@ import H1 from 'components/H1'
 import List from 'components/List'
 
 import LoadingIndicator from 'components/LoadingIndicator'
-import {
-  RecordMap,
-  Record,
-} from 'components/Record'
+import Record from 'containers/Record'
 
 import styles from './styles.css'
 
-export class FeaturePage extends Component {
+class FeaturePage extends Component {
   componentDidMount() {
     this.props.loadRecords()
   }
@@ -45,19 +42,15 @@ export class FeaturePage extends Component {
       <div>
         <H1 className={styles.header}>X</H1>
         <ul className={styles.list}>
-          {(this.props.loading) ? (
-            <List component={LoadingIndicator} />
-          ) : (this.props.records !== false) ? (
-            this.props.records.map((x, i) => (
-              <div
-                key={i}
-                className={styles.rootRecord}>
-                <Record record={x} />
-              </div>
-            ))
-          ) : null }
+          { this.props.loading
+            ? <List component={LoadingIndicator} />
+            : this.props.records !== false
+              ? this.props.records.map((x, i) => (
+                  <Record key={i} {...x} />
+                ))
+              : null
+          }
         </ul>
-        <Button handleRoute={this.openHomePage}>Home</Button>
       </div>
     )
   }
