@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { createSelector } from 'reselect'
-import { selectActive } from 'containers/App/selectors'
-import { setRecordActive } from 'containers/App/actions'
+import { setRecordActive } from 'containers/Record/actions'
 
 import styles from './styles.css'
 
@@ -56,10 +54,7 @@ Record.PropTypes = {
 }
 
 export default connect(
-  createSelector(
-    selectActive(),
-    active => ({ active })
-  ),
+  ({ active }) => ({ active }),
   dispatch => ({
     setRecordActive: id => dispatch(setRecordActive(id))
   })

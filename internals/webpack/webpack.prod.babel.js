@@ -62,5 +62,11 @@ module.exports = require('./webpack.base.babel')({
         additional: ['*.chunk.js'],
       },
     }),
+    new webpack.DefinePlugin({
+      __DEV__: false,
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      }
+    }),
   ],
 })

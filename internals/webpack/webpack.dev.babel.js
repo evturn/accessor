@@ -37,6 +37,12 @@ module.exports = require('./webpack.base.babel')({
       template: 'app/index.html',
       inject: true,
     }),
+    new webpack.DefinePlugin({
+      __DEV__: true,
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      }
+    }),
   ],
 
   babelQuery: {

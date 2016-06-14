@@ -1,11 +1,12 @@
+import * as Rx from 'rxjs'
+
 import {
-  LOAD_REPOS,
-  LOAD_REPOS_SUCCESS,
-  LOAD_REPOS_ERROR,
   LOAD_RECORDS,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
+  SET_RECORD_ACTIVE,
 } from './constants'
+
 
 export function loadRecords() {
   return {
@@ -27,23 +28,12 @@ export function recordsLoadingError(error) {
   }
 }
 
-export function loadRepos() {
-  return {
-    type: LOAD_REPOS,
-  }
-}
 
-export function reposLoaded(repos, username) {
-  return {
-    type: LOAD_REPOS_SUCCESS,
-    repos,
-    username,
-  }
-}
+const setRecordActive = id => (
+  Rx.Observable.of({ id })
+    .map(id => ({ type: SET_RECORD_ACTIVE, id }))
+)
 
-export function repoLoadingError(error) {
-  return {
-    type: LOAD_REPOS_ERROR,
-    error,
-  }
+export {
+  setRecordActive
 }
