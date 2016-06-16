@@ -63,8 +63,6 @@ const setRecordActive = id => (
         .filter(x => x.id === id)[0]
     }
 
-
-
     const getNextActiveID = id => {
       if (id === active) {
         return flatRecords
@@ -74,8 +72,6 @@ const setRecordActive = id => (
 
       return id
     }
-
-
 
     return Rx.Observable.of(id)
       .map(getNextActiveID)
@@ -89,9 +85,7 @@ const setRecordActive = id => (
 
         return records$
           .filter(x => x.id === id)
-          .map(active => {
-            const arr = []
-
+          .reduce((arr, active) => {
             const recurseGetParent = id => {
               const parent = getParentByParentID(id)
 
@@ -107,7 +101,7 @@ const setRecordActive = id => (
             recurseGetParent(active.parent)
 
             return arr
-          })
+          }, [])
           .map(branch => ({ active: id, branch }))
       })
       .flatMap(({ active, branch }) => Rx.Observable.from([
