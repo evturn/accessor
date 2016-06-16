@@ -11,6 +11,12 @@
 .title {
   font-family: 'helvetica Neue';
   font-weight: bold;
+  display: inline-block;
+}
+
+button {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .more {

@@ -53,32 +53,71 @@ const getRecords = _ => (
 
 const setRecordActive = id => (
   (actions, store) => {
-    store.dispatch(_ => Rx.Observable.of({type: SET_RECORD_ACTIVE, active: id}))
     const records$ = Rx.Observable.from(store.getState().global.flatRecords)
+    const flatRecords = store.getState().global.flatRecords
+    const branch = store.getState().global.branch
+    const active = store.getState().global.active
 
-    return records$
-      .filter(x => x.id === id)
-      .map(active => {
-        const arr = []
+    const getParentByParentID = id => {
+      return flatRecords
+        .filter(x => x.id === id)[0]
+    }
 
-        const recurseGetParent = id => {
-          const parent = store.getState().global.flatRecords
-            .filter(x => x.id === id)[0]
 
-          if (parent.parent) {
-            recurseGetParent(parent.parent)
-          }
 
-          if (id) {
-            arr.push(id)
-          }
+    const getNextActiveID = id => {
+      if (id === active) {
+        return flatRecords
+          .filter(x => x.id === id)
+          .map(x => x.parent)[0]
+      }
+
+      return id
+    }
+
+
+
+    return Rx.Observable.of(id)
+      .map(getNextActiveID)
+      .flatMap(id => {
+        if (!id) {
+          return Rx.Observable.of({
+            active: id,
+            branch: []
+          })
         }
 
-        recurseGetParent(active.parent)
+        return records$
+          .filter(x => x.id === id)
+          .map(active => {
+            const arr = []
 
-        return arr
+            const recurseGetParent = id => {
+              const parent = getParentByParentID(id)
+
+              if (parent && parent.parent) {
+                recurseGetParent(parent.parent)
+              }
+
+              if (id) {
+                arr.push(id)
+              }
+            }
+
+            recurseGetParent(active.parent)
+
+            return arr
+          })
+          .map(branch => ({ active: id, branch }))
       })
-      .flatMap(x => Rx.Observable.of({type: SET_BRANCH_ACTIVE, branch: x}))
+      .flatMap(({ active, branch }) => Rx.Observable.from([
+        {type: SET_RECORD_ACTIVE, active},
+        {type: SET_BRANCH_ACTIVE, branch}
+      ]))
+
+
+
+
 
   }
 )
