@@ -7,7 +7,6 @@ import {
   setRecordActive,
 } from 'containers/Record/actions'
 
-
 import Button from 'components/Button'
 import H1 from 'components/H1'
 import List from 'components/List'
@@ -56,6 +55,7 @@ class FeaturePage extends Component {
     )
   }
 }
+
 FeaturePage.propTypes = {
   changeRoute: PropTypes.func,
   loading: PropTypes.bool,

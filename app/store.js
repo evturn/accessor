@@ -6,7 +6,6 @@ import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'
 import createReducer from './reducers'
 
-const sagaMiddleware = createSagaMiddleware()
 const observableMiddleware = reduxObservable()
 const devtools = window.devToolsExtension || (() => noop => noop)
 
@@ -31,10 +30,9 @@ export default function configureStore(initialState = {}, history) {
     compose(...enhancers)
   )
 
-  /* istanbul ignore next */
   if (module.hot) {
     module.hot.accept('./reducers', () => {
-      const nextRootReducer = require('./reducers').default // eslint-disable-line global-require
+      const nextRootReducer = require('./reducers').default
       store.replaceReducer(nextRootReducer)
     })
   }

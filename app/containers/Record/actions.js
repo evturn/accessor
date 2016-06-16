@@ -25,7 +25,6 @@ const setKids = ({ _children }) => (
 )
 
 
-
 const getRecords = _ => (
   (actions, store) => {
     store.dispatch(
@@ -33,16 +32,30 @@ const getRecords = _ => (
     )
 
   return Rx.Observable.fromPromise(request('/api'))
-    .map(records => {
-      const recs = records.filter(x => !x.parent)
-        .map(x => ({ ...x, _children: records.filter(filterKids(x))}))
-        .map(x => ({ ...x, _children: setKids(x) }))
-        .reduce(reduceToMap, [])
+    .flatMap(records => {
+      const records$ = Rx.Observable.from(records)
 
-      return {
-        records: recs,
-        flatRecords: records,
+      const assignChildren = x => {
+        if (x._children) {
+          x._children = records
+            .filter(y => y.parent === x.id)
+            .map(kid => {
+              assignChildren(kid)
+              return kid
+            })
+        }
+
+        return x
       }
+
+      return records$
+        .filter(x => !x.parent)
+        .reduce((acc, x) => {
+          const rec = assignChildren(x)
+          acc.push(rec)
+          return acc
+        }, [])
+        .map(x => ({ records: x, flatRecords: records }))
     })
     .flatMap(({ records, flatRecords }) => {
       return Rx.Observable.of({
