@@ -1,19 +1,8 @@
-/* eslint-disable react/prefer-stateless-function */
-
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
-import { createSelector } from 'reselect'
-
-import { loadRecords } from '../App/actions'
-import {
-  selectRecords,
-  selectLoading,
-  selectError,
-  selectOhFuck,
-} from '../App/selectors'
+import { getRecords } from 'containers/Record/actions'
 
 import Button from 'components/Button'
 import H1 from 'components/H1'
@@ -26,15 +15,7 @@ import styles from './styles.css'
 
 class FeaturePage extends Component {
   componentDidMount() {
-    this.props.loadRecords()
-  }
-
-  openRoute = route => {
-    this.props.changeRoute(route)
-  }
-
-  openHomePage = _ => {
-    this.openRoute('/')
+    this.props.getRecords()
   }
 
   render() {
@@ -66,23 +47,15 @@ FeaturePage.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
-  loadRecords: PropTypes.func,
+  getRecords: PropTypes.func,
 }
 
 const mapDispatchToProps = dispatch => ({
-  changeRoute: url => dispatch(push(url)),
-  loadRecords: _ => dispatch(loadRecords()),
+  getRecords: _ => dispatch(getRecords()),
   dispatch,
 })
 
 export default connect(
-  createSelector(
-    selectRecords(),
-    selectLoading(),
-    selectError(),
-    (records, loading, error) => ({
-      records, loading, error
-    })
-  ),
+  ({ global }) => ({ records: global.records }),
   mapDispatchToProps
 )(FeaturePage)

@@ -1,13 +1,9 @@
 import 'babel-polyfill'
 
-import 'file?name=[name].[ext]!./favicon.ico'
-import 'file?name=[name].[ext]!./manifest.json'
-import 'file?name=[name].[ext]!./.htaccess'
-
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import { applyRouterMiddleware, Router, browserHistory } from 'react-router'
+import { applyRouterMiddleware, Route, IndexRoute, Router, browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import FontFaceObserver from 'fontfaceobserver'
 import useScroll from 'react-router-scroll'
@@ -19,7 +15,7 @@ import {
 } from 'containers/App/selectors'
 
 import App from 'containers/App'
-import createRoutes from './routes'
+import FeaturePage from 'containers/FeaturePage'
 
 import styles from 'containers/App/styles.css'
 
@@ -31,34 +27,18 @@ openSansObserver
     _ => document.body.classList.remove(styles.fontLoaded)
   )
 
-const locationSelector = {
-  selectLocationState: selectLocationState()
-}
-
-const configureHistory = store => (
-  syncHistoryWithStore(
-    browserHistory,
-    store,
-    locationSelector
-  )
-)
-
-const setRootRoute = store => ({
-  component: App,
-  childRoutes: createRoutes(store)
-})
-
 const store = configureStore({}, browserHistory)
-const history = configureHistory(store)
-const rootRoute = setRootRoute(store)
+const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(
   <Provider store={store}>
     <Router
       history={history}
-      routes={rootRoute}
-      render={applyRouterMiddleware(useScroll(selectTippyTop))}
-    />
+      render={applyRouterMiddleware(useScroll(selectTippyTop))}>
+      <Route path='/' component={App}>
+        <IndexRoute component={FeaturePage} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('app')
 )

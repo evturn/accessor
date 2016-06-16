@@ -1,5 +1,3 @@
-/* eslint-disable no-console,prefer-template */
-
 const chalk = require('chalk')
 const ip = require('ip')
 
@@ -21,7 +19,7 @@ const logger = {
       '\n      LAN: ' + chalk.magenta('http://' + ip.address() + ':' + port) +
       (tunnelStarted ? '\n    Proxy: ' + chalk.magenta(tunnelStarted) : '') +
       divider,
-      chalk.blue('\nPress ' + chalk.italic('CTRL-C') + ' to stop\n')
+      chalk.blue('\nPress ' + chalk.italic('CMD-.') + ' to stop\n')
     )
   },
 }

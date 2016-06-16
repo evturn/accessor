@@ -1,5 +1,3 @@
-/* eslint consistent-return:0 */
-
 const express = require('express')
 const logger = require('./logger')
 const ngrok = require('ngrok')
@@ -19,7 +17,7 @@ const webpackConfig = __DEV__
 
 app.use(frontend(webpackConfig))
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 
 app.listen(port, e => {
   if (e) {

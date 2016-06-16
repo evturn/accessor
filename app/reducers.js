@@ -1,18 +1,19 @@
 import { fromJS } from 'immutable'
-import { combineReducers } from 'redux-immutable'
-import { LOCATION_CHANGE } from 'react-router-redux'
+import { combineReducers } from 'redux'
+import { routerReducer } from 'react-router-redux'
 
-import globalReducer from 'containers/App/reducer'
 import observableReducer from 'containers/Record/reducer'
 
-const routeInitialState = fromJS({
-  locationBeforeTransitions: null,
-})
 
-function routeReducer(state = routeInitialState, action) {
+import { LOCATION_CHANGE } from 'react-router-redux'
+
+function routeReducer(state={
+  locationBeforeTransitions: null
+}, action) {
   switch (action.type) {
+
     case LOCATION_CHANGE:
-      return state.merge({
+      return Object.assign({}, state, {
         locationBeforeTransitions: action.payload,
       })
 
@@ -21,11 +22,9 @@ function routeReducer(state = routeInitialState, action) {
   }
 }
 
-export default function createReducer(asyncReducers) {
+export default function createReducer() {
   return combineReducers({
-    route: routeReducer,
-    global: globalReducer,
-    ...observableReducer,
-    ...asyncReducers,
+    global: observableReducer,
+    routing: routeReducer,
   })
 }

@@ -1,9 +1,14 @@
 import {
+  LOAD_RECORDS,
+  LOAD_RECORDS_SUCCESS,
+  LOAD_RECORDS_ERROR,
   SET_RECORD_ACTIVE,
+  SET_BRANCH_ACTIVE,
 } from './constants'
 
 const initialState = {
   active: false,
+  branch: [],
   loading: false,
   error: false,
   records: false,
@@ -11,11 +16,6 @@ const initialState = {
 
 const observableReducer = (state=initialState, action) => {
   switch (action.type) {
-    case SET_RECORD_ACTIVE:
-      return Object.assign({}, state, {
-        active: action.id
-      })
-
     case LOAD_RECORDS:
       return Object.assign({}, state, {
         loading: true,
@@ -34,6 +34,16 @@ const observableReducer = (state=initialState, action) => {
       return Object.assign({}, state, {
         loading: false,
         error: action.error,
+      })
+
+    case SET_RECORD_ACTIVE:
+      return Object.assign({}, state, {
+        active: action.active
+      })
+
+    case SET_BRANCH_ACTIVE:
+      return Object.assign({}, state, {
+        branch: action.branch
       })
 
     default:

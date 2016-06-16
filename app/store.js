@@ -13,7 +13,6 @@ const devtools = window.devToolsExtension || (() => noop => noop)
 export default function configureStore(initialState = {}, history) {
   const middlewares = [
     observableMiddleware,
-    sagaMiddleware,
     routerMiddleware(history),
   ]
 
@@ -28,12 +27,9 @@ export default function configureStore(initialState = {}, history) {
 
   const store = createStore(
     createReducer(),
-    fromJS(initialState),
+    initialState,
     compose(...enhancers)
   )
-
-  store.runSaga = sagaMiddleware.run
-  store.asyncReducers = {} // Async reducer registry
 
   /* istanbul ignore next */
   if (module.hot) {
