@@ -2,7 +2,11 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
-import { getRecords } from 'containers/Record/actions'
+import {
+  getRecords,
+  setRecordActive,
+} from 'containers/Record/actions'
+
 
 import Button from 'components/Button'
 import H1 from 'components/H1'
@@ -18,6 +22,24 @@ class FeaturePage extends Component {
     this.props.getRecords()
   }
 
+  setActive = id => {
+    console.log(id)
+    this.props.setRecordActive(id)
+  }
+
+  recurseRecord = record => {
+    return (
+      <Record
+        setActive={this.setActive.bind(this)}
+        key={record.id}
+        {...record}>
+        { record._children.length
+          ? <ul>{record._children.map(this.recurseRecord)}</ul>
+          : null}
+      </Record>
+    )
+  }
+
   render() {
     return (
       <div>
@@ -26,9 +48,7 @@ class FeaturePage extends Component {
           { this.props.loading
             ? <List component={LoadingIndicator} />
             : this.props.records !== false
-              ? this.props.records.map((x, i) => (
-                  <Record key={i} {...x} />
-                ))
+              ? this.props.records.map(this.recurseRecord)
               : null
           }
         </ul>
@@ -52,10 +72,12 @@ FeaturePage.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
-  dispatch,
+  setRecordActive: id => dispatch(setRecordActive(id)),
 })
 
 export default connect(
-  ({ global }) => ({ records: global.records }),
+  ({ global }) => ({
+    records: global.records,
+  }),
   mapDispatchToProps
 )(FeaturePage)

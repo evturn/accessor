@@ -21,12 +21,14 @@ const observableReducer = (state=initialState, action) => {
         loading: true,
         error: false,
         records: false,
+        flatRecords: false,
       })
 
     case LOAD_RECORDS_SUCCESS:
       return Object.assign({}, state, {
         loading: false,
         error: false,
+        flatRecords: action.flatRecords,
         records: action.records,
       })
 

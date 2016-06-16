@@ -18,11 +18,13 @@ const filterKids = x => (
   x2 => x2.parent === x.id
 )
 
-const setKids = ({ children }) => (
-  children.length
-    ? children.reduce(reduceToMap, [])
+const setKids = ({ _children }) => (
+  _children.length
+    ? _children.reduce(reduceToMap, [])
     : false
 )
+
+
 
 const getRecords = _ => (
   (actions, store) => {
@@ -32,55 +34,62 @@ const getRecords = _ => (
 
   return Rx.Observable.fromPromise(request('/api'))
     .map(records => {
-      return records.filter(x => !x.parent)
-        .map(x => ({ ...x, children: records.filter(filterKids(x))}))
-        .map(x => ({ ...x, children: setKids(x) }))
+      const recs = records.filter(x => !x.parent)
+        .map(x => ({ ...x, _children: records.filter(filterKids(x))}))
+        .map(x => ({ ...x, _children: setKids(x) }))
         .reduce(reduceToMap, [])
+
+      return {
+        records: recs,
+        flatRecords: records,
+      }
     })
-    .flatMap(records => {
+    .flatMap(({ records, flatRecords }) => {
       return Rx.Observable.of({
         type: LOAD_RECORDS_SUCCESS,
         records,
+        flatRecords,
       })
     })
 })
 
-const setRecordActive = (e, id) => (
+
+
+const getParent = record => (
+  records$.filter(x => x.id === record.parent)
+)
+
+
+
+const setRecordActive = id => (
   (actions, store) => {
-    e.stopPropagation()
-    const records$ = Rx.Observable.from(store.getState().global.records)
+    store.dispatch(_ => Rx.Observable.of({type: SET_RECORD_ACTIVE, active: id}))
+    const records$ = Rx.Observable.from(store.getState().global.flatRecords)
 
-    const active$ = records$
+    const recurseGetParent = id => {
+      if (id) {
+        records$
+          .filter(x => x.id === id)
+          .map(x => recurseGetParent(x.parent))
+
+        return id
+      }
+
+      return false
+    }
+
+    return records$
       .filter(x => x.id === id)
-
-    const branch$ = active$
-      .flatMap(active => {
-        return records$.reduce((acc, x, i, arr) => {
-          if (i === 0) {
-            acc.push(active)
-          } else {
-            if (x.parent) {
-              const parent = arr.filter(rec => rec.id === x.parent)
-              acc.concat(parent)
-            }
+      .reduce((acc, x) => {
+        if (x.parent) {
+          const id = recurseGetParent(x.parent)
+          if (id) {
+            return acc.concat(id)
           }
-          return acc
+        }
+      }, [])
+      .flatMap(x => Rx.Observable.of({type: SET_BRANCH_ACTIVE, branch: x}))
 
-        }, [])
-      })
-
-
-    return Rx.Observable
-    .combineLatest(
-      active$,
-      branch$
-    )
-    .flatMap(([ active, branch]) => {
-      return Rx.Observable.merge(
-        Rx.Observable.of({ type: SET_RECORD_ACTIVE, active: active.id }),
-        Rx.Observable.of({ type: SET_BRANCH_ACTIVE, branch })
-      )
-    })
   }
 )
 
