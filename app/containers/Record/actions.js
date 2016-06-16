@@ -51,38 +51,33 @@ const getRecords = _ => (
 })
 
 
-
-const getParent = record => (
-  records$.filter(x => x.id === record.parent)
-)
-
 const setRecordActive = id => (
   (actions, store) => {
     store.dispatch(_ => Rx.Observable.of({type: SET_RECORD_ACTIVE, active: id}))
     const records$ = Rx.Observable.from(store.getState().global.flatRecords)
 
-    const recurseGetParent = id => {
-      if (id) {
-        records$
-          .filter(x => x.id === id)
-          .map(x => recurseGetParent(x.parent))
-
-        return id
-      }
-
-      return false
-    }
-
     return records$
       .filter(x => x.id === id)
-      .reduce((acc, x) => {
-        if (x.parent) {
-          const id = recurseGetParent(x.parent)
+      .map(active => {
+        const arr = []
+
+        const recurseGetParent = id => {
+          const parent = store.getState().global.flatRecords
+            .filter(x => x.id === id)[0]
+
+          if (parent.parent) {
+            recurseGetParent(parent.parent)
+          }
+
           if (id) {
-            return acc.concat(id)
+            arr.push(id)
           }
         }
-      }, [])
+
+        recurseGetParent(active.parent)
+
+        return arr
+      })
       .flatMap(x => Rx.Observable.of({type: SET_BRANCH_ACTIVE, branch: x}))
 
   }
