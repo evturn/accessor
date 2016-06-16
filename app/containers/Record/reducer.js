@@ -2,8 +2,7 @@ import {
   LOAD_RECORDS,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
-  SET_RECORD_ACTIVE,
-  SET_BRANCH_ACTIVE,
+  UPDATE_ACTIVE_BRANCH,
 } from './constants'
 
 const initialState = {
@@ -38,14 +37,10 @@ const observableReducer = (state=initialState, action) => {
         error: action.error,
       })
 
-    case SET_RECORD_ACTIVE:
+    case UPDATE_ACTIVE_BRANCH:
       return Object.assign({}, state, {
-        active: action.active
-      })
-
-    case SET_BRANCH_ACTIVE:
-      return Object.assign({}, state, {
-        branch: action.branch
+        active: action.active,
+        branch: action.branch,
       })
 
     default:

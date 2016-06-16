@@ -6,11 +6,6 @@ import { setRecordActive } from 'containers/Record/actions'
 import styles from './styles.css'
 
 class Record extends Component {
-  constructor(props) {
-    super(props)
-    // this.setRecordActive = props.setRecordActive.bind(this)
-  }
-
   setActive = id => {
     this.props.setActive(id)
   }

@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import { fromJS } from 'immutable'
 import { routerMiddleware } from 'react-router-redux'
-import createSagaMiddleware from 'redux-saga'
 import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'
 import createReducer from './reducers'

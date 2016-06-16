@@ -22,7 +22,6 @@ class FeaturePage extends Component {
   }
 
   setActive = id => {
-    console.log(id)
     this.props.setRecordActive(id)
   }
 

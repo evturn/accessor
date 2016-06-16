@@ -1,6 +1,5 @@
 const express = require('express')
 const logger = require('./logger')
-const ngrok = require('ngrok')
 
 const frontend = require('./middlewares/frontendMiddleware')
 const __DEV__ = process.env.NODE_ENV !== 'production'
