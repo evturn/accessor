@@ -10,21 +10,6 @@ import {
 } from './constants'
 
 
-const reduceToMap = (acc, x) => (
-  acc = acc.concat(x)
-)
-
-const filterKids = x => (
-  x2 => x2.parent === x.id
-)
-
-const setKids = ({ _children }) => (
-  _children.length
-    ? _children.reduce(reduceToMap, [])
-    : false
-)
-
-
 const getRecords = _ => (
   (actions, store) => {
     store.dispatch(
@@ -51,8 +36,7 @@ const getRecords = _ => (
       return records$
         .filter(x => !x.parent)
         .reduce((acc, x) => {
-          const rec = assignChildren(x)
-          acc.push(rec)
+          acc.push(assignChildren(x))
           return acc
         }, [])
         .map(x => ({ records: x, flatRecords: records }))
@@ -71,8 +55,6 @@ const getRecords = _ => (
 const getParent = record => (
   records$.filter(x => x.id === record.parent)
 )
-
-
 
 const setRecordActive = id => (
   (actions, store) => {

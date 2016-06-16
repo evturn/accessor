@@ -16,9 +16,19 @@ class Record extends Component {
   }
 
   render() {
+    const activeClass = this.props.active === this.props.id
+      ? styles.active
+      : ''
+
+    const branchClass = this.props.branch &&
+      this.props.branch
+          .filter(x => x === this.props.id)[0]
+            ? styles.branch
+            : ''
+
     return (
       <li className={styles.li}>
-        <div className={styles.title}>{this.props.title}</div>
+        <div className={`${styles.title} ${activeClass} ${branchClass}`}>{this.props.title}</div>
         <button onClick={e => this.setActive(this.props.id)}>Clickity {this.props.id}</button>
         <div className={styles.open}>
           <div className={styles.more}>{this.props.more}</div>
@@ -42,7 +52,8 @@ Record.PropTypes = {
     PropTypes.number,
     PropTypes.bool
   ]),
-  active: PropTypes.array,
+  branch: PropTypes.array,
+  active: PropTypes.number,
   setActive: PropTypes.func,
   dispatch: PropTypes.func,
 }

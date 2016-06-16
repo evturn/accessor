@@ -24,15 +24,5 @@ app.listen(port, e => {
     return logger.error(e)
   }
 
-  if (__DEV__) {
-    ngrok.connect(port, (innerErr, url) => {
-      if (innerErr) {
-        return logger.error(innerErr)
-      }
-
-      logger.appStarted(port, url)
-    })
-  } else {
-    logger.appStarted(port)
-  }
+  logger.appStarted(port)
 })
