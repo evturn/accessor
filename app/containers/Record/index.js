@@ -1,13 +1,15 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import { setRecordActive } from 'containers/Record/actions'
-
 import styles from './styles.css'
 
 class Record extends Component {
   setActive = id => {
     this.props.setActive(id)
+  }
+
+  moveRecord = id => {
+    this.props.moveRecord(id)
   }
 
   render() {
@@ -28,6 +30,12 @@ class Record extends Component {
         <button
           className={activeClass}
           onClick={e => this.setActive(this.props.id)}>⦿</button>
+        { this.props.id === 18
+            ? <button
+                className={styles.move}
+                onClick={e => this.moveRecord(this.props.id)}>⊙</button>
+            : null
+        }
         <div className={branchClass}>
           <div className={styles.more}>{this.props.more}</div>
           {this.props.children}

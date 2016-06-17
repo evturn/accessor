@@ -3,6 +3,7 @@ import {
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
   UPDATE_ACTIVE_BRANCH,
+  MOVE_RECORD,
 } from './constants'
 
 const initialState = {
@@ -41,6 +42,12 @@ const observableReducer = (state=initialState, action) => {
       return Object.assign({}, state, {
         active: action.active,
         branch: action.branch,
+      })
+
+    case MOVE_RECORD:
+      return Object.assign({}, state, {
+        target: action.target,
+        source: action.source,
       })
 
     default:

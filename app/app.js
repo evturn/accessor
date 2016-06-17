@@ -10,7 +10,6 @@ import useScroll from 'react-router-scroll'
 import configureStore from './store'
 
 import {
-  selectLocationState,
   selectTippyTop
 } from 'containers/App/selectors'
 
@@ -42,6 +41,3 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('app')
 )
-
-import { install } from 'offline-plugin/runtime'
-install()

@@ -6,6 +6,7 @@ import {
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
   UPDATE_ACTIVE_BRANCH,
+  MOVE_RECORD,
 } from './constants'
 
 
@@ -109,9 +110,37 @@ const setRecordActive = id => (
   }
 )
 
+const moveRecord = id => (
+  (actions, store) => {
+    const flatRecords$ = Rx.Observable.from(store.getState().global.flatRecords)
+
+    const source$ = flatRecords$
+      .filter(x => x.id === id)
+
+    return source$
+      .flatMap(source => {
+        return flatRecords$
+          .filter(x => x.id === source.parent)
+          .map(target => ({
+            source,
+            target
+          }))
+      })
+      .flatMap(({ source, target }) => {
+        return Rx.Observable.of({
+          type: MOVE_RECORD,
+          source,
+          target,
+        })
+      })
+
+  }
+)
+
 export {
   getRecords,
   recordsLoaded,
   recordsLoadingError,
   setRecordActive,
+  moveRecord,
 }

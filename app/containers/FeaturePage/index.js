@@ -5,6 +5,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function'
 import {
   getRecords,
   setRecordActive,
+  moveRecord,
 } from 'containers/Record/actions'
 
 import Button from 'components/Button'
@@ -25,9 +26,14 @@ class FeaturePage extends Component {
     this.props.setRecordActive(id)
   }
 
+  moveRecord = id => {
+    this.props.moveRecord(id)
+  }
+
   recurseRecord = record => {
     return (
       <Record
+        moveRecord={this.moveRecord.bind(this)}
         setActive={this.setActive.bind(this)}
         key={record.id}
         {...record}>
@@ -72,6 +78,7 @@ FeaturePage.propTypes = {
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
   setRecordActive: id => dispatch(setRecordActive(id)),
+  moveRecord: id => dispatch(moveRecord(id)),
 })
 
 export default connect(
