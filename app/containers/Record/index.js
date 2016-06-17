@@ -29,16 +29,17 @@ class Record extends Component {
         <div className={styles.title}>{this.props.title}</div>
         <button
           className={activeClass}
-          onClick={e => this.setActive(this.props.id)}>⦿</button>
-        { this.props.parent
+          onClick={e => this.setActive(this.props.id)}>
+          ⦿
+        </button>{
+          this.props.parent
             ? <button
                 className={styles.move}
                 onClick={e => this.moveRecord({ targetID: this.props.id, parentID: this.props.parent })}>
                 ⊙
               </button>
             : null
-        }
-        <div className={branchClass}>
+        }<div className={branchClass}>
           <div className={styles.more}>{this.props.more}</div>
           {this.props.children}
         </div>
