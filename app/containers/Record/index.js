@@ -36,7 +36,7 @@ class Record extends Component {
             ? <button
                 className={styles.move}
                 onClick={e => this.moveRecord({ targetID: this.props.id, parentID: this.props.parent })}>
-                ⊙
+                ▵
               </button>
             : null
         }<div className={branchClass}>
