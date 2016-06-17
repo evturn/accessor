@@ -46,8 +46,8 @@ const observableReducer = (state=initialState, action) => {
 
     case MOVE_RECORD:
       return Object.assign({}, state, {
-        target: action.target,
-        source: action.source,
+        records: action.records,
+        flatRecords: action.flatRecords,
       })
 
     default:

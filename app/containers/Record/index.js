@@ -8,8 +8,8 @@ class Record extends Component {
     this.props.setActive(id)
   }
 
-  moveRecord = id => {
-    this.props.moveRecord(id)
+  moveRecord = ({ targetID, parentID }) => {
+    this.props.moveRecord({ targetID, parentID })
   }
 
   render() {
@@ -30,10 +30,12 @@ class Record extends Component {
         <button
           className={activeClass}
           onClick={e => this.setActive(this.props.id)}>⦿</button>
-        { this.props.id === 18
+        { this.props.parent
             ? <button
                 className={styles.move}
-                onClick={e => this.moveRecord(this.props.id)}>⊙</button>
+                onClick={e => this.moveRecord({ targetID: this.props.id, parentID: this.props.parent })}>
+                ⊙
+              </button>
             : null
         }
         <div className={branchClass}>

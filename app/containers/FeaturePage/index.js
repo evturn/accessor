@@ -26,8 +26,8 @@ class FeaturePage extends Component {
     this.props.setRecordActive(id)
   }
 
-  moveRecord = id => {
-    this.props.moveRecord(id)
+  moveRecord = ({ targetID, parentID }) => {
+    this.props.moveRecord({ targetID, parentID })
   }
 
   recurseRecord = record => {
@@ -78,7 +78,7 @@ FeaturePage.propTypes = {
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
   setRecordActive: id => dispatch(setRecordActive(id)),
-  moveRecord: id => dispatch(moveRecord(id)),
+  moveRecord: ({ targetID, parentID }) => dispatch(moveRecord({ targetID, parentID })),
 })
 
 export default connect(
