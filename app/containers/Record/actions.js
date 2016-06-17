@@ -114,6 +114,10 @@ const moveRecord = id => (
   (actions, store) => {
     const flatRecords$ = Rx.Observable.from(store.getState().global.flatRecords)
 
+    const getNewParent = id => {
+      return
+    }
+
     const source$ = flatRecords$
       .filter(x => x.id === id)
 
@@ -127,10 +131,23 @@ const moveRecord = id => (
           }))
       })
       .flatMap(({ source, target }) => {
+        return flatRecords$
+          .filter(x => x.id === target.parent)
+          .flatMap(newSourceParent => {
+            console.log(newSourceParent)
+            newSourceParent._children.push(source)
+            source.parent = newSourceParent.id
+            target._children = target._children.filter(x => x !== source.id)
+
+            return flatRecords$
+              .filter(x => x.id === !newSourceParent.id && !source.id && !target.id)
+              .concat([ source, target, newSourceParent ])
+          })
+      })
+      .flatMap(x => {
         return Rx.Observable.of({
           type: MOVE_RECORD,
-          source,
-          target,
+          source: x,
         })
       })
 
