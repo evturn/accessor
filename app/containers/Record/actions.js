@@ -9,31 +9,6 @@ import {
   MOVE_RECORD,
 } from './constants'
 
-const assembleRecords = flatRecords => {
-  const flatRecords$ = Rx.Observable.from(flatRecords)
-
-  const assignChildren = x => {
-    if (x._children) {
-      x._children = flatRecords
-        .filter(y => y.parent === x.id)
-        .map(kid => {
-          assignChildren(kid)
-          return kid
-        })
-    }
-
-    return x
-  }
-
-  return flatRecords$
-    .filter(x => !x.parent)
-    .reduce((acc, x) => {
-      acc.push(assignChildren(x))
-      return acc
-    }, [])
-    .map(x => ({ records: x, flatRecords }))
-}
-
 const getRecords = _ => (
   (actions, store) => {
     store.dispatch(
@@ -56,8 +31,8 @@ const setRecordActive = id => (
   (actions, store) => {
     const flatRecords = store.getState().global.flatRecords
 
-    const getNextActiveID = id => (
-      Rx.Observable.of(store.getState().global.active)
+    function getNextActiveID(id) {
+      return Rx.Observable.of(store.getState().global.active)
         .map(active => {
           if (id === active) {
             return flatRecords
@@ -67,16 +42,12 @@ const setRecordActive = id => (
 
           return id
         })
-    )
+    }
 
-    const getParentByParentID = id => (
-      flatRecords
-        .filter(x => x.id === id)[0]
-    )
-
-    const getParentRecursive = (acc, active) => {
-      const recurseGetParent = id => {
-        const parent = getParentByParentID(id)
+    function getParentRecursive(acc, active) {
+      function recurseGetParent(id) {
+        const parent = flatRecords
+          .filter(x => x.id === id)[0]
 
         if (parent && parent.parent) {
           recurseGetParent(parent.parent)
@@ -115,7 +86,16 @@ const moveRecord = ({ targetID, parentID }) => (
   (actions, store) => {
     const flatRecords$ = Rx.Observable.from(store.getState().global.flatRecords)
 
-    const getMutualParent = (target, parent) => {
+    function popTargetFromParentChildren(parent) {
+      return {
+      ...parent,
+      _children: parent._children
+        .filter(x => x !== targetID)
+        .map(x => x.id)
+      }
+    }
+
+    function getMutualParent(target, parent) {
       return parent.parent
         ? flatRecords$
           .filter(x => x.id === parent.parent)
@@ -130,7 +110,7 @@ const moveRecord = ({ targetID, parentID }) => (
           })
     }
 
-    const assignTargetToMutualParent = ({ target, mutualParent }) => {
+    function assignTargetToMutualParent({ target, mutualParent }) {
       if (mutualParent) {
         return [{
           ...mutualParent,
@@ -147,46 +127,61 @@ const moveRecord = ({ targetID, parentID }) => (
       }
     }
 
-    const targets$ = flatRecords$
+    function assembleFlatRecords(targets) {
+      return flatRecords$
+        .filter(x => {
+          return targets.filter(y => x.id === y.id)[0]
+            ? false
+            : true
+        })
+        .reduce((acc, x) => acc.concat([x]), targets)
+    }
+
+    return flatRecords$
       .filter(x => x.id === parentID)
+      .map(popTargetFromParentChildren)
       .flatMap(parent => {
         return flatRecords$
           .filter(x => x.id === targetID)
           .flatMap(target => getMutualParent(target, parent))
       })
-
-  return targets$
-    .flatMap(({ target, parent, mutualParent }) => {
-      const newSources = assignTargetToMutualParent({ target, parent, mutualParent })
-        .concat(([{
-          ...parent,
-          _children: parent._children
-            .filter(x => x !== target.id)
-            .map(x => x.id)
-        }]))
-
-      return flatRecords$
-        .filter(x => {
-          return newSources.filter(source => x.id === source.id)[0]
-            ? false
-            : true
+      .map(assignTargetToMutualParent)
+      .flatMap(assembleFlatRecords)
+      .flatMap(assembleRecords)
+      .flatMap(({ records, flatRecords }) => {
+        return Rx.Observable.of({
+          type: MOVE_RECORD,
+          records,
+          flatRecords,
         })
-        .reduce((acc, x) => {
-          acc.push(x)
-          return acc
-        }, newSources)
-
-    })
-    .flatMap(assembleRecords)
-    .flatMap(({ records, flatRecords }) => {
-      return Rx.Observable.of({
-        type: MOVE_RECORD,
-        records,
-        flatRecords,
       })
-    })
   }
 )
+
+function assembleRecords(flatRecords) {
+  const flatRecords$ = Rx.Observable.from(flatRecords)
+
+  function assignChildren(x) {
+    if (x._children) {
+      x._children = flatRecords
+        .filter(y => y.parent === x.id)
+        .map(kid => {
+          assignChildren(kid)
+          return kid
+        })
+    }
+
+    return x
+  }
+
+  return flatRecords$
+    .filter(x => !x.parent)
+    .reduce((acc, x) => {
+      acc.push(assignChildren(x))
+      return acc
+    }, [])
+    .map(x => ({ records: x, flatRecords }))
+}
 
 export {
   getRecords,
