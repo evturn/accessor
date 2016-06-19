@@ -22,6 +22,7 @@ const getRecords = _ => (
         type: LOAD_RECORDS_SUCCESS,
         records,
         flatRecords,
+        recordMap: createMap(flatRecords)
       })
     })
 })
@@ -157,6 +158,36 @@ const moveRecord = ({ targetID, parentID }) => (
       })
   }
 )
+
+function createMap(flatRecords) {
+  return flatRecords.reduce((acc, x) => {
+
+      function assignChildren(x) {
+        const kids = flatRecords
+          .filter(y => y.parent === x.id)
+
+        if (kids.length) {
+          kids.map(assignChildren)
+
+          x._children = kids.reduce((acc, x) => {
+            acc[x.id] = x
+            return acc
+          }, {})
+        } else {
+          x._children = false
+        }
+
+        return x
+
+      }
+
+    if (!x.parent && !acc[x.id]) {
+      acc[x.id] = assignChildren(x)
+    }
+
+    return acc
+  }, {})
+}
 
 function assembleRecords(flatRecords) {
   const flatRecords$ = Rx.Observable.from(flatRecords)

@@ -22,6 +22,7 @@ const observableReducer = (state=initialState, action) => {
         error: false,
         records: false,
         flatRecords: false,
+        recordMap: false,
       })
 
     case LOAD_RECORDS_SUCCESS:
@@ -30,6 +31,7 @@ const observableReducer = (state=initialState, action) => {
         error: false,
         flatRecords: action.flatRecords,
         records: action.records,
+        recordMap: action.recordMap,
       })
 
     case LOAD_RECORDS_ERROR:
