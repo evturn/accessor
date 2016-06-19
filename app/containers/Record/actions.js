@@ -18,11 +18,19 @@ const getRecords = _ => (
   return Rx.Observable.fromPromise(request('/api'))
     .flatMap(assembleRecords)
     .flatMap(({ records, flatRecords }) => {
+      return createMap(flatRecords)
+        .map(recordMap => ({
+          records,
+          flatRecords,
+          recordMap
+        }))
+    })
+    .flatMap(({ records, flatRecords, recordMap }) => {
       return Rx.Observable.of({
         type: LOAD_RECORDS_SUCCESS,
         records,
         flatRecords,
-        recordMap: createMap(flatRecords)
+        recordMap
       })
     })
 })
@@ -160,7 +168,8 @@ const moveRecord = ({ targetID, parentID }) => (
 )
 
 function createMap(flatRecords) {
-  return flatRecords.reduce((acc, x) => {
+  return Rx.Observable.from(flatRecords)
+    .reduce((acc, x) => {
 
       function assignChildren(x) {
         const kids = flatRecords
