@@ -13,21 +13,17 @@ class Record extends Component {
   }
 
   render() {
-    const isSelected = this.props.selected.filter(x => x === this.props.id)[0]
-    const activeClass = isSelected
-      ? styles.active
-      : ''
+    const branch = this.props.selected
+      .filter(x => x === this.props.id)
 
-    const branchClass = isSelected
+    const branchClass = branch.length
       ? styles.open
       : styles.shut
 
     return (
       <li className={styles.li}>
         <div className={styles.title}>{this.props.title}</div>
-        <button
-          className={activeClass}
-          onClick={e => this.recordSelected(this.props.id)}>
+        <button onClick={e => this.recordSelected(this.props.id)}>
           ⦿
         </button>{
           this.props.parent
@@ -61,6 +57,7 @@ Record.PropTypes = {
   ]),
   branch: PropTypes.array,
   active: PropTypes.number,
+  branches: PropTypes.object,
   recordSelected: PropTypes.func,
   dispatch: PropTypes.func,
 }
@@ -69,6 +66,7 @@ export default connect(
   ({ global }) => ({
     active: global.active,
     branch: global.branch,
+    branches: global.branches,
     selected: global.selected,
   })
 )(Record)

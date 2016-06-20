@@ -27,7 +27,8 @@ const observableReducer = (state=initialState, action) => {
 
     case SELECT_RECORD:
       return Object.assign({}, state, {
-        selected: state.selected.concat(action.selected),
+        selected: action.selected,
+        target: action.target,
       })
 
     case LOAD_RECORDS_SUCCESS:

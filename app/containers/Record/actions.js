@@ -85,24 +85,12 @@ function buildRecordsTree(data) {
 
 const recordSelected = id => (
   (actions, store) => {
-    const flat$ = Rx.Observable.from(store.getState().global.flatRecords)
-
-    store.dispatch(
-      _ => Rx.Observable.of({
-        type: LAST_TARGET,
-        target: id
-        })
-    )
-
-    // const selected$ = flat$
-    //   .filter(x => x.id === id)
-    //   .flatMap(selected => (
-    //     Rx.Observable.of({
-    //       type: SELECT_RECORD,
-    //       selected,
-    //     })
-    //   )
-
+    return Rx.Observable.of(store.getState().global.branches)
+      .map(x => ({
+        type: SELECT_RECORD,
+        selected: x[id],
+        target: id,
+      }))
   }
 )
 
