@@ -12,6 +12,7 @@ const initialState = {
   loading: false,
   error: false,
   records: false,
+  branches: false,
   flatRecords: false,
   selected: [],
   target: false,
@@ -34,6 +35,7 @@ const observableReducer = (state=initialState, action) => {
         loading: false,
         error: false,
         records: action.records,
+        branches: action.branches,
         flatRecords: action.flatRecords,
       })
 

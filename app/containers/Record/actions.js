@@ -12,6 +12,7 @@ import {
 } from './constants'
 
 
+
 const getRecords = _ => (
   (actions, store) => {
     store.dispatch(
@@ -20,13 +21,6 @@ const getRecords = _ => (
 
     return Rx.Observable.fromPromise(request('/api'))
       .flatMap(buildRecordsTree)
-      .flatMap(({ records, flatRecords }) => (
-        Rx.Observable.of({
-          type: LOAD_RECORDS_SUCCESS,
-          records,
-          flatRecords,
-        })
-      ))
   }
 )
 
@@ -34,20 +28,20 @@ function buildRecordsTree(data) {
   return Rx.Observable.from(data)
     .reduce((acc, x) => {
 
-      const createBranch = y => {
-        x.branch = !x.branch
-          ? []
-          : x.branch
+      const createBranch = (x, branch) => {
+        const addParentID = y => {
+          branch.push(y.id)
 
-        x.branch.push(y.id)
+          if (y.parent) {
+            data
+              .filter(a => a.id === y.parent)
+              .map(addParentID)
+          }
 
-        if (y.parent) {
-          data
-            .filter(a => a.id === y.parent)
-            .map(createBranch)
+          return branch
         }
 
-        return x
+        return addParentID(x)
       }
 
       const createChildren = x => {
@@ -65,18 +59,27 @@ function buildRecordsTree(data) {
         return x
       }
 
-      createBranch(x)
+      acc.branches[x.id] = createBranch(x, [])
 
       if (!x.parent) {
-        acc.push(createChildren(x))
+        acc.records.push(createChildren(x))
       }
 
       return acc
-    }, [])
-    .map(records => ({
+    }, { records: [], branches: {} })
+    .map(({ records, branches }) => ({
       records,
+      branches,
       flatRecords: data
     }))
+    .flatMap(({ records, branches, flatRecords }) => (
+      Rx.Observable.of({
+        type: LOAD_RECORDS_SUCCESS,
+        records,
+        branches,
+        flatRecords,
+      })
+    ))
 }
 
 
@@ -103,60 +106,6 @@ const recordSelected = id => (
   }
 )
 
-// const setRecordActive = id => (
-//   (actions, store) => {
-//     const flatRecords = store.getState().global.flatRecords
-
-//     function getNextActiveID(id) {
-//       return Rx.Observable.of(store.getState().global.active)
-//         .map(active => {
-//           if (id === active) {
-//             return flatRecords
-//               .filter(x => x.id === id)
-//               .map(x => x.parent)[0]
-//           }
-
-//           return id
-//         })
-//     }
-
-//     function getParentRecursive(acc, active) {
-//       function recurseGetParent(id) {
-//         const parent = flatRecords
-//           .filter(x => x.id === id)[0]
-
-//         if (parent && parent.parent) {
-//           recurseGetParent(parent.parent)
-//         }
-
-//         if (id) {
-//           acc.push(id)
-//         }
-//       }
-
-//       recurseGetParent(active.parent)
-//       return acc
-//     }
-
-//     return Rx.Observable.of(id)
-//       .flatMap(getNextActiveID)
-//       .flatMap(id => {
-//         return !id
-//           ? Rx.Observable.of({ active: false, branch: [] })
-//           : Rx.Observable.from(store.getState().global.flatRecords)
-//               .filter(x => x.id === id)
-//               .reduce(getParentRecursive, [])
-//               .map(branch => ({ active: id, branch }))
-//       })
-//       .flatMap(({ active, branch }) => (
-//         Rx.Observable.of({
-//           type: UPDATE_ACTIVE_BRANCH,
-//           active,
-//           branch
-//         })
-//       ))
-//   }
-// )
 
 const moveRecord = ({ targetID, parentID }) => (
   (actions, store) => {
