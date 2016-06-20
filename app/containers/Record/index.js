@@ -4,8 +4,8 @@ import { connect } from 'react-redux'
 import styles from './styles.css'
 
 class Record extends Component {
-  setActive = id => {
-    this.props.setActive(id)
+  recordSelected = id => {
+    this.props.recordSelected(id)
   }
 
   moveRecord = ({ targetID, parentID }) => {
@@ -13,23 +13,21 @@ class Record extends Component {
   }
 
   render() {
-    const activeClass = this.props.active === this.props.id
+    const isSelected = this.props.selected.filter(x => x === this.props.id)[0]
+    const activeClass = isSelected
       ? styles.active
       : ''
 
-    const branchClass = this.props.active === this.props.id
-      || this.props.branch
-      && this.props.branch
-          .filter(x => x === this.props.id)[0]
-            ? styles.open
-            : styles.shut
+    const branchClass = isSelected
+      ? styles.open
+      : styles.shut
 
     return (
       <li className={styles.li}>
         <div className={styles.title}>{this.props.title}</div>
         <button
           className={activeClass}
-          onClick={e => this.setActive(this.props.id)}>
+          onClick={e => this.recordSelected(this.props.id)}>
           ⦿
         </button>{
           this.props.parent
@@ -63,7 +61,7 @@ Record.PropTypes = {
   ]),
   branch: PropTypes.array,
   active: PropTypes.number,
-  setActive: PropTypes.func,
+  recordSelected: PropTypes.func,
   dispatch: PropTypes.func,
 }
 
@@ -71,5 +69,6 @@ export default connect(
   ({ global }) => ({
     active: global.active,
     branch: global.branch,
+    selected: global.selected,
   })
 )(Record)

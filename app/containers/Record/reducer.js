@@ -4,40 +4,51 @@ import {
   LOAD_RECORDS_ERROR,
   UPDATE_ACTIVE_BRANCH,
   MOVE_RECORD,
+  SELECT_RECORD,
+  LAST_TARGET,
 } from './constants'
 
 const initialState = {
-  active: false,
-  branch: [],
   loading: false,
   error: false,
   records: false,
+  flatRecords: false,
+  selected: [],
+  target: false,
 }
 
 const observableReducer = (state=initialState, action) => {
   switch (action.type) {
-    case LOAD_RECORDS:
+    case LAST_TARGET:
       return Object.assign({}, state, {
-        loading: true,
-        error: false,
-        records: false,
-        flatRecords: false,
-        recordMap: false,
+        target: action.target,
+      })
+
+    case SELECT_RECORD:
+      return Object.assign({}, state, {
+        selected: state.selected.concat(action.selected),
       })
 
     case LOAD_RECORDS_SUCCESS:
       return Object.assign({}, state, {
         loading: false,
         error: false,
-        flatRecords: action.flatRecords,
         records: action.records,
-        recordMap: action.recordMap,
+        flatRecords: action.flatRecords,
       })
 
     case LOAD_RECORDS_ERROR:
       return Object.assign({}, state, {
         loading: false,
         error: action.error,
+      })
+
+    case LOAD_RECORDS:
+      return Object.assign({}, state, {
+        loading: true,
+        error: false,
+        flatRecords: false,
+        records: false,
       })
 
     case UPDATE_ACTIVE_BRANCH:

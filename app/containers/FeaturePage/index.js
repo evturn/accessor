@@ -6,6 +6,7 @@ import {
   getRecords,
   setRecordActive,
   moveRecord,
+  recordSelected,
 } from 'containers/Record/actions'
 
 import Button from 'components/Button'
@@ -22,8 +23,8 @@ class FeaturePage extends Component {
     this.props.getRecords()
   }
 
-  setActive = id => {
-    this.props.setRecordActive(id)
+  recordSelected = id => {
+    this.props.recordSelected(id)
   }
 
   moveRecord = ({ targetID, parentID }) => {
@@ -31,15 +32,17 @@ class FeaturePage extends Component {
   }
 
   recurseRecord = record => {
+    const nestedRecords = record._children
+      ? <ul>{record._children.map(this.recurseRecord)}</ul>
+      : null
+
     return (
       <Record
-        moveRecord={this.moveRecord.bind(this)}
-        setActive={this.setActive.bind(this)}
         key={record.id}
+        recordSelected={this.recordSelected.bind(this)}
+        moveRecord={this.moveRecord.bind(this)}
         {...record}>
-        { record._children.length
-          ? <ul>{record._children.map(this.recurseRecord)}</ul>
-          : null}
+        {nestedRecords}
       </Record>
     )
   }
@@ -73,10 +76,12 @@ FeaturePage.propTypes = {
     PropTypes.bool,
   ]),
   getRecords: PropTypes.func,
+  recordSelected: PropTypes.func,
 }
 
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
+  recordSelected: id => dispatch(recordSelected(id)),
   setRecordActive: id => dispatch(setRecordActive(id)),
   moveRecord: ({ targetID, parentID }) => dispatch(moveRecord({ targetID, parentID })),
 })
