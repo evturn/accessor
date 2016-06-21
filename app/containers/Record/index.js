@@ -77,6 +77,13 @@ class Record extends Component {
           <div className={`${styles.open} ${nestClass}`}>
             {this.props.children}
           </div>
+          {targetTitle
+            ? <div className={styles.btns}>
+                <div className={styles.clip}>＋</div>
+                <div className={styles.clip}>📎</div>
+              </div>
+            : null
+          }
       </li>
     )
   }

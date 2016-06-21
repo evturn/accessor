@@ -18,7 +18,7 @@ import Record from 'containers/Record'
 
 import styles from './styles.css'
 
-class FeaturePage extends Component {
+class RecordMap extends Component {
   componentDidMount() {
     this.props.getRecords()
   }
@@ -50,7 +50,7 @@ class FeaturePage extends Component {
   render() {
     return (
       <div>
-        <H1 className={styles.header}>X</H1>
+        <H1 className={styles.header}>⧉</H1>
         <div className={styles.nav}>{
           this.props.target
             ? <span
@@ -72,7 +72,7 @@ class FeaturePage extends Component {
   }
 }
 
-FeaturePage.propTypes = {
+RecordMap.propTypes = {
   changeRoute: PropTypes.func,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([
@@ -104,4 +104,4 @@ export default connect(
     target: global.target,
   }),
   mapDispatchToProps
-)(FeaturePage)
+)(RecordMap)

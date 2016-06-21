@@ -76,3 +76,15 @@ ul ul .title {
 .select {
   composes: back from '../FeaturePage/styles.css';
 }
+
+.clip {
+  width: 50px;
+  text-align: center;
+  float: right;
+  color: #ADADAD;
+}
+
+.btns {
+  height: 70px;
+  line-height: 70px;
+}

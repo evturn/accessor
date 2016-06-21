@@ -14,7 +14,7 @@ import {
 } from 'containers/App/selectors'
 
 import App from 'containers/App'
-import FeaturePage from 'containers/FeaturePage'
+import RecordMap from 'containers/RecordMap'
 
 import styles from 'containers/App/styles.css'
 
@@ -35,7 +35,7 @@ ReactDOM.render(
       history={history}
       render={applyRouterMiddleware(useScroll(selectTippyTop))}>
       <Route path='/' component={App}>
-        <IndexRoute component={FeaturePage} />
+        <IndexRoute component={RecordMap} />
       </Route>
     </Router>
   </Provider>,
