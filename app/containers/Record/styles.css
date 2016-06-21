@@ -1,3 +1,5 @@
+
+
 .list {
   font-family: 'Helvetica Neue', serif;
   padding-left: 1.75em;
@@ -14,6 +16,10 @@
   display: inline-block;
 }
 
+.open.title.main {
+  font-size: 16px;
+}
+
 button {
   margin-left: 10px;
   margin-right: 10px;
@@ -21,6 +27,13 @@ button {
 
 .more {
   padding: 15px 0;
+  font-size: 12px;
+  font-family: 'helvetica Neue';
+}
+
+ul ul .title {
+  font-size: 14px;
+  font-family: 'helvetica Neue';
 }
 
 .shut {
@@ -29,10 +42,6 @@ button {
 
 .open {
   display: block;
-}
-
-ul ul {
-  margin-left: 40px;
 }
 
 .active {
@@ -45,4 +54,9 @@ ul ul {
 
 .move {
   color: #445BFF;
+}
+
+.select {
+  composes: back from '../FeaturePage/styles.css';
+  float: right;
 }

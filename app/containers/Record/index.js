@@ -13,32 +13,42 @@ class Record extends Component {
   }
 
   render() {
-    const rootLevel = this.props.target === false
-    const rootRecord = this.props.parent === false
-    const targetRecord = this.props.target.id === this.props.id
-    const targetChild = this.props.target.id === this.props.parent
+    const {
+      id,
+      parent,
+      target
+    } = this.props
 
-    const targetVisibility = targetRecord
+    const targetClass = target.id === id
       ? styles.open
       : styles.shut
 
-    const titleVisibility = rootLevel
-      ? rootLevel && rootRecord
+    const targetTitle = target.id === id
+      ? styles.main
+      : ''
+
+    const titleClass = target === false
+      ? target === false && parent === false
         ? styles.open
         : styles.shut
-      : targetRecord || targetChild
+      : target.id === id || target.id === parent
         ? styles.open
         : styles.shut
 
     return (
       <li className={styles.li}>
-        <div className={`${styles.title} ${titleVisibility}`}>
+        <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
           {this.props.title}
-          <button onClick={e => this.recordSelected(this.props.id)}>
-            ➡︎
-          </button>
-        </div>
-        <div className={`${styles.more} ${targetVisibility}`}>
+          {target.id !== id
+            ? <button
+                className={styles.select}
+                onClick={e => this.recordSelected(id)}>
+                ➡︎
+              </button>
+            : null
+          }
+          </div>
+        <div className={`${styles.more} ${targetClass}`}>
           {this.props.more}
         </div>
         <div className={styles.open}>
