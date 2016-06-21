@@ -11,8 +11,6 @@ import {
   LAST_TARGET,
 } from './constants'
 
-
-
 const getRecords = _ => (
   (actions, store) => {
     store.dispatch(
@@ -25,17 +23,41 @@ const getRecords = _ => (
 )
 
 function buildRecordsTree(data) {
+  const { createBranch, createChildren } = recordTree(data)
+
+  const recordReducer = (acc, x) => {
+    if (!acc.branches) acc.branches = {}
+    if (!acc.records) acc.records = []
+    if (!x.parent) acc.records.push(createChildren(x))
+
+    acc.branches[x.id] = createBranch(x)
+
+    return acc
+  }
+
+  return Rx.Observable.from(data)
+    .reduce(recordReducer, {})
+    .flatMap(({ records, branches }) => (
+      Rx.Observable.of({
+        type: LOAD_RECORDS_SUCCESS,
+        records,
+        branches,
+        flatRecords: data
+      })
+    ))
+}
+
+function recordTree(data) {
 
   const createBranch = record => {
     const addParentID = (record, branch) => {
-      branch.push(record.id)
-
       if (record.parent) {
         data
           .filter(x => x.id === record.parent)
           .map(x => addParentID(x, branch))
       }
 
+      branch.push(record.id)
       return branch
     }
 
@@ -46,7 +68,7 @@ function buildRecordsTree(data) {
     const addChildren = (record, children) => {
       if (children.length) {
         record._children = children
-        children.map(x => createChildren(x))
+        children.map(createChildren)
       }
 
       return record
@@ -55,31 +77,8 @@ function buildRecordsTree(data) {
     return addChildren(record, data.filter(x => x.parent === record.id))
   }
 
-  return Rx.Observable.from(data)
-    .reduce((acc, x) => {
-      acc.branches[x.id] = createBranch(x)
-
-      if (!x.parent) {
-        acc.records.push(createChildren(x))
-      }
-
-      return acc
-    }, { records: [], branches: {} })
-    .map(({ records, branches }) => ({
-      records,
-      branches,
-      flatRecords: data
-    }))
-    .flatMap(({ records, branches, flatRecords }) => (
-      Rx.Observable.of({
-        type: LOAD_RECORDS_SUCCESS,
-        records,
-        branches,
-        flatRecords,
-      })
-    ))
+  return { createBranch, createChildren }
 }
-
 
 const recordSelected = id => (
   (actions, store) => {
@@ -91,7 +90,6 @@ const recordSelected = id => (
       }))
   }
 )
-
 
 const moveRecord = ({ targetID, parentID }) => (
   (actions, store) => {
