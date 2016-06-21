@@ -53,24 +53,28 @@ class Record extends Component {
 
     return (
       <li className={styles.li}>
-          <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
-            {this.props.title}
-            {target.id !== id
-              ? <div className={styles.ctrls}>
-                  <button
-                    className={styles.select}
-                    onClick={_ => this.setState({ expand: !this.state.expand})}>
-                    <span>{this.state.expand ? `⬆` : `⬇`}</span>
-                  </button>
-                  <button
-                    className={styles.select}
-                    onClick={e => this.recordSelected(id)}>
-                    ➡︎
-                  </button>
-                </div>
-              : null
-            }
-            </div>
+        <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
+          {this.props.title}
+          {target.id === id
+            ? <div className={styles.clip}>⋮</div>
+            : null
+          }
+          {target.id !== id
+            ? <div className={styles.ctrls}>
+                <button
+                  className={styles.select}
+                  onClick={_ => this.setState({ expand: !this.state.expand})}>
+                  <span>{this.state.expand ? `⬆` : `⬇`}</span>
+                </button>
+                <button
+                  className={styles.select}
+                  onClick={e => this.recordSelected(id)}>
+                  ➡︎
+                </button>
+              </div>
+            : null
+          }
+          </div>
           <div className={`${styles.more} ${expandClass}`}>
             {this.props.more}
           </div>

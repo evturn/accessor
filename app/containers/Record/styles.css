@@ -17,6 +17,12 @@
   display: inline-block;
 }
 
+.title .clip {
+  font-size: 31px;
+  line-height: 20px;
+  color: #ccc;
+}
+
 .open.title.main {
   font-size: 16px;
 }
@@ -74,7 +80,7 @@ ul ul .title {
 }
 
 .select {
-  composes: back from '../FeaturePage/styles.css';
+  composes: back from '../RecordMap/styles.css';
 }
 
 .clip {
