@@ -22,35 +22,21 @@ const getRecords = _ => (
   }
 )
 
-function buildRecordsTree(data) {
-  const { createBranch, createChildren } = recordTree(data)
-
-  const recordReducer = (acc, x) => {
-    if (!acc.branches) acc.branches = {}
-    if (!acc.records) acc.records = []
-    if (!x.parent) acc.records.push(createChildren(x))
-
-    acc.branches[x.id] = createBranch(x)
-
-    return acc
+const recordSelected = id => (
+  (actions, store) => {
+    return Rx.Observable.of(store.getState().global.branches)
+      .map(x => ({
+        type: SELECT_RECORD,
+        selected: x[id],
+        target: id,
+      }))
   }
+)
 
-  return Rx.Observable.from(data)
-    .reduce(recordReducer, {})
-    .flatMap(({ records, branches }) => (
-      Rx.Observable.of({
-        type: LOAD_RECORDS_SUCCESS,
-        records,
-        branches,
-        flatRecords: data
-      })
-    ))
-}
+function buildRecordsTree(data) {
 
-function recordTree(data) {
-
-  const createBranch = record => {
-    const addParentID = (record, branch) => {
+  function createBranch(record) {
+    function addParentID(record, branch) {
       if (record.parent) {
         data
           .filter(x => x.id === record.parent)
@@ -64,8 +50,8 @@ function recordTree(data) {
     return addParentID(record, [])
   }
 
-  const createChildren = record => {
-    const addChildren = (record, children) => {
+  function createChildren(record) {
+    function addChildren(record, children) {
       if (children.length) {
         record._children = children
         children.map(createChildren)
@@ -77,19 +63,29 @@ function recordTree(data) {
     return addChildren(record, data.filter(x => x.parent === record.id))
   }
 
-  return { createBranch, createChildren }
-}
+  function recordReducer(acc, x) {
+    if (!acc.branches) acc.branches = {}
+    if (!acc.records) acc.records = []
+    if (!x.parent) acc.records.push(createChildren(x))
 
-const recordSelected = id => (
-  (actions, store) => {
-    return Rx.Observable.of(store.getState().global.branches)
-      .map(x => ({
-        type: SELECT_RECORD,
-        selected: x[id],
-        target: id,
-      }))
+    acc.branches[x.id] = createBranch(x)
+
+    return acc
   }
-)
+
+  function updateRecordsState({ records, branches }) {
+    return Rx.Observable.of({
+        type: LOAD_RECORDS_SUCCESS,
+        records,
+        branches,
+        flatRecords: data
+      })
+    }
+
+  return Rx.Observable.from(data)
+    .reduce(recordReducer, {})
+    .flatMap(updateRecordsState)
+}
 
 const moveRecord = ({ targetID, parentID }) => (
   (actions, store) => {
