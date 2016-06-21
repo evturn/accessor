@@ -51,7 +51,7 @@ class FeaturePage extends Component {
     return (
       <div>
         <H1 className={styles.header}>X</H1>
-        <div>{
+        <div className={styles.nav}>{
           this.props.target
             ? <span
                 className={styles.back}

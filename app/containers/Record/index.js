@@ -4,6 +4,13 @@ import { connect } from 'react-redux'
 import styles from './styles.css'
 
 class Record extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      expand: false
+    }
+  }
   recordSelected = id => {
     this.props.recordSelected(id)
   }
@@ -19,9 +26,13 @@ class Record extends Component {
       target
     } = this.props
 
-    const targetClass = target.id === id
+    const expandClass = target.id === id
       ? styles.open
-      : styles.shut
+      : this.state.expand && target.id === parent
+        ? styles.open
+        : target === false && parent === false && this.state.expand
+          ? styles.open
+          : styles.shut
 
     const targetTitle = target.id === id
       ? styles.main
@@ -35,25 +46,37 @@ class Record extends Component {
         ? styles.open
         : styles.shut
 
+      const nestClass = target.id === id
+        && this.props.children
+        ? styles.nest
+        : ''
+
     return (
       <li className={styles.li}>
-        <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
-          {this.props.title}
-          {target.id !== id
-            ? <button
-                className={styles.select}
-                onClick={e => this.recordSelected(id)}>
-                ➡︎
-              </button>
-            : null
-          }
+          <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
+            {this.props.title}
+            {target.id !== id
+              ? <div className={styles.ctrls}>
+                  <button
+                    className={styles.select}
+                    onClick={_ => this.setState({ expand: !this.state.expand})}>
+                    <span>{this.state.expand ? `⬆` : `⬇`}</span>
+                  </button>
+                  <button
+                    className={styles.select}
+                    onClick={e => this.recordSelected(id)}>
+                    ➡︎
+                  </button>
+                </div>
+              : null
+            }
+            </div>
+          <div className={`${styles.more} ${expandClass}`}>
+            {this.props.more}
           </div>
-        <div className={`${styles.more} ${targetClass}`}>
-          {this.props.more}
-        </div>
-        <div className={styles.open}>
-          {this.props.children}
-        </div>
+          <div className={`${styles.open} ${nestClass}`}>
+            {this.props.children}
+          </div>
       </li>
     )
   }

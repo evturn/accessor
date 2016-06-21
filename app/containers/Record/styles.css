@@ -7,17 +7,29 @@
 
 .li {
   list-style: none;
-  margin: 1em 0;
+  margin: 20px 0;
+  transition-duration: 0.3s;
 }
 
 .title {
-  font-family: 'helvetica Neue';
+  font-family: 'Helvetica Neue';
   font-weight: bold;
   display: inline-block;
 }
 
 .open.title.main {
   font-size: 16px;
+}
+
+.nest {
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #ccc;
+}
+
+.nest .title {
+  font-family: 'Helvetica Neue';
+  font-weight: 300;
 }
 
 button {
@@ -29,6 +41,7 @@ button {
   padding: 15px 0;
   font-size: 12px;
   font-family: 'helvetica Neue';
+  transition-duration: 0.3s;
 }
 
 ul ul .title {
@@ -56,7 +69,10 @@ ul ul .title {
   color: #445BFF;
 }
 
+.ctrls {
+  float: right;
+}
+
 .select {
   composes: back from '../FeaturePage/styles.css';
-  float: right;
 }
