@@ -13,28 +13,35 @@ class Record extends Component {
   }
 
   render() {
-    const branch = this.props.selected
-      .filter(x => x === this.props.id)
+    const rootLevel = this.props.target === false
+    const rootRecord = this.props.parent === false
+    const targetRecord = this.props.target.id === this.props.id
+    const targetChild = this.props.target.id === this.props.parent
 
-    const branchClass = branch.length
+    const targetVisibility = targetRecord
       ? styles.open
       : styles.shut
 
+    const titleVisibility = rootLevel
+      ? rootLevel && rootRecord
+        ? styles.open
+        : styles.shut
+      : targetRecord || targetChild
+        ? styles.open
+        : styles.shut
+
     return (
       <li className={styles.li}>
-        <div className={styles.title}>{this.props.title}</div>
-        <button onClick={e => this.recordSelected(this.props.id)}>
-          ⦿
-        </button>{
-          this.props.parent
-            ? <button
-                className={styles.move}
-                onClick={e => this.moveRecord({ targetID: this.props.id, parentID: this.props.parent })}>
-                ▵
-              </button>
-            : null
-        }<div className={branchClass}>
-          <div className={styles.more}>{this.props.more}</div>
+        <div className={`${styles.title} ${titleVisibility}`}>
+          {this.props.title}
+          <button onClick={e => this.recordSelected(this.props.id)}>
+            ➡︎
+          </button>
+        </div>
+        <div className={`${styles.more} ${targetVisibility}`}>
+          {this.props.more}
+        </div>
+        <div className={styles.open}>
           {this.props.children}
         </div>
       </li>
@@ -59,7 +66,10 @@ Record.PropTypes = {
   active: PropTypes.number,
   branches: PropTypes.object,
   recordSelected: PropTypes.func,
-  dispatch: PropTypes.func,
+  target: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object
+  ]),
 }
 
 export default connect(
@@ -68,5 +78,6 @@ export default connect(
     branch: global.branch,
     branches: global.branches,
     selected: global.selected,
+    target: global.target,
   })
 )(Record)

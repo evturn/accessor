@@ -16,6 +16,7 @@ const initialState = {
   flatRecords: false,
   selected: [],
   target: false,
+  location: false,
 }
 
 const observableReducer = (state=initialState, action) => {

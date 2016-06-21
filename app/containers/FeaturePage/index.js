@@ -51,14 +51,22 @@ class FeaturePage extends Component {
     return (
       <div>
         <H1 className={styles.header}>X</H1>
-        <ul className={styles.list}>
-          { this.props.loading
+        <div>{
+          this.props.target
+            ? <span
+                className={styles.back}
+                onClick={_ => this.recordSelected(this.props.target.parent)}>
+                ⬅︎
+              </span>
+            : null
+        }</div>
+        <ul className={styles.list}>{
+          this.props.loading
             ? <List component={LoadingIndicator} />
             : this.props.records !== false
               ? this.props.records.map(this.recurseRecord)
               : null
-          }
-        </ul>
+        }</ul>
       </div>
     )
   }
@@ -77,6 +85,10 @@ FeaturePage.propTypes = {
   ]),
   getRecords: PropTypes.func,
   recordSelected: PropTypes.func,
+  target: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.object
+  ]),
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -89,6 +101,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   ({ global }) => ({
     records: global.records,
+    target: global.target,
   }),
   mapDispatchToProps
 )(FeaturePage)

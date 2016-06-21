@@ -24,6 +24,11 @@ ul ul {
   margin-left: 40px;
 }
 
+.back {
+  color: #2065FFFF;
+  cursor: pointer;
+}
+
 
 
 .list {

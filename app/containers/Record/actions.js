@@ -24,12 +24,15 @@ const getRecords = _ => (
 
 const recordSelected = id => (
   (actions, store) => {
-    return Rx.Observable.of(store.getState().global.branches)
-      .map(x => ({
-        type: SELECT_RECORD,
-        selected: x[id],
-        target: id,
-      }))
+    return Rx.Observable.combineLatest(
+      Rx.Observable.of(store.getState().global.flatRecords),
+      Rx.Observable.of(store.getState().global.branches)
+    )
+    .map(([flatRecords, branches]) => ({
+      type: SELECT_RECORD,
+      selected: branches[id],
+      target: !id ? false : flatRecords.filter(x => x.id === id)[0],
+    }))
   }
 )
 
