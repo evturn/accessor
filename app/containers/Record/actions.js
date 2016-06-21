@@ -25,41 +25,39 @@ const getRecords = _ => (
 )
 
 function buildRecordsTree(data) {
+
+  const createBranch = record => {
+    const addParentID = (record, branch) => {
+      branch.push(record.id)
+
+      if (record.parent) {
+        data
+          .filter(x => x.id === record.parent)
+          .map(x => addParentID(x, branch))
+      }
+
+      return branch
+    }
+
+    return addParentID(record, [])
+  }
+
+  const createChildren = record => {
+    const addChildren = (record, children) => {
+      if (children.length) {
+        record._children = children
+        children.map(x => createChildren(x))
+      }
+
+      return record
+    }
+
+    return addChildren(record, data.filter(x => x.parent === record.id))
+  }
+
   return Rx.Observable.from(data)
     .reduce((acc, x) => {
-
-      const createBranch = (x, branch) => {
-        const addParentID = y => {
-          branch.push(y.id)
-
-          if (y.parent) {
-            data
-              .filter(a => a.id === y.parent)
-              .map(addParentID)
-          }
-
-          return branch
-        }
-
-        return addParentID(x)
-      }
-
-      const createChildren = x => {
-        data
-          .filter(y => y.parent === x.id)
-          .map(y => {
-            x._children = !x._children
-              ? []
-              : x._children
-
-            x._children.push(y)
-            createChildren(y)
-          })
-
-        return x
-      }
-
-      acc.branches[x.id] = createBranch(x, [])
+      acc.branches[x.id] = createBranch(x)
 
       if (!x.parent) {
         acc.records.push(createChildren(x))
