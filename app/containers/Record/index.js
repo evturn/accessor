@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
-import styles from './styles.css'
+import {
+  SwitchExpand,
+  SwitchSelect,
+} from 'components/Switch'
+
+import css from './styles.css'
 
 class Record extends Component {
   constructor(props) {
@@ -15,8 +20,8 @@ class Record extends Component {
     this.props.recordSelected(id)
   }
 
-  moveRecord = ({ targetID, parentID }) => {
-    this.props.moveRecord({ targetID, parentID })
+  toggleExpand = expand => {
+    this.setState({ expand })
   }
 
   render() {
@@ -27,64 +32,62 @@ class Record extends Component {
     } = this.props
 
     const expandClass = target.id === id
-      ? styles.open
+      ? css.open
       : this.state.expand && target.id === parent
-        ? styles.open
+        ? css.open
         : target === false && parent === false && this.state.expand
-          ? styles.open
-          : styles.shut
+          ? css.open
+          : css.shut
 
     const targetTitle = target.id === id
-      ? styles.main
+      ? css.main
       : ''
 
     const titleClass = target === false
       ? target === false && parent === false
-        ? styles.open
-        : styles.shut
+        ? css.open
+        : css.shut
       : target.id === id || target.id === parent
-        ? styles.open
-        : styles.shut
+        ? css.open
+        : css.shut
 
       const nestClass = target.id === id
         && this.props.children
-        ? styles.nest
+        ? css.nest
         : ''
 
     return (
-      <li className={styles.li}>
-        <div className={`${styles.title} ${titleClass} ${targetTitle}`}>
+      <li className={css.li}>
+        <div className={`${css.title} ${titleClass} ${targetTitle}`}>
           {this.props.title}
           {target.id === id
-            ? <div className={styles.clip}>⋮</div>
+            ? <div className={css.clip}>⋮</div>
             : null
           }
           {target.id !== id
-            ? <div className={styles.ctrls}>
-                <button
-                  className={styles.select}
-                  onClick={_ => this.setState({ expand: !this.state.expand})}>
-                  <span>{this.state.expand ? `⬆` : `⬇`}</span>
-                </button>
-                <button
-                  className={styles.select}
-                  onClick={e => this.recordSelected(id)}>
-                  ➡︎
-                </button>
+            ? <div className={css.ctrls}>
+                <SwitchExpand
+                  expand={this.state.expand}
+                  toggle={this.toggleExpand}
+                />
+                <SwitchSelect
+                  id={id}
+                  recordSelected={this.recordSelected}
+                />
               </div>
             : null
           }
           </div>
-          <div className={`${styles.more} ${expandClass}`}>
+          <div className={`${css.more} ${expandClass}`}>
             {this.props.more}
           </div>
-          <div className={`${styles.open} ${nestClass}`}>
+          <div className={`${css.open} ${nestClass}`}>
             {this.props.children}
           </div>
           {targetTitle
-            ? <div className={styles.btns}>
-                <div className={styles.clip}>＋</div>
-                <div className={styles.clip}>📎</div>
+            ? <div className={css.btns}>
+                <div className={css.clip}>＋</div>
+                <div className={css.clip}>📎</div>
               </div>
             : null
           }

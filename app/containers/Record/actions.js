@@ -38,14 +38,14 @@ const recordSelected = id => (
 )
 
 const navigateToRoot = target => (
-  (actions, store) => {
-    return target
+  (actions, store) => (
+    target
       ? Rx.Observable.of({
           type: NAVIGATE_TO_ROOT,
           target: false,
         })
       : Rx.Observable.empty()
-  }
+  )
 )
 
 function buildRecordsTree(data) {
