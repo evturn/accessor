@@ -8,14 +8,13 @@ import {
   navigateToRoot,
 } from 'containers/Record/actions'
 
-import Button from 'components/Button'
 import H1 from 'components/H1'
 import List from 'components/List'
-
 import LoadingIndicator from 'components/LoadingIndicator'
+
 import Record from 'containers/Record'
 
-import styles from './styles.css'
+import css from './styles.css'
 
 class RecordMap extends Component {
   componentDidMount() {
@@ -26,49 +25,55 @@ class RecordMap extends Component {
     this.props.recordSelected(id)
   }
 
-  moveRecord = ({ targetID, parentID }) => {
-    this.props.moveRecord({ targetID, parentID })
+  navigateToRoot = target => {
+    this.props.navigateToRoot(target)
   }
 
-  recurseRecord = record => {
-    const nestedRecords = record._children
-      ? <ul>{record._children.map(this.recurseRecord)}</ul>
-      : null
-
+  renderRecord = record => {
     return (
       <Record
         key={record.id}
         recordSelected={this.recordSelected.bind(this)}
-        moveRecord={this.moveRecord.bind(this)}
-        {...record}>
-        {nestedRecords}
-      </Record>
+        {...record}>{
+          record._children
+          ? <ul>{record._children.map(this.renderRecord)}</ul>
+          : null
+      }</Record>
     )
   }
 
   render() {
+    const {
+      records,
+      target,
+      loading,
+    } = this.props
+
     return (
-      <div>
+      <div className={css.x}>
         <H1
-          className={styles.header}
-          onClick={_ => this.props.navigateToRoot(this.props.target)}>⧉</H1>
-        <div className={styles.nav}>{
-          this.props.target
+          className={css.header}
+          onClick={_ => this.navigateToRoot(target)}>
+          ⧉
+        </H1>
+        <div className={css.nav}>{
+          target
             ? <span
-                className={styles.back}
-                onClick={_ => this.recordSelected(this.props.target.parent)}>
+                className={css.back}
+                onClick={_ => this.recordSelected(target.parent)}>
                 ⬅︎
               </span>
             : null
         }</div>
-        <ul className={styles.list}>{
-          this.props.loading
+          {loading
             ? <List component={LoadingIndicator} />
-            : this.props.records !== false
-              ? this.props.records.map(this.recurseRecord)
+            : records && !loading
+              ? <ul className={css.list}>
+                  {records.map(this.renderRecord)}
+                </ul>
               : null
-        }</ul>
-      </div>
+          }
+        </div>
     )
   }
 }
@@ -102,6 +107,7 @@ export default connect(
   ({ global }) => ({
     records: global.records,
     target: global.target,
+    loading: global.loading,
   }),
   mapDispatchToProps
 )(RecordMap)

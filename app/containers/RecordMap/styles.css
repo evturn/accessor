@@ -3,6 +3,10 @@
   margin: 1em 0;
 }
 
+.x {
+  min-height: 80vh;
+}
+
 .title {
   font-family: 'helvetica Neue';
   font-weight: bold;
