@@ -13,9 +13,10 @@ class Record extends Component {
     super(props)
 
     this.state = {
-      expand: false
+      expand: false,
     }
   }
+
   recordSelected = id => {
     this.props.recordSelected(id)
   }
@@ -25,72 +26,82 @@ class Record extends Component {
   }
 
   render() {
-    const {
-      id,
-      parent,
-      target
-    } = this.props
+    const CURRENT_TARGET = this.props.target.id === this.props.id
+    const PARENT_IS_TARGET = this.props.target.id === this.props.parent
+    const ROOT_IS_TARGET = this.props.target === false && this.props.parent === false
 
-    const expandClass = target.id === id
-      ? css.open
-      : this.state.expand && target.id === parent
-        ? css.open
-        : target === false && parent === false && this.state.expand
-          ? css.open
+    const titleClass = ROOT_IS_TARGET
+      || PARENT_IS_TARGET
+        ? `${css.title} ${css.open}`
+        : CURRENT_TARGET
+          ? `${css.title} ${css.open} ${css.main}`
           : css.shut
 
-    const targetTitle = target.id === id
-      ? css.main
-      : ''
+    const NestedRecords = ({ children }) => {
+      const nestClass = CURRENT_TARGET
+        && children
+          ? `${css.open} ${css.nest}`
+          : ''
+      return (
+        <div className={nestClass}>
+          {children}
+        </div>
+      )
+    }
 
-    const titleClass = target === false
-      ? target === false && parent === false
-        ? css.open
-        : css.shut
-      : target.id === id || target.id === parent
-        ? css.open
-        : css.shut
+    const SwitchControls = ({ expand, id, toggle, selected }) => (
+      !CURRENT_TARGET
+        ? <div className={css.ctrls}>
+            <SwitchExpand
+              expand={expand}
+              toggle={toggle}
+            />
+            <SwitchSelect
+              id={id}
+              recordSelected={selected}
+            />
+          </div>
+        : null
+    )
 
-      const nestClass = target.id === id
-        && this.props.children
-        ? css.nest
-        : ''
+    const RecordDescription = ({ expand }) => {
+      const expandClass = CURRENT_TARGET
+        || expand && PARENT_IS_TARGET
+        || expand && ROOT_IS_TARGET
+          ? `${css.more} ${css.open}`
+          : css.shut
+
+      return (
+        <div className={expandClass}>
+          {this.props.more}
+        </div>
+      )
+    }
 
     return (
       <li className={css.li}>
-        <div className={`${css.title} ${titleClass} ${targetTitle}`}>
+        <div className={titleClass}>
           {this.props.title}
-          {target.id === id
+          {CURRENT_TARGET
             ? <div className={css.clip}>⋮</div>
             : null
           }
-          {target.id !== id
-            ? <div className={css.ctrls}>
-                <SwitchExpand
-                  expand={this.state.expand}
-                  toggle={this.toggleExpand}
-                />
-                <SwitchSelect
-                  id={id}
-                  recordSelected={this.recordSelected}
-                />
-              </div>
-            : null
-          }
-          </div>
-          <div className={`${css.more} ${expandClass}`}>
-            {this.props.more}
-          </div>
-          <div className={`${css.open} ${nestClass}`}>
-            {this.props.children}
-          </div>
-          {targetTitle
-            ? <div className={css.btns}>
-                <div className={css.clip}>＋</div>
-                <div className={css.clip}>📎</div>
-              </div>
-            : null
-          }
+          <SwitchControls
+            id={this.props.id}
+            expand={this.state.expand}
+            toggle={this.toggleExpand}
+            selected={this.recordSelected}
+          />
+        </div>
+        <RecordDescription expand={this.state.expand} />
+        <NestedRecords children={this.props.children} />
+        {CURRENT_TARGET
+          ? <div className={css.btns}>
+              <div className={css.clip}>＋</div>
+              <div className={css.clip}>📎</div>
+            </div>
+          : null
+        }
       </li>
     )
   }
