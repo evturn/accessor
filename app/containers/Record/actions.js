@@ -9,6 +9,7 @@ import {
   MOVE_RECORD,
   SELECT_RECORD,
   LAST_TARGET,
+  NAVIGATE_TO_ROOT,
 } from './constants'
 
 const getRecords = _ => (
@@ -33,6 +34,17 @@ const recordSelected = id => (
       selected: branches[id],
       target: !id ? false : flatRecords.filter(x => x.id === id)[0],
     }))
+  }
+)
+
+const navigateToRoot = target => (
+  (actions, store) => {
+    return target
+      ? Rx.Observable.of({
+          type: NAVIGATE_TO_ROOT,
+          target: false,
+        })
+      : Rx.Observable.empty()
   }
 )
 
@@ -200,8 +212,5 @@ function createMap(flatRecords) {
 export {
   getRecords,
   recordSelected,
-  recordsLoaded,
-  recordsLoadingError,
-  setRecordActive,
-  moveRecord,
+  navigateToRoot,
 }

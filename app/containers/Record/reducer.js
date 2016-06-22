@@ -6,6 +6,7 @@ import {
   MOVE_RECORD,
   SELECT_RECORD,
   LAST_TARGET,
+  NAVIGATE_TO_ROOT,
 } from './constants'
 
 const initialState = {
@@ -21,7 +22,7 @@ const initialState = {
 
 const observableReducer = (state=initialState, action) => {
   switch (action.type) {
-    case LAST_TARGET:
+    case NAVIGATE_TO_ROOT:
       return Object.assign({}, state, {
         target: action.target,
       })

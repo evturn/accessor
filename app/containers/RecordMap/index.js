@@ -4,9 +4,8 @@ import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
   getRecords,
-  setRecordActive,
-  moveRecord,
   recordSelected,
+  navigateToRoot,
 } from 'containers/Record/actions'
 
 import Button from 'components/Button'
@@ -50,7 +49,9 @@ class RecordMap extends Component {
   render() {
     return (
       <div>
-        <H1 className={styles.header}>⧉</H1>
+        <H1
+          className={styles.header}
+          onClick={_ => this.props.navigateToRoot(this.props.target)}>⧉</H1>
         <div className={styles.nav}>{
           this.props.target
             ? <span
@@ -94,8 +95,7 @@ RecordMap.propTypes = {
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
   recordSelected: id => dispatch(recordSelected(id)),
-  setRecordActive: id => dispatch(setRecordActive(id)),
-  moveRecord: ({ targetID, parentID }) => dispatch(moveRecord({ targetID, parentID })),
+  navigateToRoot: target => dispatch(navigateToRoot(target)),
 })
 
 export default connect(
