@@ -21,60 +21,91 @@ class RecordMap extends Component {
     this.props.getRecords()
   }
 
-  navigateToRoot = target => {
-    this.props.navigateToRoot(target)
+  renderHeader() {
+    return ({ navigateToRoot, target }) => (
+      <H1
+        className={css.header}
+        onClick={_ => navigateToRoot(target)}>
+        ⧉
+      </H1>
+    )
   }
 
-  renderRecord = record => {
+  renderCardViewNav() {
+    return ({ target, recordSelected }) => (
+      <div className={css.nav}>{
+        target
+          ? <span
+              className={css.back}
+              onClick={_ => recordSelected(target.parent)}>
+              ⬅︎
+            </span>
+          : null
+      }</div>
+    )
+  }
+
+  renderLoadingIndicator() {
+    return ({ loading, records, children }) => (
+      loading
+        ? <List component={LoadingIndicator} />
+        : records && !loading
+          ? children
+          : null
+      )
+  }
+
+  renderAllRecords() {
+    return ({ records, renderRecord }) => (
+      <ul className={css.list}>
+        {records.map(renderRecord)}
+      </ul>
+    )
+  }
+
+  renderRecord(record) {
     return (
       <Record
-        key={record.id}
-        {...record}>{
-          record._children
-          ? <ul>{record._children.map(this.renderRecord)}</ul>
+        {...record}
+        key={record.id}>{
+        record._children
+          ? <ul>{record._children.map(::this.renderRecord)}</ul>
           : null
       }</Record>
     )
   }
 
+
   render() {
-    const {
-      records,
-      target,
-      loading,
-    } = this.props
+    const AppHeader = this.renderHeader()
+    const CardViewHeader = this.renderCardViewNav()
+    const Records = this.renderAllRecords()
+    const LoadHandler = this.renderLoadingIndicator()
 
     return (
       <div className={css.x}>
-        <H1
-          className={css.header}
-          onClick={_ => this.navigateToRoot(target)}>
-          ⧉
-        </H1>
-        <div className={css.nav}>{
-          target
-            ? <span
-                className={css.back}
-                onClick={_ => this.props.recordSelected(target.parent)}>
-                ⬅︎
-              </span>
-            : null
-        }</div>
-          {loading
-            ? <List component={LoadingIndicator} />
-            : records && !loading
-              ? <ul className={css.list}>
-                  {records.map(this.renderRecord)}
-                </ul>
-              : null
-          }
-        </div>
+        <AppHeader
+          target={this.props.target}
+          navigateToRoot={this.props.navigateToRoot}
+        />
+        <CardViewHeader
+          target={this.props.target}
+          recordSelected={this.props.recordSelected}
+        />
+        <LoadHandler
+          loading={this.props.loading}
+          records={this.props.records}>
+          <Records
+            records={this.props.records}
+            renderRecord={::this.renderRecord}
+          />
+        </LoadHandler>
+      </div>
     )
   }
 }
 
 RecordMap.propTypes = {
-  changeRoute: PropTypes.func,
   loading: PropTypes.bool,
   error: PropTypes.oneOfType([
     PropTypes.object,

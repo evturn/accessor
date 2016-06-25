@@ -21,36 +21,38 @@ class Record extends Component {
     }
   }
 
+  getContainerStyle(current, parent, root) {
+    return root
+      || parent
+        ? `${css.title} ${css.open}`
+        : current
+          ? `${css.title} ${css.open} ${css.main}`
+          : css.shut
+  }
+
   toggleExpand(expand) {
     this.setState({ expand })
   }
 
-  render() {
-    const CURRENT_TARGET = this.props.target.id === this.props.id
-    const PARENT_IS_TARGET = this.props.target.id === this.props.parent
-    const ROOT_IS_TARGET = this.props.target === false && this.props.parent === false
-
-    const titleClass = ROOT_IS_TARGET
-      || PARENT_IS_TARGET
-        ? `${css.title} ${css.open}`
-        : CURRENT_TARGET
-          ? `${css.title} ${css.open} ${css.main}`
+  createDescriptionComponent(current, parent, root) {
+    return ({ expand, more }) => {
+      const expandClass = current
+        || expand && parent
+        || expand && root
+          ? `${css.more} ${css.open}`
           : css.shut
 
-    const NestedRecords = ({ children }) => {
-      const nestClass = CURRENT_TARGET
-        && children
-          ? `${css.open} ${css.nest}`
-          : ''
       return (
-        <div className={nestClass}>
-          {children}
+        <div className={expandClass}>
+          {more}
         </div>
       )
     }
+  }
 
-    const SwitchControls = ({ expand, id, toggle, selected }) => (
-      !CURRENT_TARGET
+  createSwitchControlsComponent(current) {
+    return ({ expand, id, toggle, selected }) => (
+      !current
         ? <div className={css.ctrls}>
             <SwitchExpand
               expand={expand}
@@ -63,20 +65,31 @@ class Record extends Component {
           </div>
         : null
     )
+  }
 
-    const RecordDescription = ({ expand }) => {
-      const expandClass = CURRENT_TARGET
-        || expand && PARENT_IS_TARGET
-        || expand && ROOT_IS_TARGET
-          ? `${css.more} ${css.open}`
-          : css.shut
-
+  createNestedRecordsComponent(current) {
+    return ({ children }) => {
+      const nestClass = current
+        && children
+          ? `${css.open} ${css.nest}`
+          : ''
       return (
-        <div className={expandClass}>
-          {this.props.more}
+        <div className={nestClass}>
+          {children}
         </div>
       )
     }
+  }
+
+  render() {
+    const CURRENT_TARGET = this.props.target.id === this.props.id
+    const PARENT_IS_TARGET = this.props.target.id === this.props.parent
+    const ROOT_IS_TARGET = this.props.target === false && this.props.parent === false
+
+    const NestedRecords = this.createNestedRecordsComponent(CURRENT_TARGET)
+    const SwitchControls = this.createSwitchControlsComponent(CURRENT_TARGET)
+    const RecordDescription = this.createDescriptionComponent(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
+    const titleClass = this.getContainerStyle(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
 
     return (
       <li className={css.li}>
@@ -93,7 +106,10 @@ class Record extends Component {
             selected={::this.props.recordSelected}
           />
         </div>
-        <RecordDescription expand={this.state.expand} />
+        <RecordDescription
+          expand={this.state.expand}
+          more={this.props.more}
+        />
         <NestedRecords children={this.props.children} />
         {CURRENT_TARGET
           ? <div className={css.btns}>
