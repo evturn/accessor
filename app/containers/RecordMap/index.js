@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
   getRecords,
@@ -74,7 +73,6 @@ class RecordMap extends Component {
       }</Record>
     )
   }
-
 
   render() {
     const AppHeader = this.renderHeader()

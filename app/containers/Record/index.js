@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
   SwitchExpand,
@@ -20,6 +21,8 @@ class Record extends Component {
       expand: false,
     }
   }
+
+  shouldPureComponentUpdate = shouldPureComponentUpdate
 
   getContainerStyle(current, parent, root) {
     return root
@@ -122,7 +125,6 @@ class Record extends Component {
     )
   }
 }
-
 
 Record.PropTypes = {
   title: PropTypes.string,
