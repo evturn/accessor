@@ -46,7 +46,8 @@
       "stage-0"
     ],
     "plugins": [
-      "transform-decorators-legacy"
+      "transform-decorators-legacy",
+      "transform-function-bind"
     ],
     "env": {
       "production": {
@@ -137,6 +138,7 @@
     "babel-loader": "^6.2.4",
     "babel-plugin-react-transform": "^2.0.2",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-function-bind": "^6.8.0",
     "babel-plugin-transform-react-constant-elements": "^6.8.0",
     "babel-plugin-transform-react-inline-elements": "^6.8.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.2.7",

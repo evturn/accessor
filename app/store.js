@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import { fromJS } from 'immutable'
 import { routerMiddleware } from 'react-router-redux'
 import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'

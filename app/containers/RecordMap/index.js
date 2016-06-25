@@ -21,10 +21,6 @@ class RecordMap extends Component {
     this.props.getRecords()
   }
 
-  recordSelected = id => {
-    this.props.recordSelected(id)
-  }
-
   navigateToRoot = target => {
     this.props.navigateToRoot(target)
   }
@@ -33,7 +29,6 @@ class RecordMap extends Component {
     return (
       <Record
         key={record.id}
-        recordSelected={this.recordSelected.bind(this)}
         {...record}>{
           record._children
           ? <ul>{record._children.map(this.renderRecord)}</ul>
@@ -60,7 +55,7 @@ class RecordMap extends Component {
           target
             ? <span
                 className={css.back}
-                onClick={_ => this.recordSelected(target.parent)}>
+                onClick={_ => this.props.recordSelected(target.parent)}>
                 ⬅︎
               </span>
             : null

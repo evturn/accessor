@@ -6,6 +6,10 @@ import {
   SwitchSelect,
 } from 'components/Switch'
 
+import {
+  recordSelected,
+} from 'containers/Record/actions'
+
 import css from './styles.css'
 
 class Record extends Component {
@@ -17,11 +21,7 @@ class Record extends Component {
     }
   }
 
-  recordSelected = id => {
-    this.props.recordSelected(id)
-  }
-
-  toggleExpand = expand => {
+  toggleExpand(expand) {
     this.setState({ expand })
   }
 
@@ -89,8 +89,8 @@ class Record extends Component {
           <SwitchControls
             id={this.props.id}
             expand={this.state.expand}
-            toggle={this.toggleExpand}
-            selected={this.recordSelected}
+            toggle={::this.toggleExpand}
+            selected={::this.props.recordSelected}
           />
         </div>
         <RecordDescription expand={this.state.expand} />
@@ -130,6 +130,10 @@ Record.PropTypes = {
   ]),
 }
 
+const mapDispatchToProps = dispatch => ({
+  recordSelected: id => dispatch(recordSelected(id)),
+})
+
 export default connect(
   ({ global }) => ({
     active: global.active,
@@ -137,5 +141,6 @@ export default connect(
     branches: global.branches,
     selected: global.selected,
     target: global.target,
-  })
+  }),
+  mapDispatchToProps
 )(Record)
