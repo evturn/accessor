@@ -37,7 +37,7 @@ class Record extends Component {
     this.setState({ expand })
   }
 
-  createDescriptionComponent(current, parent, root) {
+  createRecordDescription(current, parent, root) {
     return ({ expand, more }) => {
       const expandClass = current
         || expand && parent
@@ -53,7 +53,7 @@ class Record extends Component {
     }
   }
 
-  createSwitchControlsComponent(current) {
+  createSwitchControls(current) {
     return ({ expand, id, toggle, selected }) => (
       !current
         ? <div className={css.ctrls}>
@@ -70,7 +70,18 @@ class Record extends Component {
     )
   }
 
-  createNestedRecordsComponent(current) {
+  createRecordActions(current) {
+    return ({ addChildRecord, addAttachment }) => (
+      current
+        ? <div className={css.btns}>
+            <div className={css.clip}>＋</div>
+            <div className={css.clip}>📎</div>
+          </div>
+        : null
+    )
+  }
+
+  createNestedRecords(current) {
     return ({ children }) => {
       const nestClass = current
         && children
@@ -89,9 +100,10 @@ class Record extends Component {
     const PARENT_IS_TARGET = this.props.target.id === this.props.parent
     const ROOT_IS_TARGET = this.props.target === false && this.props.parent === false
 
-    const NestedRecords = this.createNestedRecordsComponent(CURRENT_TARGET)
-    const SwitchControls = this.createSwitchControlsComponent(CURRENT_TARGET)
-    const RecordDescription = this.createDescriptionComponent(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
+    const NestedRecords = this.createNestedRecords(CURRENT_TARGET)
+    const SwitchControls = this.createSwitchControls(CURRENT_TARGET)
+    const RecordActions = this.createRecordActions(CURRENT_TARGET)
+    const RecordDescription = this.createRecordDescription(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
     const titleClass = this.getContainerStyle(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
 
     return (
@@ -114,13 +126,7 @@ class Record extends Component {
           more={this.props.more}
         />
         <NestedRecords children={this.props.children} />
-        {CURRENT_TARGET
-          ? <div className={css.btns}>
-              <div className={css.clip}>＋</div>
-              <div className={css.clip}>📎</div>
-            </div>
-          : null
-        }
+        <RecordActions />
       </li>
     )
   }
