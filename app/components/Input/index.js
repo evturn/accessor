@@ -2,28 +2,42 @@ import React from 'react'
 
 import css from './styles.css'
 
-const Input = ({ value, onChange, onBlur, onKeyPress, ref }) => {
+const Input = ({ active, getBackingInstance, submit, edit }) => {
   return (
-    <input
-      style={{
-        border: 'none',
-        borderBottom: '1px solid #ccc',
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 300,
-        fontSize: '14px',
-        margin: '20px 0 0 0',
-        height: '21px',
-        width: '100%',
-        transitionDuration: '0.3s'
-      }}
-      type="text"
-      ref={i => ref = i}
-      onBlur={onBlur}
-      onChange={onChange}
-      onKeyPress={onKeyPress}
-      value={value}
-   />
+    active
+      ? <input
+          className={css.standard}
+          ref={getBackingInstance}
+          onBlur={submit}
+          onKeyPress={edit}
+          onChange={edit}
+        />
+      : null
   )
 }
 
-export default Input
+const InputEditor = ({ className, active, getBackingInstance, submit, edit, value, updateRecord, children }) => {
+  return (
+    <div className={className}>{
+      active
+        ? <input
+            className={`${css.editor} ${className}`}
+            ref={getBackingInstance}
+
+            onKeyPress={edit}
+            onChange={edit}
+            defaultValue={value}
+          />
+        : <span
+            className={css.text}
+            onClick={updateRecord}>{value}</span>
+      }
+      {children}
+    </div>
+  )
+}
+
+export {
+  Input,
+  InputEditor,
+}

@@ -21,8 +21,26 @@
   color: #ccc;
 }
 
-.open.title.main {
+.title.open.main {
+  position: relative;
+}
+
+.title.open .title.editor {
   font-size: 16px;
+  font-weight: bold;
+  height: 23px;
+  margin-top: 20px;
+}
+.title.open.main,
+.title.open.main > .main {
+  font-size: 16px;
+  font-weight: bold;
+  height: 23px;
+  margin-top: 20px;
+}
+
+.title.open.main .text {
+  height: 21px;
 }
 
 .nest {
@@ -78,8 +96,14 @@ ul ul .title {
   cursor: pointer;
 }
 
+.title {
+  position: relative;
+}
+
 .ctrls {
-  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .select {
@@ -97,3 +121,17 @@ ul ul .title {
   height: 30px;
   line-height: 30px;
 }
+
+input.field {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-family: 'Helvetica Neue';
+  font-weight: 300;
+  font-size: 14px;
+  margin: 20px 0 0 0;
+  height: 21px;
+  width: 100%;
+  transition-duration: 0.3s;
+}
+
+

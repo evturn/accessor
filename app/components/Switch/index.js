@@ -22,10 +22,10 @@ const SwitchSelect = ({ id, recordSelected }) => {
   )
 }
 
-const SwitchControls = ({ current, expand, toggle, id, recordSelected }) => {
+const SwitchControls = ({ current, expand, toggle, id, recordSelected, hide }) => {
   return (
     !current
-      ? <div className={css.ctrls}>
+      ? <div className={`${css.ctrls} ${hide ? css.hide : ''}`}>
           <SwitchExpand
             expand={expand}
             toggle={toggle}
@@ -39,7 +39,7 @@ const SwitchControls = ({ current, expand, toggle, id, recordSelected }) => {
   )
 }
 
-const SwitchActions = ({ current, createNewRecord}) => {
+const SwitchActions = ({ current, createNewRecord }) => {
   return (
     current
       ? <div className={css.btns}>
@@ -52,9 +52,18 @@ const SwitchActions = ({ current, createNewRecord}) => {
   )
 }
 
+const SwitchDrag = ({ current, hide }) => {
+  return (
+    current
+      ? <div className={`${css.clip} ${hide ? css.hide : ''}`}>⋮</div>
+      : null
+  )
+}
+
 export {
   SwitchExpand,
   SwitchSelect,
   SwitchControls,
   SwitchActions,
+  SwitchDrag,
 }

@@ -5,6 +5,7 @@ import {
   SELECT_RECORD,
   NAVIGATE_TO_ROOT,
   RECORD_HAS_CHANGED,
+  RECORD_HAS_UPDATES,
 } from './constants'
 
 const initialState = {
@@ -46,6 +47,7 @@ const observableReducer = (state=initialState, action) => {
         target: action.target,
       })
 
+    case RECORD_HAS_UPDATES:
     case RECORD_HAS_CHANGED:
       return Object.assign({}, state, {
         records: action.records,

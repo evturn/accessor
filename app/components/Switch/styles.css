@@ -13,3 +13,18 @@
 .btns {
   composes: btns from '../../containers/Record/styles.css';
 }
+
+.ctrls,
+.clip {
+  transition-duration: 0.3s;
+  opacity: 1;
+}
+
+.ctrls.hide,
+.clip.hide {
+  opacity: 0.2;
+  transition-duration: 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

@@ -5,12 +5,19 @@ import shouldPureComponentUpdate from 'react-pure-render/function'
 import {
   SwitchControls,
   SwitchActions,
+  SwitchDrag,
 } from 'components/Switch'
 
 import {
   recordSelected,
   recordHasChanged,
+  recordHasUpdates,
 } from 'containers/Record/actions'
+
+import {
+  Input,
+  InputEditor,
+} from 'components/Input'
 
 import css from './styles.css'
 
@@ -21,6 +28,7 @@ class Record extends Component {
     this.state = {
       expand: false,
       editing: false,
+      updating: false,
       formValue: '',
     }
   }
@@ -55,7 +63,7 @@ class Record extends Component {
     e.charCode === 13
       ? this.submit()
       : this.setState({
-          formValue: this['😵'].value
+          formValue: e.target.value
         })
   }
 
@@ -71,19 +79,31 @@ class Record extends Component {
     this.setState({ editing: true })
   }
 
+  updateRecord() {
+    this.setState({ updating: true })
+  }
+
   submit() {
-    this.state.formValue.length
-      ? this.props.recordHasChanged({
-          parent: { ...this.props },
-          record: {
-            title: this.state.formValue,
-            more: `I can not shut the hell about ${this.state.formValue}!`
-          }
-        })
-      : null
+    if (this.state.formValue.length) {
+      this.state.editing
+        ? this.props.recordHasChanged({
+            parent: { ...this.props },
+            record: {
+              title: this.state.formValue,
+              more: `I can not shut the hell about ${this.state.formValue}!`
+            }
+          })
+        : this.state.updating
+          ? this.props.recordHasUpdates({
+              record: { ...this.props },
+              title: this.state.formValue
+            })
+          : null
+    }
 
     this.setState({
       editing: false,
+      updating: false,
       formValue: '',
     })
   }
@@ -100,20 +120,27 @@ class Record extends Component {
 
     return (
       <li className={css.li}>
-        <div className={classes.title}>
-          {this.props.title}
-          {derived.current
-            ? <div className={css.clip}>⋮</div>
-            : null
-          }
+        <InputEditor
+          className={classes.title}
+          updateRecord={::this.updateRecord}
+          active={this.state.updating}
+          getBackingInstance={::this.getBackingInstance}
+          submit={::this.submit}
+          edit={::this.edit}
+          value={this.props.title}>
+          <SwitchDrag
+            hide={this.state.updating}
+            current={derived.current}
+          />
           <SwitchControls
             current={derived.current}
             expand={this.state.expand}
             toggle={::this.toggleDescription}
             id={this.props.id}
             recordSelected={::this.props.recordSelected}
+            hide={this.state.updating}
           />
-        </div>
+        </InputEditor>
         <div className={classes.expand}>
           {this.props.more}
         </div>
@@ -122,26 +149,12 @@ class Record extends Component {
           createNewRecord={::this.createNewRecord}
         />
         <div className={classes.nested}>
-          {this.state.editing
-            ? <input
-                style={{
-                  border: 'none',
-                  borderBottom: '1px solid #ccc',
-                  fontFamily: 'Helvetica Neue',
-                  fontWeight: 300,
-                  fontSize: '14px',
-                  margin: '20px 0 0 0',
-                  height: '21px',
-                  width: '100%',
-                  transitionDuration: '0.3s'
-                }}
-                ref={::this.getBackingInstance}
-                onBlur={::this.submit}
-                onKeyPress={::this.edit}
-                onChange={::this.edit}
-              />
-            : null
-          }
+          <Input
+            active={this.state.editing}
+            getBackingInstance={::this.getBackingInstance}
+            submit={::this.submit}
+            edit={::this.edit}
+          />
           {this.props.children}
         </div>
       </li>
@@ -173,7 +186,8 @@ Record.PropTypes = {
 
 const mapDispatchToProps = dispatch => ({
   recordSelected: id => dispatch(recordSelected(id)),
-  recordHasChanged: ({ parent, record }) => dispatch(recordHasChanged({ parent, record }))
+  recordHasChanged: ({ parent, record }) => dispatch(recordHasChanged({ parent, record })),
+  recordHasUpdates: ({ record, title }) => dispatch(recordHasUpdates({ record, title })),
 })
 
 export default connect(

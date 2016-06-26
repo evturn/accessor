@@ -1,10 +1,41 @@
 .field {
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #E3E3E3;
   font-family: 'Helvetica Neue';
+  width: 100%;
   font-weight: 300;
-  font-size: 14px;
-  margin: 20px 0;
-  height: 21px;
   transition-duration: 0.3s;
+}
+
+.field:focus {
+  outline: none;
+}
+
+.title.open.field,
+.title.open.main,
+.title.open.main.editor
+.title.open.main .text {
+  font-size: 16px;
+  font-weight: bold;
+  height: 23px;
+  margin-top: 20px;
+}
+
+.text {
+  height: 21px;
+}
+
+.editor {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 20px;
+  height: 23px;
+  composes: field;
+}
+
+.standard {
+  font-size: 14px;
+  margin: 20px 0 0 0;
+  height: 21px;
+  composes: field;
 }

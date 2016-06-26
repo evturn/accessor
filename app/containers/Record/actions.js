@@ -9,6 +9,7 @@ import {
   SELECT_RECORD,
   NAVIGATE_TO_ROOT,
   RECORD_HAS_CHANGED,
+  RECORD_HAS_UPDATES,
 } from './constants'
 
 const getRecords = _ => (
@@ -77,6 +78,32 @@ const recordHasChanged = ({ parent, record }) => (
       .flatMap(({ records, branches, flatRecords }) => {
         return Rx.Observable.of({
           type: RECORD_HAS_CHANGED,
+          records,
+          branches,
+          flatRecords,
+        })
+      })
+  }
+)
+
+const recordHasUpdates = ({ record, title }) => (
+  (actions, store) => {
+
+    function updateRecord(flatRecords) {
+      return flatRecords.map(y => {
+        return y.id === record.id
+          ? { ...y, title }
+          : y
+      })
+    }
+
+    return Rx.Observable.of(store.getState().global.flatRecords)
+      .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
+      .map(updateRecord)
+      .flatMap(buildRecordsTree)
+      .flatMap(({ records, branches, flatRecords }) => {
+        return Rx.Observable.of({
+          type: RECORD_HAS_UPDATES,
           records,
           branches,
           flatRecords,
@@ -246,4 +273,5 @@ export {
   recordSelected,
   navigateToRoot,
   recordHasChanged,
+  recordHasUpdates,
 }
