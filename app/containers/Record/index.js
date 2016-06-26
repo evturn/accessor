@@ -9,6 +9,7 @@ import {
 
 import {
   recordSelected,
+  recordHasChanged,
 } from 'containers/Record/actions'
 
 import css from './styles.css'
@@ -19,6 +20,8 @@ class Record extends Component {
 
     this.state = {
       expand: false,
+      editing: false,
+      formValue: '',
     }
   }
 
@@ -44,6 +47,47 @@ class Record extends Component {
     }
   }
 
+  toggleDescription() {
+    this.setState({ expand: !this.state.expand})
+  }
+
+  edit(e) {
+    e.charCode === 13
+      ? this.submit()
+      : this.setState({
+          formValue: this['😵'].value
+        })
+  }
+
+  getBackingInstance(input) {
+    this['😵'] = input
+
+    this['😵'] !== null
+      ? this['😵'].focus()
+      : null
+  }
+
+  createNewRecord() {
+    this.setState({ editing: true })
+  }
+
+  submit() {
+    this.state.formValue.length
+      ? this.props.recordHasChanged({
+          parent: { ...this.props },
+          record: {
+            title: this.state.formValue,
+            more: `I can not shut the hell about ${this.state.formValue}!`
+          }
+        })
+      : null
+
+    this.setState({
+      editing: false,
+      formValue: '',
+    })
+  }
+
   render() {
     const derived = {
       current: this.props.target.id === this.props.id,
@@ -66,7 +110,7 @@ class Record extends Component {
             ? <div className={css.ctrls}>
                 <SwitchExpand
                   expand={this.state.expand}
-                  toggle={_ => this.setState({ expand: !this.state.expand})}
+                  toggle={::this.toggleDescription}
                 />
                 <SwitchSelect
                   id={this.props.id}
@@ -78,17 +122,40 @@ class Record extends Component {
         </div>
         <div className={classes.expand}>
           {this.props.more}
-        </div>
-        <div className={classes.nested}>
-          {this.props.children}
         </div>{
         derived.current
           ? <div className={css.btns}>
-              <div className={css.clip}>＋</div>
+              <div
+                className={css.clip}
+                onClick={::this.createNewRecord}>＋</div>
               <div className={css.clip}>📎</div>
             </div>
           : null
-      }</li>
+        }
+        <div className={classes.nested}>
+          {this.state.editing
+            ? <input
+                style={{
+                  border: 'none',
+                  borderBottom: '1px solid #ccc',
+                  fontFamily: 'Helvetica Neue',
+                  fontWeight: 300,
+                  fontSize: '14px',
+                  margin: '20px 0 0 0',
+                  height: '21px',
+                  width: '100%',
+                  transitionDuration: '0.3s'
+                }}
+                ref={::this.getBackingInstance}
+                onBlur={::this.submit}
+                onKeyPress={::this.edit}
+                onChange={::this.edit}
+              />
+            : null
+          }
+          {this.props.children}
+        </div>
+      </li>
     )
   }
 }
@@ -117,6 +184,7 @@ Record.PropTypes = {
 
 const mapDispatchToProps = dispatch => ({
   recordSelected: id => dispatch(recordSelected(id)),
+  recordHasChanged: ({ parent, record }) => dispatch(recordHasChanged({ parent, record }))
 })
 
 export default connect(

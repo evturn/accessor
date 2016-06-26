@@ -1,0 +1,10 @@
+.field {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  font-family: 'Helvetica Neue';
+  font-weight: 300;
+  font-size: 14px;
+  margin: 20px 0;
+  height: 21px;
+  transition-duration: 0.3s;
+}

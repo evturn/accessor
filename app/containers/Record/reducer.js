@@ -2,9 +2,9 @@ import {
   LOAD_RECORDS,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
-  UPDATE_ACTIVE_BRANCH,
   SELECT_RECORD,
   NAVIGATE_TO_ROOT,
+  RECORD_HAS_CHANGED,
 } from './constants'
 
 const initialState = {
@@ -46,10 +46,11 @@ const observableReducer = (state=initialState, action) => {
         target: action.target,
       })
 
-    case UPDATE_ACTIVE_BRANCH:
+    case RECORD_HAS_CHANGED:
       return Object.assign({}, state, {
-        active: action.active,
-        branch: action.branch,
+        records: action.records,
+        flatRecords: action.flatRecords,
+        branches: action.branches,
       })
 
     case NAVIGATE_TO_ROOT:

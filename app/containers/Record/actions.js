@@ -5,11 +5,10 @@ import {
   LOAD_RECORDS,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
-  UPDATE_ACTIVE_BRANCH,
   MOVE_RECORD,
   SELECT_RECORD,
-  LAST_TARGET,
   NAVIGATE_TO_ROOT,
+  RECORD_HAS_CHANGED,
 } from './constants'
 
 const getRecords = _ => (
@@ -18,8 +17,19 @@ const getRecords = _ => (
       _ => Rx.Observable.of({ type: LOAD_RECORDS })
     )
 
+    function updateRecordsState({ records, branches, flatRecords }) {
+      return Rx.Observable.of({
+          type: LOAD_RECORDS_SUCCESS,
+          records,
+          branches,
+          flatRecords,
+        })
+      }
+
     return Rx.Observable.fromPromise(request('/api'))
       .flatMap(buildRecordsTree)
+      .flatMap(updateRecordsState)
+
   }
 )
 
@@ -45,6 +55,34 @@ const navigateToRoot = target => (
         })
       : Rx.Observable.empty()
   )
+)
+
+const recordHasChanged = ({ parent, record }) => (
+  (actions, store) => {
+
+    function addNewRecord(flatRecords) {
+      return [{
+        id: flatRecords.length + 1,
+        title: record.title,
+        more: record.more,
+        parent: parent.id,
+      }].concat(flatRecords)
+    }
+
+
+    return Rx.Observable.of(store.getState().global.flatRecords)
+      .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
+      .map(addNewRecord)
+      .flatMap(buildRecordsTree)
+      .flatMap(({ records, branches, flatRecords }) => {
+        return Rx.Observable.of({
+          type: RECORD_HAS_CHANGED,
+          records,
+          branches,
+          flatRecords,
+        })
+      })
+  }
 )
 
 function buildRecordsTree(data) {
@@ -87,18 +125,13 @@ function buildRecordsTree(data) {
     return acc
   }
 
-  function updateRecordsState({ records, branches }) {
-    return Rx.Observable.of({
-        type: LOAD_RECORDS_SUCCESS,
-        records,
-        branches,
-        flatRecords: data
-      })
-    }
-
   return Rx.Observable.from(data)
     .reduce(recordReducer, {})
-    .flatMap(updateRecordsState)
+    .map(({ records, branches }) => ({
+      records,
+      branches,
+      flatRecords: data
+    }))
 }
 
 const moveRecord = ({ targetID, parentID }) => (
@@ -212,4 +245,5 @@ export {
   getRecords,
   recordSelected,
   navigateToRoot,
+  recordHasChanged,
 }
