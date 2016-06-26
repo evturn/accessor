@@ -1,0 +1,18 @@
+.x {
+  min-height: 80vh;
+}
+
+.header {
+  text-align: center;
+  font-weight: 300;
+  font-size: 50px;
+}
+
+.back {
+  color: #2065FFFF;
+  cursor: pointer;
+}
+
+.nav {
+  height: 25px;
+}

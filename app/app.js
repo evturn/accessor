@@ -14,7 +14,7 @@ import {
 } from 'containers/App/selectors'
 
 import App from 'containers/App'
-import RecordMap from 'containers/RecordMap'
+import Card from 'containers/Card'
 
 import styles from 'containers/App/styles.css'
 
@@ -35,7 +35,7 @@ ReactDOM.render(
       history={history}
       render={applyRouterMiddleware(useScroll(selectTippyTop))}>
       <Route path='/' component={App}>
-        <IndexRoute component={RecordMap} />
+        <IndexRoute component={Card} />
       </Route>
     </Router>
   </Provider>,

@@ -6,7 +6,7 @@ const SwitchExpand = ({ expand, toggle }) => {
   return (
     <button
       className={css.select}
-      onClick={_ => toggle(!expand)}>
+      onClick={toggle}>
       <span>{expand ? `⬆` : `⬇`}</span>
     </button>
   )

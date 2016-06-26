@@ -24,110 +24,71 @@ class Record extends Component {
 
   shouldPureComponentUpdate = shouldPureComponentUpdate
 
-  getContainerStyle(current, parent, root) {
-    return root
-      || parent
-        ? `${css.title} ${css.open}`
-        : current
-          ? `${css.title} ${css.open} ${css.main}`
-          : css.shut
-  }
-
-  toggleExpand(expand) {
-    this.setState({ expand })
-  }
-
-  createRecordDescription(current, parent, root) {
-    return ({ expand, more }) => {
-      const expandClass = current
-        || expand && parent
-        || expand && root
+  computeStyles(x) {
+    return {
+      expand: x.current
+        || x.expand && x.parent
+        || x.expand && x.root
           ? `${css.more} ${css.open}`
-          : css.shut
-
-      return (
-        <div className={expandClass}>
-          {more}
-        </div>
-      )
-    }
-  }
-
-  createSwitchControls(current) {
-    return ({ expand, id, toggle, selected }) => (
-      !current
-        ? <div className={css.ctrls}>
-            <SwitchExpand
-              expand={expand}
-              toggle={toggle}
-            />
-            <SwitchSelect
-              id={id}
-              recordSelected={selected}
-            />
-          </div>
-        : null
-    )
-  }
-
-  createRecordActions(current) {
-    return ({ addChildRecord, addAttachment }) => (
-      current
-        ? <div className={css.btns}>
-            <div className={css.clip}>＋</div>
-            <div className={css.clip}>📎</div>
-          </div>
-        : null
-    )
-  }
-
-  createNestedRecords(current) {
-    return ({ children }) => {
-      const nestClass = current
-        && children
+          : css.shut,
+      nested: x.current
+        && x.children
           ? `${css.open} ${css.nest}`
-          : ''
-      return (
-        <div className={nestClass}>
-          {children}
-        </div>
-      )
+          : '',
+      title: x.root
+        || x.parent
+          ? `${css.title} ${css.open}`
+          : x.current
+            ? `${css.title} ${css.open} ${css.main}`
+            : css.shut
     }
   }
 
   render() {
-    const CURRENT_TARGET = this.props.target.id === this.props.id
-    const PARENT_IS_TARGET = this.props.target.id === this.props.parent
-    const ROOT_IS_TARGET = this.props.target === false && this.props.parent === false
-
-    const NestedRecords = this.createNestedRecords(CURRENT_TARGET)
-    const SwitchControls = this.createSwitchControls(CURRENT_TARGET)
-    const RecordActions = this.createRecordActions(CURRENT_TARGET)
-    const RecordDescription = this.createRecordDescription(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
-    const titleClass = this.getContainerStyle(CURRENT_TARGET, PARENT_IS_TARGET, ROOT_IS_TARGET)
+    const derived = {
+      current: this.props.target.id === this.props.id,
+      parent: this.props.target.id === this.props.parent,
+      root: this.props.target === false && this.props.parent === false,
+      expand: this.state.expand,
+      children: this.props.children
+    }
+    const classes = this.computeStyles(derived)
 
     return (
       <li className={css.li}>
-        <div className={titleClass}>
+        <div className={classes.title}>
           {this.props.title}
-          {CURRENT_TARGET
+          {derived.current
             ? <div className={css.clip}>⋮</div>
             : null
           }
-          <SwitchControls
-            id={this.props.id}
-            expand={this.state.expand}
-            toggle={::this.toggleExpand}
-            selected={::this.props.recordSelected}
-          />
+          {!derived.current
+            ? <div className={css.ctrls}>
+                <SwitchExpand
+                  expand={this.state.expand}
+                  toggle={_ => this.setState({ expand: !this.state.expand})}
+                />
+                <SwitchSelect
+                  id={this.props.id}
+                  recordSelected={::this.props.recordSelected}
+                />
+              </div>
+            : null
+          }
         </div>
-        <RecordDescription
-          expand={this.state.expand}
-          more={this.props.more}
-        />
-        <NestedRecords children={this.props.children} />
-        <RecordActions />
-      </li>
+        <div className={classes.expand}>
+          {this.props.more}
+        </div>
+        <div className={classes.nested}>
+          {this.props.children}
+        </div>{
+        derived.current
+          ? <div className={css.btns}>
+              <div className={css.clip}>＋</div>
+              <div className={css.clip}>📎</div>
+            </div>
+          : null
+      }</li>
     )
   }
 }
@@ -163,7 +124,6 @@ export default connect(
     active: global.active,
     branch: global.branch,
     branches: global.branches,
-    selected: global.selected,
     target: global.target,
   }),
   mapDispatchToProps

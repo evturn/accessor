@@ -31,7 +31,6 @@ const recordSelected = id => (
     )
     .map(([flatRecords, branches]) => ({
       type: SELECT_RECORD,
-      selected: branches[id],
       target: !id ? false : flatRecords.filter(x => x.id === id)[0],
     }))
   }
