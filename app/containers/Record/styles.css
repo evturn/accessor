@@ -6,7 +6,26 @@
 .li {
   list-style: none;
   margin: 20px 0;
-  transition-duration: 0.3s;
+}
+
+.tree .record,
+.tree .records, {
+  font-family: 'Helvetica Neue';
+  display: block;
+  font-size: 14px;
+}
+
+.tree {
+  list-style: none;
+}
+
+.record {
+  height: 24px;
+  margin: 20px 0 20px 0;
+}
+
+.tree .records {
+  margin-left: 15px;
 }
 
 .title {
@@ -108,6 +127,17 @@ ul ul .title {
 
 .select {
   composes: back from '../RecordMap/styles.css';
+}
+
+.drag {
+  width: 35px;
+  color: #ADADAD;
+  text-align: right;
+  float: right;
+}
+
+.dragging {
+  opacity: 0.4;
 }
 
 .clip {

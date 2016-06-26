@@ -9,7 +9,6 @@ import styles from './styles.css'
 const App = props => (
   <div className={styles.wrapper}>
     {props.children}
-    <Footer />
   </div>
 )
 

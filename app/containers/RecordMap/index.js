@@ -47,6 +47,8 @@ RecordMap.propTypes = {
     PropTypes.bool,
     PropTypes.object
   ]),
+  cardView: PropTypes.bool,
+  treeView: PropTypes.bool,
 }
 
 export default connect(
@@ -54,5 +56,6 @@ export default connect(
     records: global.records,
     target: global.target,
     loading: global.loading,
+    view: global.view,
   }),
 )(RecordMap)

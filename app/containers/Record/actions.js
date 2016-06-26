@@ -10,6 +10,8 @@ import {
   NAVIGATE_TO_ROOT,
   RECORD_HAS_CHANGED,
   RECORD_HAS_UPDATES,
+  SELECT_CARD_VIEW,
+  SELECT_TREE_VIEW,
 } from './constants'
 
 const getRecords = _ => (
@@ -112,6 +114,18 @@ const recordHasUpdates = ({ record, title }) => (
   }
 )
 
+const selectCardView = _ => (
+  (actions, store) => (
+    Rx.Observable.of({ type: SELECT_CARD_VIEW })
+  )
+)
+
+const selectTreeView = _ => (
+  (actions, store) => (
+    Rx.Observable.of({ type: SELECT_TREE_VIEW })
+  )
+)
+
 function buildRecordsTree(data) {
 
   function createBranch(record) {
@@ -161,117 +175,12 @@ function buildRecordsTree(data) {
     }))
 }
 
-const moveRecord = ({ targetID, parentID }) => (
-  (actions, store) => {
-    const flatRecords$ = Rx.Observable.from(store.getState().global.flatRecords)
-
-    function popTargetFromParentChildren(parent) {
-      return {
-      ...parent,
-      _children: parent._children
-        .filter(x => x !== targetID)
-        .map(x => x.id)
-      }
-    }
-
-    function getMutualParent(target, parent) {
-      return parent.parent
-        ? flatRecords$
-          .filter(x => x.id === parent.parent)
-          .map(mutualParent => ({
-            target,
-            parent,
-            mutualParent
-          }))
-        : Rx.Observable.of({
-            target,
-            parent
-          })
-    }
-
-    function assignTargetToMutualParent({ target, mutualParent }) {
-      if (mutualParent) {
-        return [{
-          ...mutualParent,
-          _children: mutualParent._children.push(target.id)
-        },{
-          ...target,
-          parent: mutualParent.id
-        }]
-      } else {
-        return [{
-          ...target,
-          parent: false
-        }]
-      }
-    }
-
-    function assembleFlatRecords(targets) {
-      return flatRecords$
-        .filter(x => {
-          return targets.filter(y => x.id === y.id)[0]
-            ? false
-            : true
-        })
-        .reduce((acc, x) => acc.concat([x]), targets)
-    }
-
-    return flatRecords$
-      .filter(x => x.id === parentID)
-      .map(popTargetFromParentChildren)
-      .flatMap(parent => {
-        return flatRecords$
-          .filter(x => x.id === targetID)
-          .flatMap(target => getMutualParent(target, parent))
-      })
-      .map(assignTargetToMutualParent)
-      .flatMap(assembleFlatRecords)
-      .flatMap(assembleRecords)
-      .flatMap(({ records, flatRecords }) => {
-        return Rx.Observable.of({
-          type: MOVE_RECORD,
-          records,
-          flatRecords,
-        })
-      })
-  }
-)
-
-function createMap(flatRecords) {
-  return Rx.Observable.from(flatRecords)
-    .reduce((acc, x) => {
-
-      function assignChildren(x) {
-        const kids = flatRecords
-          .filter(y => y.parent === x.id)
-
-        if (kids.length) {
-          kids.map(assignChildren)
-
-          x._children = kids.reduce((acc, x) => {
-            acc[x.id] = x
-            return acc
-          }, {})
-        } else {
-          x._children = false
-        }
-
-        return x
-
-      }
-
-    if (!x.parent && !acc[x.id]) {
-      acc[x.id] = assignChildren(x)
-    }
-
-    return acc
-  }, {})
-}
-
 export {
   getRecords,
   recordSelected,
   navigateToRoot,
   recordHasChanged,
   recordHasUpdates,
+  selectCardView,
+  selectTreeView,
 }

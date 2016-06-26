@@ -6,6 +6,8 @@ import {
   NAVIGATE_TO_ROOT,
   RECORD_HAS_CHANGED,
   RECORD_HAS_UPDATES,
+  SELECT_CARD_VIEW,
+  SELECT_TREE_VIEW,
 } from './constants'
 
 const initialState = {
@@ -15,6 +17,8 @@ const initialState = {
   flatRecords: false,
   branches: false,
   target: false,
+  cardView: true,
+  treeView: false,
 }
 
 const observableReducer = (state=initialState, action) => {
@@ -58,6 +62,18 @@ const observableReducer = (state=initialState, action) => {
     case NAVIGATE_TO_ROOT:
       return Object.assign({}, state, {
         target: action.target,
+      })
+
+    case SELECT_CARD_VIEW:
+      return Object.assign({}, state, {
+        cardView: true,
+        treeView: false,
+      })
+
+    case SELECT_TREE_VIEW:
+      return Object.assign({}, state, {
+        cardView: false,
+        treeView: true,
       })
 
     default:

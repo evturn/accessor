@@ -30,6 +30,7 @@ class Record extends Component {
       editing: false,
       updating: false,
       formValue: '',
+      dragging: false,
     }
   }
 
@@ -108,6 +109,18 @@ class Record extends Component {
     })
   }
 
+  onDragStart() {
+    this.setState({
+      dragging: true,
+    })
+  }
+
+  onDragEnd() {
+    this.setState({
+      dragging: false,
+    })
+  }
+
   render() {
     const derived = {
       current: this.props.target.id === this.props.id,
@@ -119,45 +132,59 @@ class Record extends Component {
     const classes = this.computeStyles(derived)
 
     return (
-      <li className={css.li}>
-        <InputEditor
-          className={classes.title}
-          updateRecord={::this.updateRecord}
-          active={this.state.updating}
-          getBackingInstance={::this.getBackingInstance}
-          submit={::this.submit}
-          edit={::this.edit}
-          value={this.props.title}>
-          <SwitchDrag
-            hide={this.state.updating}
-            current={derived.current}
-          />
-          <SwitchControls
-            current={derived.current}
-            expand={this.state.expand}
-            toggle={::this.toggleDescription}
-            id={this.props.id}
-            recordSelected={::this.props.recordSelected}
-            hide={this.state.updating}
-          />
-        </InputEditor>
-        <div className={classes.expand}>
-          {this.props.more}
-        </div>
-        <SwitchActions
-          current={derived.current}
-          createNewRecord={::this.createNewRecord}
-        />
-        <div className={classes.nested}>
-          <Input
-            active={this.state.editing}
-            getBackingInstance={::this.getBackingInstance}
-            submit={::this.submit}
-            edit={::this.edit}
-          />
-          {this.props.children}
-        </div>
-      </li>
+      this.props.cardView
+        ? <li className={css.li}>
+            <InputEditor
+              className={classes.title}
+              updateRecord={::this.updateRecord}
+              active={this.state.updating}
+              getBackingInstance={::this.getBackingInstance}
+              submit={::this.submit}
+              edit={::this.edit}
+              value={this.props.title}>
+              <SwitchDrag
+                hide={this.state.updating}
+                current={derived.current}
+              />
+              <SwitchControls
+                current={derived.current}
+                expand={this.state.expand}
+                toggle={::this.toggleDescription}
+                id={this.props.id}
+                recordSelected={::this.props.recordSelected}
+                hide={this.state.updating}
+              />
+            </InputEditor>
+            <div className={classes.expand}>
+              {this.props.more}
+            </div>
+            <SwitchActions
+              current={derived.current}
+              createNewRecord={::this.createNewRecord}
+            />
+            <div className={classes.nested}>
+              <Input
+                active={this.state.editing}
+                getBackingInstance={::this.getBackingInstance}
+                submit={::this.submit}
+                edit={::this.edit}
+              />
+              {this.props.children}
+            </div>
+          </li>
+        : <li className={css.tree}>
+            <div
+              className={css.drag}
+              onTouchStart={::this.onDragStart}
+              onTouchEnd={::this.onDragEnd}>
+              ⋯
+            </div>
+            <div
+              className={`${css.record} ${this.state.dragging ? css.dragging : ''}`}>
+              {this.props.title}
+            </div>
+            <div className={css.records}>{this.props.children}</div>
+          </li>
     )
   }
 }
@@ -182,6 +209,8 @@ Record.PropTypes = {
     PropTypes.bool,
     PropTypes.object
   ]),
+  cardView: PropTypes.bool,
+  treeView: PropTypes.bool,
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -196,6 +225,8 @@ export default connect(
     branch: global.branch,
     branches: global.branches,
     target: global.target,
+    cardView: global.cardView,
+    treeView: global.treeView,
   }),
   mapDispatchToProps
 )(Record)

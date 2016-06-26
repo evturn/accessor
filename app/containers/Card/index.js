@@ -6,6 +6,8 @@ import {
   getRecords,
   recordSelected,
   navigateToRoot,
+  selectCardView,
+  selectTreeView,
 } from 'containers/Record/actions'
 
 import H1 from 'components/H1'
@@ -28,6 +30,15 @@ class Card extends Component {
           onClick={_ => this.props.navigateToRoot(this.props.target)}>
           ⧉
         </H1>
+        <H1 className={css.perspective}>{
+          this.props.treeView
+            ? <span onClick={this.props.selectCardView}>
+                ⦶
+              </span>
+            : <span onClick={this.props.selectTreeView}>
+                ⊖
+              </span>
+      }</H1>
         <div className={css.nav}>{
           this.props.target
             ? <span
@@ -37,7 +48,11 @@ class Card extends Component {
               </span>
             : null
         }</div>
-        <RecordMap records={this.props.records} />
+        <RecordMap
+          cardView={this.props.cardView}
+          treeView={this.props.treeView}
+          records={this.props.records}
+        />
       </div>
     )
   }
@@ -59,12 +74,16 @@ Card.propTypes = {
     PropTypes.bool,
     PropTypes.object
   ]),
+  cardView: PropTypes.bool,
+  treeView: PropTypes.bool,
 }
 
 const mapDispatchToProps = dispatch => ({
   getRecords: _ => dispatch(getRecords()),
   recordSelected: id => dispatch(recordSelected(id)),
   navigateToRoot: target => dispatch(navigateToRoot(target)),
+  selectCardView: _ => dispatch(selectCardView()),
+  selectTreeView: _ => dispatch(selectTreeView()),
 })
 
 export default connect(
@@ -72,6 +91,8 @@ export default connect(
     records: global.records,
     target: global.target,
     loading: global.loading,
+    cardView: global.cardView,
+    treeView: global.treeView,
   }),
   mapDispatchToProps
 )(Card)
