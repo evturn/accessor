@@ -23,7 +23,7 @@ const InputEditor = ({ className, active, getBackingInstance, submit, edit, valu
         ? <input
             className={`${css.editor} ${className}`}
             ref={getBackingInstance}
-
+            onBlur={submit}
             onKeyPress={edit}
             onChange={edit}
             defaultValue={value}
