@@ -22,7 +22,39 @@ const SwitchSelect = ({ id, recordSelected }) => {
   )
 }
 
+const SwitchControls = ({ current, expand, toggle, id, recordSelected }) => {
+  return (
+    !current
+      ? <div className={css.ctrls}>
+          <SwitchExpand
+            expand={expand}
+            toggle={toggle}
+          />
+          <SwitchSelect
+            id={id}
+            recordSelected={recordSelected}
+          />
+        </div>
+      : null
+  )
+}
+
+const SwitchActions = ({ current, createNewRecord}) => {
+  return (
+    current
+      ? <div className={css.btns}>
+          <div
+            className={css.clip}
+            onClick={createNewRecord}>＋</div>
+          <div className={css.clip}>📎</div>
+        </div>
+      : null
+  )
+}
+
 export {
   SwitchExpand,
   SwitchSelect,
+  SwitchControls,
+  SwitchActions,
 }

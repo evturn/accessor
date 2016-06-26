@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
-  SwitchExpand,
-  SwitchSelect,
+  SwitchControls,
+  SwitchActions,
 } from 'components/Switch'
 
 import {
@@ -106,32 +106,21 @@ class Record extends Component {
             ? <div className={css.clip}>⋮</div>
             : null
           }
-          {!derived.current
-            ? <div className={css.ctrls}>
-                <SwitchExpand
-                  expand={this.state.expand}
-                  toggle={::this.toggleDescription}
-                />
-                <SwitchSelect
-                  id={this.props.id}
-                  recordSelected={::this.props.recordSelected}
-                />
-              </div>
-            : null
-          }
+          <SwitchControls
+            current={derived.current}
+            expand={this.state.expand}
+            toggle={::this.toggleDescription}
+            id={this.props.id}
+            recordSelected={::this.props.recordSelected}
+          />
         </div>
         <div className={classes.expand}>
           {this.props.more}
-        </div>{
-        derived.current
-          ? <div className={css.btns}>
-              <div
-                className={css.clip}
-                onClick={::this.createNewRecord}>＋</div>
-              <div className={css.clip}>📎</div>
-            </div>
-          : null
-        }
+        </div>
+        <SwitchActions
+          current={derived.current}
+          createNewRecord={::this.createNewRecord}
+        />
         <div className={classes.nested}>
           {this.state.editing
             ? <input

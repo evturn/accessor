@@ -1,3 +1,15 @@
 .select {
   composes: back from '../../containers/Record/styles.css';
 }
+
+.ctrls {
+  composes: ctrls from '../../containers/Record/styles.css';
+}
+
+.clip {
+  composes: clip from '../../containers/Record/styles.css';
+}
+
+.btns {
+  composes: btns from '../../containers/Record/styles.css';
+}
