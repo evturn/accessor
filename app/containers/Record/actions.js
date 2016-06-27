@@ -149,7 +149,10 @@ const selectCardView = _ => (
 
 const selectTreeView = _ => (
   (actions, store) => (
-    Rx.Observable.of({ type: SELECT_TREE_VIEW })
+    Rx.Observable.of({
+      type: SELECT_TREE_VIEW,
+      target: false,
+    })
   )
 )
 

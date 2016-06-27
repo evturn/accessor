@@ -8,7 +8,6 @@ import {
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-  SEED_STORAGE,
 } from './constants'
 
 import {
@@ -69,11 +68,6 @@ const observableReducer = (state=initialState, action) => {
         status: action.status,
       })
 
-    case SEED_STORAGE:
-      return Object.assign({}, state, {
-        status: action.status
-      })
-
     case NAVIGATE_TO_ROOT:
       return Object.assign({}, state, {
         target: action.target,
@@ -89,6 +83,7 @@ const observableReducer = (state=initialState, action) => {
       return Object.assign({}, state, {
         cardView: false,
         treeView: true,
+        target: action.target,
       })
 
     default:
