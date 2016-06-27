@@ -8,3 +8,4 @@ export {
   storageActions
 } from './actions'
 export storageMiddleware from './middleware'
+export storageAccessor from './accessor'

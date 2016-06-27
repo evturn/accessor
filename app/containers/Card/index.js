@@ -77,6 +77,10 @@ Card.propTypes = {
   ]),
   cardView: PropTypes.bool,
   treeView: PropTypes.bool,
+  status: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.string,
+  ]),
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -88,13 +92,13 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(
-  ({ global, storage }) => ({
+  ({ global }) => ({
     records: global.records,
     target: global.target,
     loading: global.loading,
     cardView: global.cardView,
     treeView: global.treeView,
-    status: storage.status,
+    status: global.status,
   }),
   mapDispatchToProps
 )(Card)

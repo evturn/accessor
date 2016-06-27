@@ -8,4 +8,7 @@ export const RECORD_HAS_CHANGED = '@@accessor/RECORD_HAS_CHANGED'
 export const RECORD_HAS_UPDATES = '@@accessor/RECORD_HAS_UPDATES'
 export const SELECT_CARD_VIEW = '@@accessor/SELECT_CARD_VIEW'
 export const SELECT_TREE_VIEW = '@@accessor/SELECT_TREE_VIEW'
-export const SUBSCRIBE_STORAGE = '@@accessor/SUBSCRIBE_STORAGE'
+export const SEED_STORAGE = '@@accessor/SEED_STORAGE'
+
+export const STORAGE_KEY = '@accessor'
+export const SEED = false

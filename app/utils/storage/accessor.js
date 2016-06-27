@@ -4,35 +4,36 @@ import {
   STORAGE_ERROR,
 } from './reducer'
 
-export default storageKey => ({
-  get() {
+export default function(storageKey) {
+  const get = (type=GET_ITEM, status ) => {
     try {
-      const value = JSON.parse(localStorage.getItem(storageKey))
-      const status = value !== null
-        ? `Recovered selection from storage`
-        : `Initialized with no selection in storage`
+      const data = JSON.parse(localStorage.getItem(storageKey))
 
       return {
-        type: GET_ITEM,
-        payload: { ...value, status }
+        type,
+        data,
+        status: data === null
+          ? `Initialized with no selection in storage`
+          : status
+            ? status
+            : `Recovered selection from storage`
       }
 
     } catch(e) {
 
       return {
         type: STORAGE_ERROR,
-        payload: { status: `Storage error: ${e.message}` }
+        status: `Storage error: ${e.message}`
       }
 
     }
-  },
+  }
 
-  set(v) {
+  const set = v => {
     localStorage.setItem(storageKey, JSON.stringify(v))
 
-    return {
-      type: SET_ITEM,
-      payload: { status: `👍 Saved selection` }
-    }
+    return get(SET_ITEM, `👍 Saved selection`)
   }
-})
+
+  return { get, set }
+}

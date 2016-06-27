@@ -39,6 +39,7 @@ module.exports = require('./webpack.base.babel')({
     }),
     new webpack.DefinePlugin({
       __DEV__: true,
+      __SEED__: process.env.SEED,
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       }

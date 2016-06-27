@@ -1,4 +1,11 @@
 import * as Rx from 'rxjs'
+import buildRecordsTree from 'utils/tree'
+import seedStorage from 'utils/seed'
+
+import {
+  GET_ITEM,
+  storageActions
+} from 'utils/storage'
 
 import {
   LOAD_RECORDS,
@@ -10,25 +17,44 @@ import {
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-  SUBSCRIBE_STORAGE,
+  SEED_STORAGE,
+  SEED,
 } from './constants'
-import {
-  GET_ITEM,
-  storageActions
-} from 'utils/storage'
+
+const loadInitialState = _ => (
+  Rx.Observable.of(storageActions.get())
+)
+
+const loadingRecords = _ => (
+  Rx.Observable.of({ type: LOAD_RECORDS })
+)
+
+const seedRecords = _ => dispatch => (
+  seedStorage(x => Rx.Observable.of({ type: SEED_STORAGE, ...x }))
+)
 
 const getRecords = _ => (
   (actions, store) => {
-    store.dispatch(_ =>
-      Rx.Observable.of(storageActions.get())
-    )
+    store.dispatch(loadingRecords)
+
+    SEED
+      ? store.dispatch(seedRecords())
+      : null
+
+    store.dispatch(loadInitialState)
 
     return Rx.Observable.of(actions.ofType(GET_ITEM))
-      .mapTo({
-        type: LOAD_RECORDS_SUCCESS,
-        ...store.getState().storage
+      .mapTo(store.getState().storage.data)
+      .map(buildRecordsTree)
+      .flatMap(({ flatRecords, records, branches }) => {
+        return Rx.Observable.of({
+          type: LOAD_RECORDS_SUCCESS,
+          flatRecords,
+          records,
+          branches,
+          status: store.getState().storage.status,
+        })
       })
-      .startWith({ type: LOAD_RECORDS })
   }
 )
 
@@ -68,22 +94,20 @@ const recordHasChanged = ({ parent, record }) => (
       }].concat(flatRecords)
     }
 
-
     return Rx.Observable.of(store.getState().global.flatRecords)
       .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
       .map(addNewRecord)
-      .flatMap(buildRecordsTree)
+      .map(buildRecordsTree)
       .flatMap(({ records, branches, flatRecords }) => {
 
         store.dispatch(
-          _ => Rx.Observable.of(storageActions.set({ records, branches, flatRecords }))
+          _ => Rx.Observable.of(storageActions.set(flatRecords))
         )
 
         return Rx.Observable.of({
           type: RECORD_HAS_CHANGED,
-          records,
-          branches,
-          flatRecords,
+          records, branches, flatRecords,
+          status: store.getState().storage.status
         })
       })
   }
@@ -103,18 +127,17 @@ const recordHasUpdates = ({ record, title }) => (
     return Rx.Observable.of(store.getState().global.flatRecords)
       .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
       .map(updateRecord)
-      .flatMap(buildRecordsTree)
+      .map(buildRecordsTree)
       .flatMap(({ records, branches, flatRecords }) => {
 
         store.dispatch(
-          _ => Rx.Observable.of(storageActions.set({ records, branches, flatRecords }))
+          _ => Rx.Observable.of(storageActions.set(flatRecords))
         )
 
         return Rx.Observable.of({
           type: RECORD_HAS_UPDATES,
-          records,
-          branches,
-          flatRecords,
+          records, branches, flatRecords,
+          status: store.getState().storage.status
         })
       })
   }
@@ -132,54 +155,7 @@ const selectTreeView = _ => (
   )
 )
 
-function buildRecordsTree(data) {
 
-  function createBranch(record) {
-    function addParentID(record, branch) {
-      if (record.parent) {
-        data
-          .filter(x => x.id === record.parent)
-          .map(x => addParentID(x, branch))
-      }
-
-      branch.push(record.id)
-      return branch
-    }
-
-    return addParentID(record, [])
-  }
-
-  function createChildren(record) {
-    function addChildren(record, children) {
-      if (children.length) {
-        record._children = children
-        children.map(createChildren)
-      }
-
-      return record
-    }
-
-    return addChildren(record, data.filter(x => x.parent === record.id))
-  }
-
-  function recordReducer(acc, x) {
-    if (!acc.branches) acc.branches = {}
-    if (!acc.records) acc.records = []
-    if (!x.parent) acc.records.push(createChildren(x))
-
-    acc.branches[x.id] = createBranch(x)
-
-    return acc
-  }
-
-  return Rx.Observable.from(data)
-    .reduce(recordReducer, {})
-    .map(({ records, branches }) => ({
-      records,
-      branches,
-      flatRecords: data
-    }))
-}
 
 export {
   getRecords,

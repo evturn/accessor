@@ -3,12 +3,7 @@ const logger = require('./logger')
 
 const frontend = require('./middlewares/frontendMiddleware')
 const __DEV__ = process.env.NODE_ENV !== 'production'
-const seedData = require('./middlewares/seed')
 const app = express()
-
-app.get('/api', (req, res) => {
-  res.json(seedData)
-})
 
 const webpackConfig = __DEV__
   ? require('../internals/webpack/webpack.dev.babel')
@@ -16,7 +11,7 @@ const webpackConfig = __DEV__
 
 app.use(frontend(webpackConfig))
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 3000
 
 app.listen(port, e => {
   if (e) {
