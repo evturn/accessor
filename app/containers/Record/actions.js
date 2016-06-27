@@ -1,7 +1,6 @@
 import * as Rx from 'rxjs'
 import buildRecordsTree from 'utils/tree'
-import seedStorage from 'utils/seed'
-
+import seedData from '../../../internals/seed'
 import {
   GET_ITEM,
   storageActions
@@ -17,7 +16,6 @@ import {
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-  SEED_STORAGE,
   SEED,
 } from './constants'
 
@@ -29,8 +27,8 @@ const loadingRecords = _ => (
   Rx.Observable.of({ type: LOAD_RECORDS })
 )
 
-const seedRecords = _ => dispatch => (
-  seedStorage(x => Rx.Observable.of({ type: SEED_STORAGE, ...x }))
+const seedRecords = _ => (
+  Rx.Observable.of(storageActions.set(seedData))
 )
 
 const getRecords = _ => (
@@ -38,7 +36,7 @@ const getRecords = _ => (
     store.dispatch(loadingRecords)
 
     SEED
-      ? store.dispatch(seedRecords())
+      ? store.dispatch(seedRecords)
       : null
 
     store.dispatch(loadInitialState)
