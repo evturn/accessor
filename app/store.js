@@ -3,13 +3,16 @@ import { routerMiddleware } from 'react-router-redux'
 import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'
 import createReducer from './reducers'
+import { storageMiddleware } from 'utils/storage'
 
 const observableMiddleware = reduxObservable()
+const STORAGE_KEY = '@accessor'
 const devtools = window.devToolsExtension || (() => noop => noop)
 
 export default function configureStore(initialState={}, history) {
   const middlewares = [
     observableMiddleware,
+    storageMiddleware(STORAGE_KEY),
     routerMiddleware(history),
   ]
 

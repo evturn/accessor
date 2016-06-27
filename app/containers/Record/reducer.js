@@ -8,7 +8,14 @@ import {
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
+  SUBSCRIBE_STORAGE,
 } from './constants'
+
+import {
+  GET_ITEM,
+  SET_ITEM,
+  STORAGE_ERROR,
+} from 'utils/storage'
 
 const initialState = {
   loading: false,
@@ -19,6 +26,7 @@ const initialState = {
   target: false,
   cardView: true,
   treeView: false,
+  storage: false,
 }
 
 const observableReducer = (state=initialState, action) => {
@@ -40,10 +48,10 @@ const observableReducer = (state=initialState, action) => {
         branches: action.branches,
       })
 
-    case LOAD_RECORDS_ERROR:
+    case STORAGE_ERROR:
       return Object.assign({}, state, {
         loading: false,
-        error: action.error,
+        error: action.payload.status,
       })
 
     case SELECT_RECORD:
@@ -57,6 +65,11 @@ const observableReducer = (state=initialState, action) => {
         records: action.records,
         flatRecords: action.flatRecords,
         branches: action.branches,
+      })
+
+    case SUBSCRIBE_STORAGE:
+      return Object.assign({}, state, {
+        storage: true,
       })
 
     case NAVIGATE_TO_ROOT:

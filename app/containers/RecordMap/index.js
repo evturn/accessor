@@ -56,6 +56,5 @@ export default connect(
     records: global.records,
     target: global.target,
     loading: global.loading,
-    view: global.view,
   }),
 )(RecordMap)

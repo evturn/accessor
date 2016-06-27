@@ -17,7 +17,6 @@ import App from 'containers/App'
 import Card from 'containers/Card'
 
 import styles from 'containers/App/styles.css'
-
 const openSansObserver = new FontFaceObserver('Open Sans', {})
 openSansObserver
   .check()

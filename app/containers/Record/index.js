@@ -222,7 +222,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   ({ global }) => ({
     active: global.active,
-    branch: global.branch,
     branches: global.branches,
     target: global.target,
     cardView: global.cardView,

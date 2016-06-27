@@ -19,7 +19,7 @@ class Card extends Component {
   shouldPureComponentUpdate = shouldPureComponentUpdate
 
   componentDidMount() {
-    this.props.getRecords()
+    this.props.loadInitialState()
   }
 
   render() {
@@ -38,7 +38,7 @@ class Card extends Component {
             : <span onClick={this.props.selectTreeView}>
                 ⊖
               </span>
-      }</H1>
+        }</H1>
         <div className={css.nav}>{
           this.props.target
             ? <span
@@ -53,6 +53,7 @@ class Card extends Component {
           treeView={this.props.treeView}
           records={this.props.records}
         />
+        <div className={css.status}>{this.props.status}</div>
       </div>
     )
   }
@@ -68,7 +69,7 @@ Card.propTypes = {
     PropTypes.array,
     PropTypes.bool,
   ]),
-  getRecords: PropTypes.func,
+  loadInitialState: PropTypes.func,
   recordSelected: PropTypes.func,
   target: PropTypes.oneOfType([
     PropTypes.bool,
@@ -79,20 +80,21 @@ Card.propTypes = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  getRecords: _ => dispatch(getRecords()),
   recordSelected: id => dispatch(recordSelected(id)),
   navigateToRoot: target => dispatch(navigateToRoot(target)),
   selectCardView: _ => dispatch(selectCardView()),
   selectTreeView: _ => dispatch(selectTreeView()),
+  loadInitialState: _ => dispatch(getRecords()),
 })
 
 export default connect(
-  ({ global }) => ({
+  ({ global, storage }) => ({
     records: global.records,
     target: global.target,
     loading: global.loading,
     cardView: global.cardView,
     treeView: global.treeView,
+    status: storage.status,
   }),
   mapDispatchToProps
 )(Card)

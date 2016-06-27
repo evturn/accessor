@@ -29,6 +29,14 @@ body.fontLoaded {
   flex-direction: column;
 }
 
+.txSelect {
+  color: #2065FFFF;
+}
+
+.bgSelect {
+  background-color: #2065FFFF;
+}
+
 .logoWrapper {
   display: block;
   position: relative;

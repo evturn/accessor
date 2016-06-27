@@ -24,3 +24,19 @@
   font-size: 30px;
   color: #ccc;
 }
+
+.status {
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  color: #ccc;
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+  font-size: 12px;
+  transition: 1s;
+  transition-delay: 0.1s;
+}

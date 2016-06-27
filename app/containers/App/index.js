@@ -4,10 +4,10 @@ import 'sanitize.css/sanitize.css'
 
 import Footer from 'components/Footer'
 
-import styles from './styles.css'
+import css from './styles.css'
 
 const App = props => (
-  <div className={styles.wrapper}>
+  <div className={css.wrapper}>
     {props.children}
   </div>
 )

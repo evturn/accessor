@@ -1,38 +1,34 @@
 import * as Rx from 'rxjs'
-import request from 'utils/request'
 
 import {
   LOAD_RECORDS,
   LOAD_RECORDS_SUCCESS,
   LOAD_RECORDS_ERROR,
-  MOVE_RECORD,
   SELECT_RECORD,
   NAVIGATE_TO_ROOT,
   RECORD_HAS_CHANGED,
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
+  SUBSCRIBE_STORAGE,
 } from './constants'
+import {
+  GET_ITEM,
+  storageActions
+} from 'utils/storage'
 
 const getRecords = _ => (
   (actions, store) => {
-    store.dispatch(
-      _ => Rx.Observable.of({ type: LOAD_RECORDS })
+    store.dispatch(_ =>
+      Rx.Observable.of(storageActions.get())
     )
 
-    function updateRecordsState({ records, branches, flatRecords }) {
-      return Rx.Observable.of({
-          type: LOAD_RECORDS_SUCCESS,
-          records,
-          branches,
-          flatRecords,
-        })
-      }
-
-    return Rx.Observable.fromPromise(request('/api'))
-      .flatMap(buildRecordsTree)
-      .flatMap(updateRecordsState)
-
+    return Rx.Observable.of(actions.ofType(GET_ITEM))
+      .mapTo({
+        type: LOAD_RECORDS_SUCCESS,
+        ...store.getState().storage
+      })
+      .startWith({ type: LOAD_RECORDS })
   }
 )
 
@@ -78,6 +74,11 @@ const recordHasChanged = ({ parent, record }) => (
       .map(addNewRecord)
       .flatMap(buildRecordsTree)
       .flatMap(({ records, branches, flatRecords }) => {
+
+        store.dispatch(
+          _ => Rx.Observable.of(storageActions.set({ records, branches, flatRecords }))
+        )
+
         return Rx.Observable.of({
           type: RECORD_HAS_CHANGED,
           records,
@@ -104,6 +105,11 @@ const recordHasUpdates = ({ record, title }) => (
       .map(updateRecord)
       .flatMap(buildRecordsTree)
       .flatMap(({ records, branches, flatRecords }) => {
+
+        store.dispatch(
+          _ => Rx.Observable.of(storageActions.set({ records, branches, flatRecords }))
+        )
+
         return Rx.Observable.of({
           type: RECORD_HAS_UPDATES,
           records,
