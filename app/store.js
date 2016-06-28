@@ -16,9 +16,9 @@ export default function configureStore(initialState={}, history) {
     routerMiddleware(history),
   ]
 
-  if (__DEV__) {
-    middlewares.push(logger())
-  }
+  __DEV__
+    ? middlewares.push(logger())
+    : null
 
   const enhancers = [
     applyMiddleware(...middlewares),

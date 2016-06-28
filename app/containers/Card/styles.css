@@ -40,3 +40,14 @@
   transition: 1s;
   transition-delay: 0.1s;
 }
+
+.newRoot {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  height: 40px;
+  width: 40px;
+  border: 1px solid #2065FFFF;
+  border-radius: 50%;
+  color: #2065FFFF;
+}

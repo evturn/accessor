@@ -57,6 +57,7 @@ const observableReducer = (state=initialState, action) => {
     case SELECT_RECORD:
       return Object.assign({}, state, {
         target: action.target,
+
       })
 
     case RECORD_HAS_UPDATES:
