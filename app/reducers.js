@@ -1,11 +1,10 @@
-import { fromJS } from 'immutable'
 import { combineReducers } from 'redux'
 import { routerReducer } from 'react-router-redux'
 import { LOCATION_CHANGE } from 'react-router-redux'
 
 import { storageReducer } from 'utils/storage'
 
-import observableReducer from 'containers/Record/reducer'
+import observableReducer from 'containers/reducer'
 
 function routeReducer(state={
   locationBeforeTransitions: null

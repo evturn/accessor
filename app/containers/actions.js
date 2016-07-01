@@ -1,6 +1,6 @@
 import * as Rx from 'rxjs'
 import buildRecordsTree from 'utils/tree'
-import seedData from '../../../internals/seed'
+import seedData from '../../internals/seed'
 import {
   GET_ITEM,
   storageActions
@@ -17,7 +17,7 @@ import {
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
   SEED,
-} from './constants'
+} from 'containers/constants'
 
 const loadInitialState = _ => (
   Rx.Observable.of(storageActions.get())

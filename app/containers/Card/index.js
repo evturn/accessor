@@ -8,7 +8,7 @@ import {
   navigateToRoot,
   selectCardView,
   selectTreeView,
-} from 'containers/Record/actions'
+} from 'containers/actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'

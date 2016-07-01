@@ -12,7 +12,7 @@ import {
   recordSelected,
   recordHasChanged,
   recordHasUpdates,
-} from 'containers/Record/actions'
+} from 'containers/actions'
 
 import {
   Input,

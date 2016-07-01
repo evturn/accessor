@@ -8,7 +8,7 @@ import {
   RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-} from './constants'
+} from 'containers/constants'
 
 import {
   GET_ITEM,

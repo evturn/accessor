@@ -4,7 +4,7 @@ import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'
 import createReducer from './reducers'
 import { storageMiddleware } from 'utils/storage'
-import { STORAGE_KEY } from 'containers/Record/constants'
+import { STORAGE_KEY } from 'containers/constants'
 
 const observableMiddleware = reduxObservable()
 const devtools = window.devToolsExtension || (() => noop => noop)
