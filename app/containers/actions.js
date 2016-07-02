@@ -17,29 +17,23 @@ const loadInitialState = _ => (
   }
 )
 
-const recordSelected = id => (
+const changeTarget = id => (
   (actions, store) => (
     Rx.Observable.of(store.getState().data)
       .map(x => ({ target: !id ? false : x.filter(y => y.id === id)[0] }))
-      .flatMap(recordActions.targetChange)
+      .flatMap(recordActions.changeTarget)
   )
 )
 
-const goHome = target => (
+const navigateToRoot = target => (
   (actions, store) => (
     Rx.Observable.of(target)
-      .flatMap(target => {
-        if (!target) {
-          return Rx.Observable.empty()
-        }
-
-        return Rx.Observable.of({ target: false })
-      })
+      .filter(target => target !== false)
       .flatMap(recordActions.navigateToRoot)
   )
 )
 
-const recordCreated = ({ parent, record }) => (
+const createRecord = ({ parent, record }) => (
   (actions, store) => {
     return Rx.Observable.of(store.getState().data)
       .map(prevData => {
@@ -61,7 +55,7 @@ const recordCreated = ({ parent, record }) => (
   }
 )
 
-const recordUpdated = ({ record, title }) => (
+const updateRecord = ({ record, title }) => (
   (actions, store) => {
     return Rx.Observable.of(store.getState().data)
       .flatMap(prevData => {
@@ -97,10 +91,10 @@ const selectTreeView = _ => (
 
 export {
   loadInitialState,
-  recordSelected,
-  goHome,
-  recordCreated,
-  recordUpdated,
+  changeTarget,
+  createRecord,
+  updateRecord,
+  navigateToRoot,
   selectCardView,
   selectTreeView,
 }

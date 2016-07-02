@@ -12,17 +12,17 @@ const SwitchExpand = ({ expand, toggle }) => {
   )
 }
 
-const SwitchSelect = ({ id, recordSelected }) => {
+const SwitchSelect = ({ id, changeTarget }) => {
   return (
     <button
       className={css.select}
-      onClick={_ => recordSelected(id)}>
+      onClick={_ => changeTarget(id)}>
       ➡︎
     </button>
   )
 }
 
-const SwitchControls = ({ current, expand, toggle, id, recordSelected, hide }) => {
+const SwitchControls = ({ current, expand, toggle, id, changeTarget, hide }) => {
   return (
     !current
       ? <div className={`${css.ctrls} ${hide ? css.hide : ''}`}>
@@ -32,7 +32,7 @@ const SwitchControls = ({ current, expand, toggle, id, recordSelected, hide }) =
           />
           <SwitchSelect
             id={id}
-            recordSelected={recordSelected}
+            changeTarget={changeTarget}
           />
         </div>
       : null

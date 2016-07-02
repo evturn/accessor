@@ -9,7 +9,7 @@ import {
   STORAGE_ERROR,
   POPULATE_RECORDS,
   NAVIGATE_TO_ROOT,
-  TARGET_CHANGE,
+  CHANGE_TARGET,
 } from 'containers/App/constants'
 
 const initialState = {
@@ -38,15 +38,9 @@ const appReducer = (state=initialState, action) => {
         ...action.payload
       })
 
-    case GET_STATE_FROM_STORAGE:
-    case SET_STATE_FROM_STORAGE:
-    case STORAGE_ERROR:
-    case TARGET_CHANGE:
     case NAVIGATE_TO_ROOT:
-    case CREATE_RECORD:
-    case UPDATE_RECORD:
       return Object.assign({}, state, {
-        ...action.payload
+        target: false,
       })
 
     case SELECT_CARD_VIEW:
@@ -60,6 +54,16 @@ const appReducer = (state=initialState, action) => {
         cardView: false,
         treeView: true,
         target: false,
+      })
+
+    case GET_STATE_FROM_STORAGE:
+    case SET_STATE_FROM_STORAGE:
+    case STORAGE_ERROR:
+    case CHANGE_TARGET:
+    case CREATE_RECORD:
+    case UPDATE_RECORD:
+      return Object.assign({}, state, {
+        ...action.payload
       })
 
     default:

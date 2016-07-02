@@ -9,9 +9,9 @@ import {
 } from 'components/Switch'
 
 import {
-  recordSelected,
-  recordCreated,
-  recordUpdated,
+  changeTarget,
+  createRecord,
+  updateRecord,
 } from 'containers/actions'
 
 import {
@@ -87,7 +87,7 @@ class Record extends Component {
   submit() {
     if (this.state.formValue.length) {
       this.state.editing
-        ? this.props.recordCreated({
+        ? this.props.createRecord({
             parent: { ...this.props },
             record: {
               title: this.state.formValue,
@@ -95,7 +95,7 @@ class Record extends Component {
             }
           })
         : this.state.updating
-          ? this.props.recordUpdated({
+          ? this.props.updateRecord({
               record: { ...this.props },
               title: this.state.formValue
             })
@@ -151,7 +151,7 @@ class Record extends Component {
                 expand={this.state.expand}
                 toggle={::this.toggleDescription}
                 id={this.props.id}
-                recordSelected={::this.props.recordSelected}
+                changeTarget={::this.props.changeTarget}
                 hide={this.state.updating}
               />
             </InputEditor>
@@ -213,9 +213,9 @@ Record.PropTypes = {
 }
 
 const mapDispatchToProps = dispatch => ({
-  recordSelected: id => dispatch(recordSelected(id)),
-  recordCreated: ({ parent, record }) => dispatch(recordCreated({ parent, record })),
-  recordUpdated: ({ record, title }) => dispatch(recordUpdated({ record, title })),
+  changeTarget: id => dispatch(changeTarget(id)),
+  createRecord: ({ parent, record }) => dispatch(createRecord({ parent, record })),
+  updateRecord: ({ record, title }) => dispatch(updateRecord({ record, title })),
 })
 
 export default connect(

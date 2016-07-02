@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
-  goHome,
   loadInitialState,
-  recordSelected,
+  navigateToRoot,
+  changeTarget,
   selectCardView,
   selectTreeView,
 } from 'containers/actions'
@@ -28,7 +28,7 @@ class Card extends Component {
 
         <H1
           className={css.header}
-          onClick={_ => this.props.goHome(this.props.target)}>
+          onClick={_ => this.props.navigateToRoot(this.props.target)}>
           ⧉
         </H1>
 
@@ -43,7 +43,7 @@ class Card extends Component {
           ? <div className={css.nav}>
               <span
                 className={css.back}
-                onClick={_ => this.props.recordSelected(this.props.target.parent)}>
+                onClick={_ => this.props.changeTarget(this.props.target.parent)}>
                 ⬅︎
               </span>
             </div>
@@ -81,7 +81,7 @@ Card.propTypes = {
     PropTypes.bool,
   ]),
   loadInitialState: PropTypes.func,
-  recordSelected: PropTypes.func,
+  changeTarget: PropTypes.func,
   target: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
@@ -104,11 +104,11 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadInitialState: _ => dispatch(loadInitialState()),
-  selectCardView:   _ => dispatch(selectCardView()),
-  selectTreeView:   _ => dispatch(selectTreeView()),
-  recordSelected:   id => dispatch(recordSelected(id)),
-  goHome:       target => dispatch(goHome(target)),
+  loadInitialState:     _ => dispatch(loadInitialState()),
+  selectCardView:       _ => dispatch(selectCardView()),
+  selectTreeView:       _ => dispatch(selectTreeView()),
+  changeTarget:       id => dispatch(changeTarget(id)),
+  navigateToRoot: target => dispatch(navigateToRoot(target)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card)

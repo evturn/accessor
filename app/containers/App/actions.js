@@ -9,7 +9,7 @@ import {
   SET_STATE_FROM_STORAGE,
   STORAGE_ERROR,
   POPULATE_RECORDS,
-  TARGET_CHANGE,
+  CHANGE_TARGET,
   CREATE_RECORD,
   UPDATE_RECORD,
 } from 'containers/App/constants'
@@ -34,8 +34,8 @@ const loadFromStorage = _ => (
   Rx.Observable.of({ type: LOAD_FROM_STORAGE })
 )
 
-const targetChange = payload => (
-  Rx.Observable.of({ type: TARGET_CHANGE, payload })
+const changeTarget = payload => (
+  Rx.Observable.of({ type: CHANGE_TARGET, payload })
 )
 
 const navigateToRoot = payload => (
@@ -65,7 +65,7 @@ export {
   setStateFromStorage,
   populateRecords,
   loadFromStorage,
-  targetChange,
+  changeTarget,
   navigateToRoot,
   createRecord,
   updateRecord,

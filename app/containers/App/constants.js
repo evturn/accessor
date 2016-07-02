@@ -12,7 +12,7 @@ export const STORAGE_ERROR          = '@@accessor/STORAGE_ERROR'
 export const LOAD_FROM_STORAGE      = '@@accessor/LOAD_FROM_STORAGE'
 export const POPULATE_RECORDS       = '@@accessor/POPULATE_RECORDS'
 
-export const TARGET_CHANGE          = '@@accessor/TARGET_CHANGE'
+export const CHANGE_TARGET          = '@@accessor/CHANGE_TARGET'
 
 export const CREATE_RECORD          = '@@accessor/CREATE_RECORD'
 export const UPDATE_RECORD          = '@@accessor/UPDATE_RECORD'
