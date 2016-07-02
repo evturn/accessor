@@ -2,37 +2,37 @@ import React from 'react'
 
 import css from './styles.css'
 
-const Input = ({ current, creating, getBackingInstance, creatingRecord, value, submit, edit }) => {
+const Input = ({ className, current, creating, _ref, onFocus, value, onBlur, onChange, onKeyPress }) => {
   return (
     current
       ? <input
-          className={css.standard}
-          onBlur={submit}
-          onKeyPress={edit}
-          onChange={edit}
-          onFocus={creatingRecord}
-          ref={creating ? getBackingInstance : null}
+          className={`${css.standard} ${className ? className : ''}`}
+          onBlur={onBlur}
+          onKeyPress={onKeyPress}
+          onChange={onChange}
+          onFocus={onFocus}
+          ref={creating ? _ref : null}
           value={creating ? value : ''}
         />
       : null
   )
 }
 
-const InputEditor = ({ className, updating, submit, getBackingInstance, edit, value, updatingRecord, children }) => {
+const InputEditor = ({ className, updating, onBlur, _ref, value, onChange, onKeyPress, onClick, children }) => {
   return (
     <div className={className}>{
       updating
         ? <input
             className={`${css.editor} ${className}`}
-            onBlur={submit}
-            ref={getBackingInstance}
-            onKeyPress={edit}
-            onChange={edit}
+            onBlur={onBlur}
+            ref={_ref}
+            onKeyPress={onKeyPress}
+            onChange={onChange}
             defaultValue={value}
           />
         : <span
             className={css.text}
-            onClick={updatingRecord}>{value}</span>
+            onClick={onClick}>{value}</span>
       }
       {children}
     </div>

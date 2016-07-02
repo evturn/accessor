@@ -141,11 +141,12 @@ class Record extends Component {
         ? <li className={css.li}>
             <InputEditor
               className={classes.title}
-              updatingRecord={::this.updatingRecord}
+              onClick={::this.updatingRecord}
               updating={this.state.updating}
-              getBackingInstance={::this.getBackingInstance}
-              submit={::this.submit}
-              edit={::this.edit}
+              _ref={::this.getBackingInstance}
+              onBlur={::this.submit}
+              onKeyPress={::this.edit}
+              onChange={::this.edit}
               value={this.props.title}>
               <SwitchDrag
                 hide={this.state.updating}
@@ -163,20 +164,18 @@ class Record extends Component {
             <div className={classes.expand}>
               {this.props.more}
             </div>
-            <SwitchActions
-              current={derived.current}
-              createNewRecord={::this.creatingRecord}
-            />
+            <SwitchActions current={derived.current} />
 
             <div className={classes.nested}>
               <Input
                 current={derived.current}
-                creatingRecord={::this.creatingRecord}
-                getBackingInstance={::this.getBackingInstance}
+                onFocus={::this.creatingRecord}
+                _ref={::this.getBackingInstance}
                 creating={this.state.creating}
                 value={this.state.formValue}
-                submit={::this.submit}
-                edit={::this.edit}
+                onBlur={::this.submit}
+                onKeyPress={::this.edit}
+                onChange={::this.edit}
               />
               {this.props.children}
             </div>

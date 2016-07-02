@@ -8,18 +8,66 @@ import {
   changeTarget,
   selectCardView,
   selectTreeView,
+  createRecord,
 } from 'containers/actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
+import { Input } from 'components/Input'
 
 import css from './styles.css'
 
 class Card extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      creating: false,
+      formValue: '',
+    }
+  }
+
   shouldPureComponentUpdate = shouldPureComponentUpdate
 
   componentDidMount() {
     this.props.loadInitialState()
+  }
+
+  createRecordAtRoot() {
+    this.setState({ creating: true })
+  }
+
+  submitNewRecord() {
+    this.props.createRecord({
+      parent: false,
+      record: {
+        title: this.state.formValue,
+        more: `I live at the root and I calmy enjoy ${this.state.formValue}!`
+      }
+    })
+
+    this.setState({
+      creating: false,
+      formValue: '',
+    })
+  }
+
+  edit(e) {
+    if (e.charCode === 13) {
+      if (this.state.formValue.length) {
+        this.submitNewRecord()
+      }
+    } else {
+      this.setState({ formValue: e.target.value })
+    }
+  }
+
+  getBackingInstance(input) {
+    this.input = input
+
+    if (this.input !== null) {
+      this.input.focus()
+    }
   }
 
   render() {
@@ -50,6 +98,18 @@ class Card extends Component {
           : null
         }
 
+        {this.state.creating
+          ? <input
+              className={css.input}
+              onBlur={::this.submitNewRecord}
+              onChange={::this.edit}
+              onKeyPress={::this.edit}
+              ref={::this.getBackingInstance}
+            />
+          : null
+        }
+
+
         <RecordMap
           cardView={this.props.cardView}
           treeView={this.props.treeView}
@@ -59,7 +119,7 @@ class Card extends Component {
         {!this.props.target && this.props.cardView
           ? <button
               className={css.newRoot}
-              onClick={_ => console.log('supperz mcdupperz')}>+</button>
+              onClick={_ => this.createRecordAtRoot()}>+</button>
           : null
         }
 
@@ -109,6 +169,7 @@ const mapDispatchToProps = dispatch => ({
   selectTreeView:       _ => dispatch(selectTreeView()),
   changeTarget:       id => dispatch(changeTarget(id)),
   navigateToRoot: target => dispatch(navigateToRoot(target)),
+  createRecord: ({ parent, record }) => dispatch(createRecord({ parent, record })),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card)

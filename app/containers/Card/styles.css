@@ -51,3 +51,7 @@
   border-radius: 50%;
   color: #2065FFFF;
 }
+
+.input {
+  composes: standard from '../../components/Input/styles.css'
+}
