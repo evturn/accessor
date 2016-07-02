@@ -8,15 +8,9 @@ const loadInitialState = _ => (
   (actions, store) => {
     store.dispatch(_ => recordActions.loadFromStorage())
 
-  return Rx.Observable.of(storageActions.get())
-    .map(response => {
-      if (response.error) {
-        return recordActions.storageError(response)
-      } else {
-        store.dispatch(_ => recordActions.getStateFromStorage(response))
-      }
-
-      return response.data
+  return storageActions.get({
+      error: recordActions.storageError,
+      success: x => store.dispatch(_ => recordActions.getStateFromStorage(x))
     })
     .flatMap(buildRecordsTree)
     .flatMap(recordActions.populateRecords)
@@ -24,36 +18,26 @@ const loadInitialState = _ => (
 )
 
 const recordSelected = id => (
-  (actions, store) => {
-    return Rx.Observable.of(store.getState().data)
-      .map(x => ({
-        target: !id
-          ? false
-          : x.filter(y => y.id === id)[0]
-      }))
+  (actions, store) => (
+    Rx.Observable.of(store.getState().data)
+      .map(x => ({ target: !id ? false : x.filter(y => y.id === id)[0] }))
       .flatMap(recordActions.targetChange)
-  }
+  )
 )
 
 const goHome = target => (
   (actions, store) => (
     Rx.Observable.of(target)
-      .flatMap(target => (
-        !target
-          ? Rx.Observable.empty()
-          : recordActions.navigateToRoot({ target: false })
-      ))
+      .flatMap(target => {
+        if (!target) {
+          return Rx.Observable.empty()
+        }
+
+        return Rx.Observable.of({ target: false })
+      })
+      .flatMap(recordActions.navigateToRoot)
   )
 )
-
-const setNextState = nextData => dispatch => {
-  return Rx.Observable.of(storageActions.set(nextData))
-  .map(x => {
-    dispatch(_ => recordActions.setStateFromStorage(x))
-
-    return x.data
-  })
-}
 
 const recordCreated = ({ parent, record }) => (
   (actions, store) => {
@@ -66,7 +50,12 @@ const recordCreated = ({ parent, record }) => (
           parent: parent.id,
         }].concat(prevData)
       })
-      .flatMap(x => setNextState(x)(store.dispatch))
+      .flatMap(x => {
+        return storageActions.set({
+          data: x,
+          success: x => store.dispatch(_ => recordActions.setStateFromStorage(x))
+        })
+      })
       .flatMap(buildRecordsTree)
       .flatMap(recordActions.createRecord)
   }
@@ -87,7 +76,12 @@ const recordUpdated = ({ record, title }) => (
 
           }, [])
       })
-      .flatMap(x => setNextState(x)(store.dispatch))
+      .flatMap(x => {
+        return storageActions.set({
+          data: x,
+          success: x => store.dispatch(_ => recordActions.setStateFromStorage(x))
+        })
+      })
       .flatMap(buildRecordsTree)
       .flatMap(recordActions.updateRecord)
   }
@@ -100,8 +94,6 @@ const selectCardView = _ => (
 const selectTreeView = _ => (
   (actions, store) => recordActions.selectTreeView()
 )
-
-
 
 export {
   loadInitialState,
