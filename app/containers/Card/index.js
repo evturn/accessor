@@ -38,25 +38,25 @@ class Card extends Component {
   }
 
   submitNewRecord() {
-    this.props.createRecord({
-      parent: false,
-      record: {
-        title: this.state.formValue,
-        more: `I live at the root and I calmy enjoy ${this.state.formValue}!`
-      }
-    })
+    if (this.state.formValue.length) {
+      this.props.createRecord({
+        parent: false,
+        record: {
+          title: this.state.formValue,
+          more: `I live at the root and I calmy enjoy ${this.state.formValue}!`
+        }
+      })
 
-    this.setState({
-      creating: false,
-      formValue: '',
-    })
+      this.setState({
+        creating: false,
+        formValue: '',
+      })
+    }
   }
 
   edit(e) {
     if (e.charCode === 13) {
-      if (this.state.formValue.length) {
-        this.submitNewRecord()
-      }
+      this.submitNewRecord()
     } else {
       this.setState({ formValue: e.target.value })
     }

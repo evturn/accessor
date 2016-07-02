@@ -73,11 +73,11 @@ class Record extends Component {
   }
 
   edit(e) {
-    e.charCode === 13
-      ? this.submit(e.target.value)
-      : this.setState({
-          formValue: e.target.value
-        })
+    if (e.charCode === 13) {
+      this.submit()
+    } else {
+      this.setState({ formValue: e.target.value })
+    }
   }
 
   getBackingInstance(input) {
@@ -97,10 +97,9 @@ class Record extends Component {
     this.setState({ updating: true })
   }
 
-  submit(value) {
+  submit() {
     if (this.state.formValue.length) {
       if (this.state.creating) {
-
         this.props.createRecord({
           parent: { ...this.props },
           record: {
@@ -108,14 +107,11 @@ class Record extends Component {
             more: `I can not shut the hell about ${this.state.formValue}!`
           }
         })
-
       } else if (this.state.updating) {
-
         this.props.updateRecord({
           record: { ...this.props },
           title: this.state.formValue
         })
-
       }
     }
 
