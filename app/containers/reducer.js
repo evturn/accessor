@@ -10,7 +10,7 @@ import {
   POPULATE_RECORDS,
   NAVIGATE_TO_ROOT,
   TARGET_CHANGE,
-} from 'containers/constants'
+} from 'containers/App/constants'
 
 const initialState = {
   records: false,
@@ -59,7 +59,7 @@ const appReducer = (state=initialState, action) => {
       return Object.assign({}, state, {
         cardView: false,
         treeView: true,
-        target: action.target,
+        target: false,
       })
 
     default:

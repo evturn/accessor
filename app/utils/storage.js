@@ -32,4 +32,4 @@ const set = data => {
   }
 }
 
-export default { get, set }
+export { get, set }
