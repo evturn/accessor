@@ -46,12 +46,12 @@ class Card extends Component {
           more: `I live at the root and I calmy enjoy ${this.state.formValue}!`
         }
       })
-
-      this.setState({
-        creating: false,
-        formValue: '',
-      })
     }
+
+    this.setState({
+      creating: false,
+      formValue: '',
+    })
   }
 
   edit(e) {

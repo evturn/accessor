@@ -59,6 +59,4 @@ function set({ data, success }) {
     })
 }
 
-
-
 export { get, set }

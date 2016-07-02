@@ -16,5 +16,3 @@ export const CHANGE_TARGET          = '@@accessor/CHANGE_TARGET'
 
 export const CREATE_RECORD          = '@@accessor/CREATE_RECORD'
 export const UPDATE_RECORD          = '@@accessor/UPDATE_RECORD'
-
-export const SEED = false
