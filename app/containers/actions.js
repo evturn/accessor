@@ -94,6 +94,15 @@ const goHome = target => (
   )
 )
 
+const setNextState = nextData => dispatch => {
+  return Rx.Observable.of(storageActions.set(nextData))
+  .map(x => {
+    dispatch(_ => setStateFromStorage(x))
+
+    return x.data
+  })
+}
+
 const recordCreated = ({ parent, record }) => (
   (actions, store) => {
     return Rx.Observable.of(store.getState().data)
@@ -105,13 +114,7 @@ const recordCreated = ({ parent, record }) => (
           parent: parent.id,
         }].concat(prevData)
       })
-      .flatMap(nextData => {
-        return Rx.Observable.of(storageActions.set(nextData))
-          .map(x => {
-            store.dispatch(_ => setStateFromStorage(x))
-            return x.data
-          })
-      })
+      .flatMap(x => setNextState(x)(store.dispatch))
       .flatMap(buildRecordsTree)
       .flatMap(createRecord)
   }
@@ -132,14 +135,7 @@ const recordUpdated = ({ record, title }) => (
 
           }, [])
       })
-      .flatMap(x => {
-        return Rx.Observable.of(storageActions.set(x))
-          .map(x => {
-            store.dispatch(_ => setStateFromStorage(x))
-
-            return x.data
-          })
-      })
+      .flatMap(x => setNextState(x)(store.dispatch))
       .flatMap(buildRecordsTree)
       .flatMap(updateRecord)
   }
