@@ -67,12 +67,7 @@ const loadInitialState = _ => (
       return response.data
     })
     .flatMap(buildRecordsTree)
-    .flatMap(({ records, branches }) => {
-      return populateRecords({
-        records,
-        branches
-      })
-    })
+    .flatMap(populateRecords)
   }
 )
 
