@@ -43,9 +43,6 @@ const SwitchActions = ({ current, createNewRecord }) => {
   return (
     current
       ? <div className={css.btns}>
-          <div
-            className={css.clip}
-            onClick={createNewRecord}>＋</div>
           <div className={css.clip}>📎</div>
         </div>
       : null

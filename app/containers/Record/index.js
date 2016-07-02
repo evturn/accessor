@@ -28,13 +28,25 @@ class Record extends Component {
     this.state = {
       expand: false,
       editing: false,
-      updating: false,
+      creating: false,
       formValue: '',
       dragging: false,
     }
   }
 
   shouldPureComponentUpdate = shouldPureComponentUpdate
+
+  onDragStart() {
+    this.setState({
+      dragging: true,
+    })
+  }
+
+  onDragEnd() {
+    this.setState({
+      dragging: false,
+    })
+  }
 
   computeStyles(x) {
     return {
@@ -62,62 +74,55 @@ class Record extends Component {
 
   edit(e) {
     e.charCode === 13
-      ? this.submit()
+      ? this.submit(e.target.value)
       : this.setState({
           formValue: e.target.value
         })
   }
 
   getBackingInstance(input) {
-    this['😵'] = input
-
-    this['😵'] !== null
-      ? this['😵'].focus()
-      : null
+    this.input = input
+    if (this.state.updating) {
+      if (this.input !== null) {
+        this.input.focus()
+      }
+    }
   }
 
-  createNewRecord() {
-    this.setState({ editing: true })
+  creatingRecord() {
+    this.setState({ creating: true })
   }
 
-  updateRecord() {
+  updatingRecord() {
     this.setState({ updating: true })
   }
 
-  submit() {
+  submit(value) {
     if (this.state.formValue.length) {
-      this.state.editing
-        ? this.props.createRecord({
-            parent: { ...this.props },
-            record: {
-              title: this.state.formValue,
-              more: `I can not shut the hell about ${this.state.formValue}!`
-            }
-          })
-        : this.state.updating
-          ? this.props.updateRecord({
-              record: { ...this.props },
-              title: this.state.formValue
-            })
-          : null
+      if (this.state.creating) {
+
+        this.props.createRecord({
+          parent: { ...this.props },
+          record: {
+            title: this.state.formValue,
+            more: `I can not shut the hell about ${this.state.formValue}!`
+          }
+        })
+
+      } else if (this.state.updating) {
+
+        this.props.updateRecord({
+          record: { ...this.props },
+          title: this.state.formValue
+        })
+
+      }
     }
 
     this.setState({
-      editing: false,
+      creating: false,
       updating: false,
       formValue: '',
-    })
-  }
-
-  onDragStart() {
-    this.setState({
-      dragging: true,
-    })
-  }
-
-  onDragEnd() {
-    this.setState({
-      dragging: false,
     })
   }
 
@@ -136,8 +141,8 @@ class Record extends Component {
         ? <li className={css.li}>
             <InputEditor
               className={classes.title}
-              updateRecord={::this.updateRecord}
-              active={this.state.updating}
+              updatingRecord={::this.updatingRecord}
+              updating={this.state.updating}
               getBackingInstance={::this.getBackingInstance}
               submit={::this.submit}
               edit={::this.edit}
@@ -160,17 +165,22 @@ class Record extends Component {
             </div>
             <SwitchActions
               current={derived.current}
-              createNewRecord={::this.createNewRecord}
+              createNewRecord={::this.creatingRecord}
             />
+
             <div className={classes.nested}>
               <Input
-                active={this.state.editing}
+                current={derived.current}
+                creatingRecord={::this.creatingRecord}
                 getBackingInstance={::this.getBackingInstance}
+                creating={this.state.creating}
+                value={this.state.formValue}
                 submit={::this.submit}
                 edit={::this.edit}
               />
               {this.props.children}
             </div>
+
           </li>
         : <li className={css.tree}>
             <div
@@ -212,6 +222,14 @@ Record.PropTypes = {
   treeView: PropTypes.bool,
 }
 
+
+const matchStateToProps = state => ({
+  branches: state.branches,
+  target: state.target,
+  cardView: state.cardView,
+  treeView: state.treeView,
+})
+
 const mapDispatchToProps = dispatch => ({
   changeTarget: id => dispatch(changeTarget(id)),
   createRecord: ({ parent, record }) => dispatch(createRecord({ parent, record })),
@@ -219,12 +237,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(
-  state => ({
-    active: state.active,
-    branches: state.branches,
-    target: state.target,
-    cardView: state.cardView,
-    treeView: state.treeView,
-  }),
+  matchStateToProps,
   mapDispatchToProps
 )(Record)

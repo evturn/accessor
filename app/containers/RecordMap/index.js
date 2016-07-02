@@ -51,10 +51,10 @@ RecordMap.propTypes = {
   treeView: PropTypes.bool,
 }
 
-export default connect(
-  state => ({
-    records: state.records,
-    target: state.target,
-    loading: state.loading,
-  }),
-)(RecordMap)
+const matchStateToProps = state => ({
+  records: state.records,
+  target: state.target,
+  loading: state.loading,
+})
+
+export default connect(matchStateToProps)(RecordMap)
