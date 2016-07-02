@@ -16,32 +16,20 @@ import {
   UPDATE_RECORD,
 } from 'containers/constants'
 
-const getStateFromStorage = payload => {
-  return Rx.Observable.of({
-    type: GET_STATE_FROM_STORAGE,
-    payload
-  })
-}
+const getStateFromStorage = payload => (
+  Rx.Observable.of({ type: GET_STATE_FROM_STORAGE, payload })
+)
 
 const storageError = payload => (
-  Rx.Observable.of({
-    type: STORAGE_ERROR,
-    payload
-  })
+  Rx.Observable.of({ type: STORAGE_ERROR, payload })
 )
 
 const setStateFromStorage = payload => (
-  Rx.Observable.of({
-    type: SET_STATE_FROM_STORAGE,
-    payload
-  })
+  Rx.Observable.of({ type: SET_STATE_FROM_STORAGE, payload })
 )
 
 const populateRecords = payload => (
-  Rx.Observable.of({
-    type: POPULATE_RECORDS,
-    payload
-  })
+  Rx.Observable.of({ type: POPULATE_RECORDS, payload })
 )
 
 const loadFromStorage = _ => (
@@ -49,31 +37,19 @@ const loadFromStorage = _ => (
 )
 
 const targetChange = payload => (
-  Rx.Observable.of({
-    type: TARGET_CHANGE,
-    payload
-  })
+  Rx.Observable.of({ type: TARGET_CHANGE, payload })
 )
 
 const navigateToRoot = payload => (
-  Rx.Observable.of({
-    type: NAVIGATE_TO_ROOT,
-    payload
-  })
+  Rx.Observable.of({ type: NAVIGATE_TO_ROOT, payload })
 )
 
 const createRecord = payload => (
-  Rx.Observable.of({
-    type: CREATE_RECORD,
-    payload
-  })
+  Rx.Observable.of({ type: CREATE_RECORD, payload })
 )
 
 const updateRecord = payload => (
-  Rx.Observable.of({
-    type: UPDATE_RECORD,
-    payload
-  })
+  Rx.Observable.of({ type: UPDATE_RECORD, payload })
 )
 
 const loadInitialState = _ => (
