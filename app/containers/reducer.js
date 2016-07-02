@@ -1,77 +1,52 @@
 import {
-  LOAD_RECORDS,
-  LOAD_RECORDS_SUCCESS,
-  LOAD_RECORDS_ERROR,
-  SELECT_RECORD,
-  NAVIGATE_TO_ROOT,
-  RECORD_HAS_CHANGED,
-  RECORD_HAS_UPDATES,
+  CREATE_RECORD,
+  UPDATE_RECORD,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-} from 'containers/constants'
-
-import {
-  GET_ITEM,
-  SET_ITEM,
+  LOAD_FROM_STORAGE,
+  GET_STATE_FROM_STORAGE,
+  SET_STATE_FROM_STORAGE,
   STORAGE_ERROR,
-} from 'utils/storage'
+  POPULATE_RECORDS,
+  NAVIGATE_TO_ROOT,
+  TARGET_CHANGE,
+} from 'containers/constants'
 
 const initialState = {
   records: false,
-  flatRecords: false,
+  data: false,
   branches: false,
   loading: false,
   error: false,
   target: false,
   cardView: true,
   treeView: false,
-  status: false,
+  message: false,
 }
 
-const observableReducer = (state=initialState, action) => {
+const appReducer = (state=initialState, action) => {
   switch (action.type) {
-    case LOAD_RECORDS:
+
+    case LOAD_FROM_STORAGE:
       return Object.assign({}, state, {
         loading: true,
-        error: false,
-        records: false,
-        flatRecords: false,
       })
 
-    case LOAD_RECORDS_SUCCESS:
+    case POPULATE_RECORDS:
       return Object.assign({}, state, {
         loading: false,
-        error: false,
-        records: action.records,
-        flatRecords: action.flatRecords,
-        branches: action.branches,
-        status: action.status,
+        ...action.payload
       })
 
+    case GET_STATE_FROM_STORAGE:
+    case SET_STATE_FROM_STORAGE:
     case STORAGE_ERROR:
-      return Object.assign({}, state, {
-        loading: false,
-        error: action.payload.status,
-      })
-
-    case SELECT_RECORD:
-      return Object.assign({}, state, {
-        target: action.target,
-
-      })
-
-    case RECORD_HAS_UPDATES:
-    case RECORD_HAS_CHANGED:
-      return Object.assign({}, state, {
-        records: action.records,
-        flatRecords: action.flatRecords,
-        branches: action.branches,
-        status: action.status,
-      })
-
+    case TARGET_CHANGE:
     case NAVIGATE_TO_ROOT:
+    case CREATE_RECORD:
+    case UPDATE_RECORD:
       return Object.assign({}, state, {
-        target: action.target,
+        ...action.payload
       })
 
     case SELECT_CARD_VIEW:
@@ -92,4 +67,4 @@ const observableReducer = (state=initialState, action) => {
   }
 }
 
-export default observableReducer
+export default appReducer

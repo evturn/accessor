@@ -1,10 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux'
-import { routerMiddleware } from 'react-router-redux'
 import { reduxObservable } from 'redux-observable'
 import logger from 'redux-logger'
 import createReducer from './reducers'
-import { storageMiddleware } from 'utils/storage'
-import { STORAGE_KEY } from 'containers/constants'
 
 const observableMiddleware = reduxObservable()
 const devtools = window.devToolsExtension || (() => noop => noop)
@@ -12,8 +9,6 @@ const devtools = window.devToolsExtension || (() => noop => noop)
 export default function configureStore(initialState={}, history) {
   const middlewares = [
     observableMiddleware,
-    storageMiddleware(STORAGE_KEY),
-    routerMiddleware(history),
   ]
 
   __DEV__

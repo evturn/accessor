@@ -52,9 +52,9 @@ RecordMap.propTypes = {
 }
 
 export default connect(
-  ({ global }) => ({
-    records: global.records,
-    target: global.target,
-    loading: global.loading,
+  state => ({
+    records: state.records,
+    target: state.target,
+    loading: state.loading,
   }),
 )(RecordMap)

@@ -1,47 +1,51 @@
+import * as Rx from 'rxjs'
+
 export default function buildRecordsTree(data) {
-  function createBranch(record) {
-    function addParentID(record, branch) {
-      if (record.parent) {
-        data
-          .filter(x => x.id === record.parent)
-          .map(x => addParentID(x, branch))
-      }
+  return Rx.Observable.of(data)
+    .flatMap(list => {
+      return Rx.Observable.combineLatest(
+        Rx.Observable.from(list)
+          .reduce((acc, x) => {
 
-      branch.push(record.id)
-      return branch
-    }
+            function nest(item) {
+              const items = list.filter(x => x.parent === item.id)
 
-    return addParentID(record, [])
-  }
+              if (items.length) {
+                items.map(nest)
+              }
 
-  function createChildren(record) {
-    function addChildren(record, children) {
-      if (children.length) {
-        record._children = children
-        children.map(createChildren)
-      }
+              return items.length
+                ? { ...item, _children: items }
+                : { ...item }
+            }
 
-      return record
-    }
+            if (!x.parent) {
+              acc = acc.concat([nest(x)])
+            }
 
-    return addChildren(record, data.filter(x => x.parent === record.id))
-  }
+            return acc
+          }, []),
 
-  function recordReducer(acc, x) {
-    if (!acc.branches) acc.branches = {}
-    if (!acc.records) acc.records = []
-    if (!x.parent) acc.records.push(createChildren(x))
+        Rx.Observable.from(list)
+          .reduce((acc, x) => {
 
-    acc.branches[x.id] = createBranch(x)
+            function branch(acc, item) {
+              if (item.parent) {
+                list
+                  .filter(x => x.id === item.parent)
+                  .map(x => branch(acc, x))
+              }
 
-    return acc
-  }
+              acc.push(item.id)
+              return acc
+            }
 
-  const { records, branches } = data.reduce(recordReducer, {})
+            acc[x.id] = branch([], x)
 
-  return {
-    records,
-    branches,
-    flatRecords: data
-  }
+            return acc
+
+          }, {})
+      )
+    })
+    .map(([ records, branches ]) => ({ records, branches }))
 }

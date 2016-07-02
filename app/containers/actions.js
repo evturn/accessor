@@ -1,143 +1,176 @@
 import * as Rx from 'rxjs'
 import buildRecordsTree from 'utils/tree'
-import seedData from '../../internals/seed'
-import {
-  GET_ITEM,
-  storageActions
-} from 'utils/storage'
+import storageActions from 'utils/storage.js'
 
 import {
-  LOAD_RECORDS,
-  LOAD_RECORDS_SUCCESS,
-  LOAD_RECORDS_ERROR,
-  SELECT_RECORD,
   NAVIGATE_TO_ROOT,
-  RECORD_HAS_CHANGED,
-  RECORD_HAS_UPDATES,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-  SEED,
+  LOAD_FROM_STORAGE,
+  GET_STATE_FROM_STORAGE,
+  SET_STATE_FROM_STORAGE,
+  STORAGE_ERROR,
+  POPULATE_RECORDS,
+  TARGET_CHANGE,
+  CREATE_RECORD,
+  UPDATE_RECORD,
 } from 'containers/constants'
 
+const getStateFromStorage = payload => {
+  return Rx.Observable.of({
+    type: GET_STATE_FROM_STORAGE,
+    payload
+  })
+}
+
+const storageError = payload => (
+  Rx.Observable.of({
+    type: STORAGE_ERROR,
+    payload
+  })
+)
+
+const setStateFromStorage = payload => (
+  Rx.Observable.of({
+    type: SET_STATE_FROM_STORAGE,
+    payload
+  })
+)
+
+const populateRecords = payload => (
+  Rx.Observable.of({
+    type: POPULATE_RECORDS,
+    payload
+  })
+)
+
+const loadFromStorage = _ => (
+  Rx.Observable.of({ type: LOAD_FROM_STORAGE })
+)
+
+const targetChange = payload => (
+  Rx.Observable.of({
+    type: TARGET_CHANGE,
+    payload
+  })
+)
+
+const navigateToRoot = payload => (
+  Rx.Observable.of({
+    type: NAVIGATE_TO_ROOT,
+    payload
+  })
+)
+
+const createRecord = payload => (
+  Rx.Observable.of({
+    type: CREATE_RECORD,
+    payload
+  })
+)
+
+const updateRecord = payload => (
+  Rx.Observable.of({
+    type: UPDATE_RECORD,
+    payload
+  })
+)
+
 const loadInitialState = _ => (
-  Rx.Observable.of(storageActions.get())
-)
-
-const loadingRecords = _ => (
-  Rx.Observable.of({ type: LOAD_RECORDS })
-)
-
-const seedRecords = _ => (
-  Rx.Observable.of(storageActions.set(seedData))
-)
-
-const getRecords = _ => (
   (actions, store) => {
-    store.dispatch(loadingRecords)
+    store.dispatch(_ => loadFromStorage())
 
-    SEED
-      ? store.dispatch(seedRecords)
-      : null
+  return Rx.Observable.of(storageActions.get())
+    .map(response => {
+      if (response.error) {
+        return storageError(response)
+      } else {
+        store.dispatch(_ => getStateFromStorage(response))
+      }
 
-    store.dispatch(loadInitialState)
-
-    return Rx.Observable.of(actions.ofType(GET_ITEM))
-      .mapTo(store.getState().storage.data)
-      .map(buildRecordsTree)
-      .flatMap(({ flatRecords, records, branches }) => {
-        return Rx.Observable.of({
-          type: LOAD_RECORDS_SUCCESS,
-          flatRecords,
-          records,
-          branches,
-          status: store.getState().storage.status,
-        })
+      return response.data
+    })
+    .flatMap(buildRecordsTree)
+    .flatMap(({ records, branches }) => {
+      return populateRecords({
+        records,
+        branches
       })
+    })
   }
 )
 
 const recordSelected = id => (
   (actions, store) => {
-    return Rx.Observable.combineLatest(
-      Rx.Observable.of(store.getState().global.flatRecords),
-      Rx.Observable.of(store.getState().global.branches)
-    )
-    .map(([flatRecords, branches]) => ({
-      type: SELECT_RECORD,
-      target: !id ? false : flatRecords.filter(x => x.id === id)[0],
-    }))
+    return Rx.Observable.of(store.getState().data)
+      .map(x => ({
+        target: !id
+          ? false
+          : x.filter(y => y.id === id)[0]
+      }))
+      .flatMap(targetChange)
   }
 )
 
-const navigateToRoot = target => (
+const goHome = target => (
   (actions, store) => (
-    target
-      ? Rx.Observable.of({
-          type: NAVIGATE_TO_ROOT,
-          target: false,
-        })
-      : Rx.Observable.empty()
+    Rx.Observable.of(target)
+      .flatMap(target => (
+        !target
+          ? Rx.Observable.empty()
+          : navigateToRoot({ target: false })
+      ))
   )
 )
 
-const recordHasChanged = ({ parent, record }) => (
+const recordCreated = ({ parent, record }) => (
   (actions, store) => {
-
-    function addNewRecord(flatRecords) {
-      return [{
-        id: flatRecords.length + 1,
-        title: record.title,
-        more: record.more,
-        parent: parent.id,
-      }].concat(flatRecords)
-    }
-
-    return Rx.Observable.of(store.getState().global.flatRecords)
-      .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
-      .map(addNewRecord)
-      .map(buildRecordsTree)
-      .flatMap(({ records, branches, flatRecords }) => {
-
-        store.dispatch(
-          _ => Rx.Observable.of(storageActions.set(flatRecords))
-        )
-
-        return Rx.Observable.of({
-          type: RECORD_HAS_CHANGED,
-          records, branches, flatRecords,
-          status: store.getState().storage.status
-        })
+    return Rx.Observable.of(store.getState().data)
+      .map(prevData => {
+        return [{
+          id: prevData.length + 1,
+          title: record.title,
+          more: record.more,
+          parent: parent.id,
+        }].concat(prevData)
       })
+      .flatMap(nextData => {
+        return Rx.Observable.of(storageActions.set(nextData))
+          .map(x => {
+            store.dispatch(_ => setStateFromStorage(x))
+            return x.data
+          })
+      })
+      .flatMap(buildRecordsTree)
+      .flatMap(createRecord)
   }
 )
 
-const recordHasUpdates = ({ record, title }) => (
+const recordUpdated = ({ record, title }) => (
   (actions, store) => {
+    return Rx.Observable.of(store.getState().data)
+      .flatMap(prevData => {
+        return Rx.Observable.from(prevData)
+          .reduce((acc, x) => {
+            if (x.id === record.id) {
+              acc = acc.concat([{ ...x, title }])
+              return acc
+            }
 
-    function updateRecord(flatRecords) {
-      return flatRecords.map(y => {
-        return y.id === record.id
-          ? { ...y, title }
-          : y
+            return acc.concat([x])
+
+          }, [])
       })
-    }
+      .flatMap(x => {
+        return Rx.Observable.of(storageActions.set(x))
+          .map(x => {
+            store.dispatch(_ => setStateFromStorage(x))
 
-    return Rx.Observable.of(store.getState().global.flatRecords)
-      .map(x => x.map(({ _children, ...rest }) => ({ ...rest })))
-      .map(updateRecord)
-      .map(buildRecordsTree)
-      .flatMap(({ records, branches, flatRecords }) => {
-
-        store.dispatch(
-          _ => Rx.Observable.of(storageActions.set(flatRecords))
-        )
-
-        return Rx.Observable.of({
-          type: RECORD_HAS_UPDATES,
-          records, branches, flatRecords,
-          status: store.getState().storage.status
-        })
+            return x.data
+          })
       })
+      .flatMap(buildRecordsTree)
+      .flatMap(updateRecord)
   }
 )
 
@@ -159,11 +192,11 @@ const selectTreeView = _ => (
 
 
 export {
-  getRecords,
+  loadInitialState,
   recordSelected,
-  navigateToRoot,
-  recordHasChanged,
-  recordHasUpdates,
+  goHome,
+  recordCreated,
+  recordUpdated,
   selectCardView,
   selectTreeView,
 }

@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import {
-  getRecords,
+  goHome,
+  loadInitialState,
   recordSelected,
-  navigateToRoot,
   selectCardView,
   selectTreeView,
 } from 'containers/actions'
@@ -28,7 +28,7 @@ class Card extends Component {
 
         <H1
           className={css.header}
-          onClick={_ => this.props.navigateToRoot(this.props.target)}>
+          onClick={_ => this.props.goHome(this.props.target)}>
           ⧉
         </H1>
 
@@ -63,7 +63,7 @@ class Card extends Component {
           : null
         }
 
-        <div className={css.status}>{this.props.status}</div>
+        <div className={css.status}>{this.props.message}</div>
 
       </div>
     )
@@ -88,27 +88,27 @@ Card.propTypes = {
   ]),
   cardView: PropTypes.bool,
   treeView: PropTypes.bool,
-  status: PropTypes.oneOfType([
+  message: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.string,
   ]),
 }
 
-const mapStateToProps = ({ global }) => ({
-  target:   global.target,
-  status:   global.status,
-  loading:  global.loading,
-  records:  global.records,
-  cardView: global.cardView,
-  treeView: global.treeView,
+const mapStateToProps = state => ({
+  target:   state.target,
+  message:  state.message,
+  loading:  state.loading,
+  records:  state.records,
+  cardView: state.cardView,
+  treeView: state.treeView,
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadInitialState:    _ => dispatch(getRecords()),
-  selectCardView:      _ => dispatch(selectCardView()),
-  selectTreeView:      _ => dispatch(selectTreeView()),
-  recordSelected:     id => dispatch(recordSelected(id)),
-  navigateToRoot: target => dispatch(navigateToRoot(target)),
+  loadInitialState: _ => dispatch(loadInitialState()),
+  selectCardView:   _ => dispatch(selectCardView()),
+  selectTreeView:   _ => dispatch(selectTreeView()),
+  recordSelected:   id => dispatch(recordSelected(id)),
+  goHome:       target => dispatch(goHome(target)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Card)

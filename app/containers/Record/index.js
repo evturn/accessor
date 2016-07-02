@@ -10,8 +10,8 @@ import {
 
 import {
   recordSelected,
-  recordHasChanged,
-  recordHasUpdates,
+  recordCreated,
+  recordUpdated,
 } from 'containers/actions'
 
 import {
@@ -87,7 +87,7 @@ class Record extends Component {
   submit() {
     if (this.state.formValue.length) {
       this.state.editing
-        ? this.props.recordHasChanged({
+        ? this.props.recordCreated({
             parent: { ...this.props },
             record: {
               title: this.state.formValue,
@@ -95,7 +95,7 @@ class Record extends Component {
             }
           })
         : this.state.updating
-          ? this.props.recordHasUpdates({
+          ? this.props.recordUpdated({
               record: { ...this.props },
               title: this.state.formValue
             })
@@ -204,7 +204,6 @@ Record.PropTypes = {
   branch: PropTypes.array,
   active: PropTypes.number,
   branches: PropTypes.object,
-  recordSelected: PropTypes.func,
   target: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
@@ -215,17 +214,17 @@ Record.PropTypes = {
 
 const mapDispatchToProps = dispatch => ({
   recordSelected: id => dispatch(recordSelected(id)),
-  recordHasChanged: ({ parent, record }) => dispatch(recordHasChanged({ parent, record })),
-  recordHasUpdates: ({ record, title }) => dispatch(recordHasUpdates({ record, title })),
+  recordCreated: ({ parent, record }) => dispatch(recordCreated({ parent, record })),
+  recordUpdated: ({ record, title }) => dispatch(recordUpdated({ record, title })),
 })
 
 export default connect(
-  ({ global }) => ({
-    active: global.active,
-    branches: global.branches,
-    target: global.target,
-    cardView: global.cardView,
-    treeView: global.treeView,
+  state => ({
+    active: state.active,
+    branches: state.branches,
+    target: state.target,
+    cardView: state.cardView,
+    treeView: state.treeView,
   }),
   mapDispatchToProps
 )(Record)
