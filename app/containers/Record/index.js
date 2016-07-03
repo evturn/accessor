@@ -10,10 +10,7 @@ import {
 
 import * as actions from 'containers/actions'
 
-import {
-  Input,
-  InputEditor,
-} from 'components/Input'
+import InputField from 'components/Input'
 
 import css from './styles.css'
 
@@ -25,24 +22,11 @@ class Record extends Component {
       expand: false,
       editing: false,
       creating: false,
-      formValue: '',
       dragging: false,
     }
   }
 
   shouldPureComponentUpdate = shouldPureComponentUpdate
-
-  onDragStart() {
-    this.setState({
-      dragging: true,
-    })
-  }
-
-  onDragEnd() {
-    this.setState({
-      dragging: false,
-    })
-  }
 
   computeStyles(x) {
     return {
@@ -68,23 +52,6 @@ class Record extends Component {
     this.setState({ expand: !this.state.expand})
   }
 
-  edit(e) {
-    if (e.charCode === 13) {
-      this.submit()
-    } else {
-      this.setState({ formValue: e.target.value })
-    }
-  }
-
-  getBackingInstance(input) {
-    this.input = input
-    if (this.state.updating) {
-      if (this.input !== null) {
-        this.input.focus()
-      }
-    }
-  }
-
   creatingRecord() {
     this.setState({ creating: true })
   }
@@ -93,29 +60,29 @@ class Record extends Component {
     this.setState({ updating: true })
   }
 
-  submit() {
-    if (this.state.formValue.length) {
-      if (this.state.creating) {
-        this.props.createRecord({
-          parent: { ...this.props },
-          record: {
-            title: this.state.formValue,
-            more: `I can not shut the hell about ${this.state.formValue}!`
-          }
-        })
-      } else if (this.state.updating) {
-        this.props.updateRecord({
-          record: { ...this.props },
-          title: this.state.formValue
-        })
-      }
+  submitNewRecord(value) {
+    if (value.length) {
+      this.props.createRecord({
+        parent: { ...this.props },
+        record: {
+          title: value,
+          more: `I can not shut the hell about ${value}!`
+        }
+      })
     }
 
-    this.setState({
-      creating: false,
-      updating: false,
-      formValue: '',
-    })
+    this.setState({ creating: false })
+  }
+
+  submitUpdatedRecord(value) {
+    if (value.length) {
+      this.props.updateRecord({
+        record: { ...this.props },
+        title: value
+      })
+    }
+
+    this.setState({ updating: false })
   }
 
   render() {
@@ -131,19 +98,26 @@ class Record extends Component {
     return (
       this.props.cardView
         ? <li className={css.li}>
-            <InputEditor
-              className={classes.title}
-              onClick={::this.updatingRecord}
-              updating={this.state.updating}
-              _ref={::this.getBackingInstance}
-              onBlur={::this.submit}
-              onKeyPress={::this.edit}
-              onChange={::this.edit}
-              value={this.props.title}>
+            <div className={classes.title}>
+
+              {this.state.updating
+                ? <InputField
+                    className={`${css.editor} ${classes.title}`}
+                    submit={::this.submitUpdatedRecord}
+                    value={this.props.title}
+                  />
+                : <span
+                    className={css.text}
+                    onClick={::this.updatingRecord}>
+                    {this.props.title}
+                  </span>
+              }
+
               <SwitchDrag
                 hide={this.state.updating}
                 current={derived.current}
               />
+
               <SwitchControls
                 current={derived.current}
                 expand={this.state.expand}
@@ -152,23 +126,25 @@ class Record extends Component {
                 changeTarget={::this.props.changeTarget}
                 hide={this.state.updating}
               />
-            </InputEditor>
+
+            </div>
+
             <div className={classes.expand}>
               {this.props.more}
             </div>
+
             <SwitchActions current={derived.current} />
 
             <div className={classes.nested}>
-              <Input
-                current={derived.current}
-                onFocus={::this.creatingRecord}
-                _ref={::this.getBackingInstance}
-                creating={this.state.creating}
-                value={this.state.formValue}
-                onBlur={::this.submit}
-                onKeyPress={::this.edit}
-                onChange={::this.edit}
-              />
+              {derived.current
+                ? <InputField
+                    preventAutoFocus={true}
+                    className={css.standard}
+                    submit={::this.submitNewRecord}
+                  />
+                : null
+              }
+
               {this.props.children}
             </div>
 

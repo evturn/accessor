@@ -53,5 +53,9 @@
 }
 
 .input {
-  composes: standard from '../../components/Input/styles.css'
+  font-size: 14px;
+  margin: 20px 0 0 0;
+  height: 21px;
+  composes: field from '../../components/Input/styles.css';
 }
+

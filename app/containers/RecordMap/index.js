@@ -23,8 +23,7 @@ class RecordMap extends Component {
 
   render() {
     return (
-      this.props.records
-      && !this.props.loading
+      this.props.records && !this.props.loading
         ? <ul className={css.recordMap}>
             {this.props.records.map(::this.renderRecord)}
           </ul>
@@ -35,20 +34,10 @@ class RecordMap extends Component {
 
 RecordMap.propTypes = {
   loading: PropTypes.bool,
-  error: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-  ]),
   records: PropTypes.oneOfType([
     PropTypes.array,
     PropTypes.bool,
   ]),
-  target: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object
-  ]),
-  cardView: PropTypes.bool,
-  treeView: PropTypes.bool,
 }
 
 const matchStateToProps = state => ({

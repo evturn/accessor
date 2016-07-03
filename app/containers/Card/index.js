@@ -6,7 +6,7 @@ import * as actions from 'containers/actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
-import { Input } from 'components/Input'
+import InputField from 'components/Input'
 
 import css from './styles.css'
 
@@ -16,7 +16,6 @@ class Card extends Component {
 
     this.state = {
       creating: false,
-      formValue: '',
     }
   }
 
@@ -30,37 +29,18 @@ class Card extends Component {
     this.setState({ creating: true })
   }
 
-  submitNewRecord() {
-    if (this.state.formValue.length) {
+  submitNewRecord(value) {
+    if (value.length) {
       this.props.createRecord({
         parent: false,
         record: {
-          title: this.state.formValue,
-          more: `I live at the root and I calmy enjoy ${this.state.formValue}!`
+          title: value,
+          more: `I live at the root and I calmy enjoy ${value}!`
         }
       })
     }
 
-    this.setState({
-      creating: false,
-      formValue: '',
-    })
-  }
-
-  edit(e) {
-    if (e.charCode === 13) {
-      this.submitNewRecord()
-    } else {
-      this.setState({ formValue: e.target.value })
-    }
-  }
-
-  getBackingInstance(input) {
-    this.input = input
-
-    if (this.input !== null) {
-      this.input.focus()
-    }
+    this.setState({ creating: false })
   }
 
   render() {
@@ -92,16 +72,12 @@ class Card extends Component {
         }
 
         {this.state.creating
-          ? <input
+          ? <InputField
               className={css.input}
-              onBlur={::this.submitNewRecord}
-              onChange={::this.edit}
-              onKeyPress={::this.edit}
-              ref={::this.getBackingInstance}
+              submit={::this.submitNewRecord}
             />
           : null
         }
-
 
         <RecordMap
           cardView={this.props.cardView}

@@ -1,45 +1,50 @@
-import React from 'react'
+import React, { Component } from 'react'
 
 import css from './styles.css'
 
-const Input = ({ className, current, creating, _ref, onFocus, value, onBlur, onChange, onKeyPress }) => {
-  return (
-    current
-      ? <input
-          className={`${css.standard} ${className ? className : ''}`}
-          onBlur={onBlur}
-          onKeyPress={onKeyPress}
-          onChange={onChange}
-          onFocus={onFocus}
-          ref={creating ? _ref : null}
-          value={creating ? value : ''}
-        />
-      : null
-  )
+class InputField extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      formValue: props.value || '',
+    }
+  }
+
+  submit() {
+    this.props.submit(this.state.formValue)
+    this.setState({ formValue: '' })
+    this.input.value = ''
+  }
+
+  edit(e) {
+    if (e.charCode === 13) {
+      this.submit()
+    } else {
+      this.setState({ formValue: e.target.value })
+    }
+  }
+
+  getBackingInstance(input) {
+    this.input = input
+
+    if (this.input !== null && !this.props.preventAutoFocus) {
+      this.input.focus()
+    }
+  }
+
+  render() {
+    return (
+      <input
+        className={this.props.className}
+        onBlur={::this.submit}
+        onChange={::this.edit}
+        onKeyPress={::this.edit}
+        defaultValue={this.state.formValue}
+        ref={::this.getBackingInstance}
+      />
+    )
+  }
 }
 
-const InputEditor = ({ className, updating, onBlur, _ref, value, onChange, onKeyPress, onClick, children }) => {
-  return (
-    <div className={className}>{
-      updating
-        ? <input
-            className={`${css.editor} ${className}`}
-            onBlur={onBlur}
-            ref={_ref}
-            onKeyPress={onKeyPress}
-            onChange={onChange}
-            defaultValue={value}
-          />
-        : <span
-            className={css.text}
-            onClick={onClick}>{value}</span>
-      }
-      {children}
-    </div>
-  )
-}
-
-export {
-  Input,
-  InputEditor,
-}
+export default InputField
