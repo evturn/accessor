@@ -17,6 +17,57 @@
   height: 25px;
 }
 
+.remove {
+  font-size: 22px;
+  width: 50px;
+  text-align: center;
+  float: right;
+  color: #ADADAD;
+}
+
+.alert {
+  display: block;
+  position: absolute;
+  top: 25%;
+  right: 10%;
+  left: 10%;
+  font-family: 'Helvetica Neue';
+  bottom: 50%;
+  background-color: #ffffff;
+  color: #000;
+  padding-top: 25px;
+  z-index: 100;
+  font-weight: 300;
+  text-align: center;
+  border-radius: 9px;
+  font-size: 13px;
+  box-shadow: 0px 0px 200px #ccc;
+  transition-duration: 0.8s;
+  transition-delay: 0.1s;
+  transition: 0.8s;
+}
+
+.hide {
+  display: none;
+}
+
+.alert button {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+}
+
+.alert button:first-child {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.btns {
+  margin-top: 20px;
+}
+
 .perspective {
   position: absolute;
   top: 15px;

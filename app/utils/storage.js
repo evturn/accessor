@@ -8,7 +8,7 @@ const storage = {
       const data = JSON.parse(localStorage.getItem(STORAGE_KEY))
 
       return {
-        data: data,
+        data,
         error: false,
         message: data === null
           ? `Initialized with no selection in storage`

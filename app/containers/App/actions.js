@@ -12,6 +12,7 @@ import {
   CHANGE_TARGET,
   CREATE_RECORD,
   UPDATE_RECORD,
+  REMOVE_RECORD,
 } from 'containers/App/constants'
 
 const getStateFromStorage = payload => (
@@ -58,6 +59,10 @@ const selectCardView = _ => (
   Rx.Observable.of({ type: SELECT_CARD_VIEW })
 )
 
+const removeRecord = payload => (
+  Rx.Observable.of({ type: REMOVE_RECORD, payload })
+)
+
 export {
   getStateFromStorage,
   storageError,
@@ -71,4 +76,5 @@ export {
   updateRecord,
   selectTreeView,
   selectCardView,
+  removeRecord,
 }

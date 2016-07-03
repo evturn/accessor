@@ -34,15 +34,13 @@ const navigateToRoot = target => (
   )
 )
 
-const createRecord = ({ parent, record }) => (
+const createRecord = record => (
   (actions, store) => {
     return Rx.Observable.of(store.getState().data)
       .map(prevData => {
         return [{
+          ...record,
           id: v4(),
-          title: record.title,
-          more: record.more,
-          parent: parent.id,
         }].concat(prevData)
       })
       .flatMap(x => {
@@ -56,14 +54,14 @@ const createRecord = ({ parent, record }) => (
   }
 )
 
-const updateRecord = ({ record, title }) => (
+const updateRecord = record => (
   (actions, store) => {
     return Rx.Observable.of(store.getState().data)
       .flatMap(prevData => {
         return Rx.Observable.from(prevData)
           .reduce((acc, x) => {
             if (x.id === record.id) {
-              acc = acc.concat([{ ...x, title }])
+              acc = acc.concat([{ ...record }])
               return acc
             }
 
@@ -90,6 +88,37 @@ const selectTreeView = _ => (
   (actions, store) => recordActions.selectTreeView()
 )
 
+const removeRecord = record => (
+  (actions, store) => {
+    return Rx.Observable.of(store.getState().data)
+      .flatMap(list => {
+        return Rx.Observable.from(list)
+          .reduce((acc, x) => {
+            if (!store.getState().branches[x.id].includes(record.id)) {
+              acc.push(x)
+              return acc
+            }
+
+          return acc
+        }, [])
+      })
+      .flatMap(x => {
+        return storageActions.set({
+          data: x,
+          success: x => store.dispatch(_ => recordActions.setStateFromStorage(x))
+        })
+      })
+      .flatMap(buildRecordsTree)
+      .flatMap(x => {
+        return recordActions.removeRecord({
+          ...x,
+          target: store.getState().data.filter(x => x.id === record.parent)[0] || false,
+        })
+      })
+
+  }
+)
+
 export {
   loadInitialState,
   changeTarget,
@@ -98,4 +127,5 @@ export {
   navigateToRoot,
   selectCardView,
   selectTreeView,
+  removeRecord,
 }

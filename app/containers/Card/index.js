@@ -16,6 +16,7 @@ class Card extends Component {
 
     this.state = {
       creating: false,
+      prompt: false,
     }
   }
 
@@ -29,14 +30,25 @@ class Card extends Component {
     this.setState({ creating: true })
   }
 
+  removeRecord() {
+    this.setState({ prompt: true })
+  }
+
+  confirmRemove() {
+    this.props.removeRecord(this.props.target)
+    this.dismissAlert()
+  }
+
+  dismissAlert() {
+    this.setState({ prompt: false })
+  }
+
   submitNewRecord(value) {
     if (value.length) {
       this.props.createRecord({
+        title: value,
+        more: `I live at the root and I calmy enjoy ${value}!`,
         parent: false,
-        record: {
-          title: value,
-          more: `I live at the root and I calmy enjoy ${value}!`
-        }
       })
     }
 
@@ -67,6 +79,11 @@ class Card extends Component {
                 onClick={_ => this.props.changeTarget(this.props.target.parent)}>
                 ⬅︎
               </span>
+              <span
+                className={css.remove}
+                onClick={::this.removeRecord}>
+                ╳
+              </span>
             </div>
           : null
         }
@@ -78,6 +95,14 @@ class Card extends Component {
             />
           : null
         }
+
+        <div className={this.state.prompt ? css.alert : css.hide}>
+          You sure you know what you're doing?
+          <div className={css.btns}>
+            <button onClick={::this.confirmRemove}>Yes</button>
+            <button onClick={::this.dismissAlert}>No, my best friend is a banana</button>
+          </div>
+        </div>
 
         <RecordMap
           cardView={this.props.cardView}

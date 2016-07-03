@@ -10,6 +10,7 @@ import {
   POPULATE_RECORDS,
   NAVIGATE_TO_ROOT,
   CHANGE_TARGET,
+  REMOVE_RECORD,
 } from 'containers/App/constants'
 
 const initialState = {
@@ -56,6 +57,7 @@ const appReducer = (state=initialState, action) => {
         target: false,
       })
 
+    case REMOVE_RECORD:
     case GET_STATE_FROM_STORAGE:
     case SET_STATE_FROM_STORAGE:
     case STORAGE_ERROR:

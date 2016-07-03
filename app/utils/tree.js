@@ -18,17 +18,15 @@ function nestAllChildrenRecurse(list) {
       function assignChildrenToParent(item) {
         const items = list.filter(x => x.parent === item.id)
 
-        if (items.length) {
-          items.map(assignChildrenToParent)
-        }
-
         return items.length
-          ? { ...item, _children: items }
+          ? { ...item, _children: items.map(assignChildrenToParent) }
           : { ...item }
       }
 
       if (!x.parent) {
-        acc = acc.concat([assignChildrenToParent(x)])
+        acc.push(assignChildrenToParent(x))
+
+        return acc
       }
 
       return acc

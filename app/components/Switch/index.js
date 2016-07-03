@@ -57,10 +57,19 @@ const SwitchDrag = ({ current, hide }) => {
   )
 }
 
+const SwitchRemove = ({ current }) => {
+  return (
+    current
+      ? <div className={css.clip}>╳</div>
+      : null
+  )
+}
+
 export {
   SwitchExpand,
   SwitchSelect,
   SwitchControls,
   SwitchActions,
   SwitchDrag,
+  SwitchRemove,
 }

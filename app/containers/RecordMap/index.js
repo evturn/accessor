@@ -13,11 +13,12 @@ class RecordMap extends Component {
     return (
       <Record
         {...record}
-        key={record.id}>{
-        record._children
+        key={record.id}>
+        {record._children
           ? <ul>{record._children.map(::this.renderRecord)}</ul>
           : null
-      }</Record>
+        }
+      </Record>
     )
   }
 

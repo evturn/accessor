@@ -2,15 +2,14 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
+import InputField from 'components/Input'
 import {
-  SwitchControls,
   SwitchActions,
   SwitchDrag,
+  SwitchControls,
 } from 'components/Switch'
 
 import * as actions from 'containers/actions'
-
-import InputField from 'components/Input'
 
 import css from './styles.css'
 
@@ -30,21 +29,19 @@ class Record extends Component {
 
   computeStyles(x) {
     return {
-      expand: x.current
-        || x.expand && x.parent
-        || x.expand && x.root
-          ? `${css.more} ${css.open}`
+      expand: x.current || x.expand && x.parent || x.expand && x.root
+        ? `${css.more} ${css.open}`
+        : css.shut,
+
+      nested: x.current && x.children
+        ? `${css.open} ${css.nest}`
+        : '',
+
+      title: x.root || x.parent
+        ? `${css.title} ${css.open}`
+        : x.current
+          ? `${css.title} ${css.open} ${css.main}`
           : css.shut,
-      nested: x.current
-        && x.children
-          ? `${css.open} ${css.nest}`
-          : '',
-      title: x.root
-        || x.parent
-          ? `${css.title} ${css.open}`
-          : x.current
-            ? `${css.title} ${css.open} ${css.main}`
-            : css.shut
     }
   }
 
@@ -63,11 +60,9 @@ class Record extends Component {
   submitNewRecord(value) {
     if (value.length) {
       this.props.createRecord({
-        parent: { ...this.props },
-        record: {
-          title: value,
-          more: `I can not shut the hell about ${value}!`
-        }
+        title: value,
+        parent: this.props.id,
+        more: `I can not shut the hell about ${value}!`
       })
     }
 
@@ -77,8 +72,8 @@ class Record extends Component {
   submitUpdatedRecord(value) {
     if (value.length) {
       this.props.updateRecord({
-        record: { ...this.props },
-        title: value
+        ...this.props,
+        title: value,
       })
     }
 
@@ -112,11 +107,6 @@ class Record extends Component {
                     {this.props.title}
                   </span>
               }
-
-              <SwitchDrag
-                hide={this.state.updating}
-                current={derived.current}
-              />
 
               <SwitchControls
                 current={derived.current}
@@ -153,14 +143,15 @@ class Record extends Component {
             <div
               className={css.drag}
               onTouchStart={::this.onDragStart}
-              onTouchEnd={::this.onDragEnd}>
-              ⋯
-            </div>
-            <div
-              className={`${css.record} ${this.state.dragging ? css.dragging : ''}`}>
+              onTouchEnd={::this.onDragEnd}>⋯</div>
+
+            <div className={`${css.record} ${this.state.dragging ? css.dragging : ''}`}>
               {this.props.title}
             </div>
-            <div className={css.records}>{this.props.children}</div>
+
+            <div className={css.records}>
+              {this.props.children}
+            </div>
           </li>
     )
   }
