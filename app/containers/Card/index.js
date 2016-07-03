@@ -2,14 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
-import {
-  loadInitialState,
-  navigateToRoot,
-  changeTarget,
-  selectCardView,
-  selectTreeView,
-  createRecord,
-} from 'containers/actions'
+import * as actions from 'containers/actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
@@ -163,13 +156,4 @@ const mapStateToProps = state => ({
   treeView: state.treeView,
 })
 
-const mapDispatchToProps = dispatch => ({
-  loadInitialState:     _ => dispatch(loadInitialState()),
-  selectCardView:       _ => dispatch(selectCardView()),
-  selectTreeView:       _ => dispatch(selectTreeView()),
-  changeTarget:       id => dispatch(changeTarget(id)),
-  navigateToRoot: target => dispatch(navigateToRoot(target)),
-  createRecord: ({ parent, record }) => dispatch(createRecord({ parent, record })),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Card)
+export default connect(mapStateToProps, actions)(Card)

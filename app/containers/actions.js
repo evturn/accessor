@@ -1,5 +1,6 @@
 import * as Rx from 'rxjs'
 import buildRecordsTree from 'utils/tree'
+import { v4 } from 'node-uuid'
 
 import * as recordActions from 'containers/App/actions'
 import * as storageActions from 'utils/storage.js'
@@ -38,7 +39,7 @@ const createRecord = ({ parent, record }) => (
     return Rx.Observable.of(store.getState().data)
       .map(prevData => {
         return [{
-          id: prevData.length + 1,
+          id: v4(),
           title: record.title,
           more: record.more,
           parent: parent.id,

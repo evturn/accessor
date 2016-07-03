@@ -8,11 +8,7 @@ import {
   SwitchDrag,
 } from 'components/Switch'
 
-import {
-  changeTarget,
-  createRecord,
-  updateRecord,
-} from 'containers/actions'
+import * as actions from 'containers/actions'
 
 import {
   Input,
@@ -207,7 +203,6 @@ Record.PropTypes = {
     PropTypes.bool
   ]),
   branch: PropTypes.array,
-  active: PropTypes.number,
   branches: PropTypes.object,
   target: PropTypes.oneOfType([
     PropTypes.bool,
@@ -225,13 +220,4 @@ const matchStateToProps = state => ({
   treeView: state.treeView,
 })
 
-const mapDispatchToProps = dispatch => ({
-  changeTarget: id => dispatch(changeTarget(id)),
-  createRecord: ({ parent, record }) => dispatch(createRecord({ parent, record })),
-  updateRecord: ({ record, title }) => dispatch(updateRecord({ record, title })),
-})
-
-export default connect(
-  matchStateToProps,
-  mapDispatchToProps
-)(Record)
+export default connect(matchStateToProps, actions)(Record)
