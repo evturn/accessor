@@ -9,7 +9,7 @@ import {
   browserHistory
 } from 'react-router'
 import useScroll from 'react-router-scroll'
-import { selectTippyTop } from 'utils/scroll'
+import selectTippyTop from 'utils/scroll'
 
 import App from 'containers/App'
 
