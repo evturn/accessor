@@ -1,52 +1,73 @@
 import {
-  SELECT_CARD_VIEW,
-  SELECT_TREE_VIEW,
-  NAVIGATE_TO_ROOT,
+  STORAGE_ERROR,
+  REQUEST_RECORDS,
+  RECEIVE_RECORDS,
+  SWITCH_LAYOUT,
   CHANGE_TARGET,
+  REMOVE_RECORD,
 } from 'containers/App/constants'
 
-const initialState = {
-  target: false,
-  cardView: true,
-  treeView: false,
-}
+const loading = (state=false, action) => {
+  switch (action.type) {
+    case REQUEST_RECORDS:
+      return true
 
-const targetReducer = (state=initialState, action) => {
-  switch(action.type) {
-    case CHANGE_TARGET:
-      return Object.assign({}, state, {
-        // changeTarget :: id -> id
-
-        // navigate forward
-        // target = action.id
-
-        // navigate backward
-        // target = !recordById[action.id].parent ? false : recordById[action.id].parent
-      })
-
-    case NAVIGATE_TO_ROOT:
-      return Object.assign({}, state, {
-        target: false,
-      })
-
-    case SELECT_TREE_VIEW:
-      return Object.assign({}, state, {
-        cardView: false,
-        treeView: true,
-        target: false,
-      })
-
-    case SELECT_CARD_VIEW:
-      return Object.assign({}, state, {
-        cardView: true,
-        treeView: false,
-      })
+    case STORAGE_ERROR:
+    case RECEIVE_RECORDS:
+      return false
 
     default:
       return state
   }
 }
 
-export default targetReducer
+const cardView = (state=true, action) => {
+  switch (action.type) {
+    case SWITCH_LAYOUT:
+      return action.cardView
+
+    default:
+      return state
+  }
+}
+
+const treeView = (state=false, action) => {
+  switch (action.type) {
+    case SWITCH_LAYOUT:
+      return action.treeView
+
+    default:
+      return state
+  }
+}
+
+const target = (state=false, action) => {
+  switch(action.type) {
+    case SWITCH_LAYOUT:
+      return false
+
+    case CHANGE_TARGET:
+      return action.id
+
+    case REMOVE_RECORD:
+      return state.data
+        .filter(x => x.id === action.record.parent)[0] || false
+
+    default:
+      return state
+  }
+}
+
+export {
+  treeView,
+  cardView,
+  target,
+  loading
+}
 
 export const selectTarget = state => state.target
+
+export const selectView = state => ({
+  cardView: state.cardView,
+  treeView: state.treeView,
+})

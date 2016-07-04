@@ -1,5 +1,3 @@
-import * as Rx from 'rxjs'
-
 const STORAGE_KEY = '@@accessor'
 
 const storage = {
@@ -38,15 +36,6 @@ const storage = {
 
 
 const get = storage.get
-
-function set({ data, success }) {
-  return Rx.Observable.of(storage.set(data))
-    .map(response => {
-      success(response)
-
-      return response.data
-    })
-}
-
+const set = storage.set
 
 export { get, set }

@@ -37,19 +37,5 @@ export default function configureStore(state=initialState, history) {
     compose(...enhancers)
   )
 
-  store.asyncReducers = {}
-
-  if (module.hot) {
-    module.hot.accept('./reducers', _ => {
-      System.import('./reducers')
-        .then(reducerModule => {
-          const createReducers = reducerModule.default
-          const nextReducers = createReducers(store.asyncReducers)
-
-          store.replaceReducer(nextReducers)
-        })
-    })
-  }
-
   return store
 }

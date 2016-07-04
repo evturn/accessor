@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 
-import { requestRecords } from '../../actions'
+import * as actions from '../../actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
@@ -77,7 +77,7 @@ class Card extends Component {
           ? <div className={css.nav}>
               <span
                 className={css.back}
-                onClick={_ => this.props.changeTarget(this.props.target.parent)}>
+                onClick={_ => this.props.navigateBackwards(this.props.target.parent)}>
                 ⬅︎
               </span>
               <span
@@ -158,4 +158,4 @@ const mapStateToProps = state => ({
   treeView: state.treeView,
 })
 
-export default connect(mapStateToProps, { requestRecords })(Card)
+export default connect(mapStateToProps, actions)(Card)

@@ -9,7 +9,7 @@ import {
   SwitchControls,
 } from 'components/Switch'
 
-import * as actions from 'containers/actions'
+import * as actions from '../../actions'
 
 import css from './styles.css'
 
@@ -169,7 +169,6 @@ Record.PropTypes = {
     PropTypes.number,
     PropTypes.bool
   ]),
-  branch: PropTypes.array,
   branches: PropTypes.object,
   target: PropTypes.oneOfType([
     PropTypes.bool,

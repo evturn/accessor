@@ -2,11 +2,34 @@ import {
   REQUEST_RECORDS,
   RECEIVE_RECORDS,
   STORAGE_ERROR,
+  SET_STATE_FROM_STORAGE,
 } from 'containers/App/constants'
 
+const error = (state=false, action) => {
+  switch (action.type) {
+    case STORAGE_ERROR:
+    case SET_STATE_FROM_STORAGE:
+      return action.error
 
-const loadingReducer = (state, action) => {
-  switch(action.type) {
+    default:
+      return state
+  }
+}
+
+const message = (state=false, action) => {
+  switch (action.type) {
+    case RECEIVE_RECORDS:
+    case STORAGE_ERROR:
+    case SET_STATE_FROM_STORAGE:
+      return action.message
+
+    default:
+      return state
+}
+
+
+const loading = (state=false, action) => {
+  switch (action.type) {
     case REQUEST_RECORDS:
       return true
 
@@ -19,14 +42,9 @@ const loadingReducer = (state, action) => {
   }
 }
 
-export default loadingReducer
 
-export const selectLoading = state => state.loading
-
-/*
-
-const mapStateToProps = state => ({
-  loading: selectLoading(state)
-})
-
-*/
+export {
+  error,
+  message,
+  loading,
+}
