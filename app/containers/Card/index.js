@@ -2,7 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
-import * as actions from 'containers/actions'
+
+import { requestRecords } from '../../actions'
 
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
@@ -23,7 +24,7 @@ class Card extends Component {
   shouldPureComponentUpdate = shouldPureComponentUpdate
 
   componentDidMount() {
-    this.props.loadInitialState()
+    this.props.requestRecords()
   }
 
   createRecordAtRoot() {
@@ -157,4 +158,4 @@ const mapStateToProps = state => ({
   treeView: state.treeView,
 })
 
-export default connect(mapStateToProps, actions)(Card)
+export default connect(mapStateToProps, { requestRecords })(Card)

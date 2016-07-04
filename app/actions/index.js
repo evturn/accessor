@@ -4,19 +4,23 @@ import {
   NAVIGATE_TO_ROOT,
   SELECT_CARD_VIEW,
   SELECT_TREE_VIEW,
-  LOAD_FROM_STORAGE,
-  GET_STATE_FROM_STORAGE,
   SET_STATE_FROM_STORAGE,
   STORAGE_ERROR,
   POPULATE_RECORDS,
   CHANGE_TARGET,
+  REQUEST_RECORDS,
+  RECEIVE_RECORDS,
   CREATE_RECORD,
   UPDATE_RECORD,
   REMOVE_RECORD,
 } from 'containers/App/constants'
 
-const getStateFromStorage = payload => (
-  Rx.Observable.of({ type: GET_STATE_FROM_STORAGE, payload })
+const requestRecords = _ => (
+  { type: REQUEST_RECORDS }
+)
+
+const receiveRecords = payload => (
+  Rx.Observable.of({ type: RECEIVE_RECORDS, payload })
 )
 
 const storageError = payload => (
@@ -29,10 +33,6 @@ const setStateFromStorage = payload => (
 
 const populateRecords = payload => (
   Rx.Observable.of({ type: POPULATE_RECORDS, payload })
-)
-
-const loadFromStorage = _ => (
-  Rx.Observable.of({ type: LOAD_FROM_STORAGE })
 )
 
 const changeTarget = payload => (
@@ -64,12 +64,11 @@ const removeRecord = payload => (
 )
 
 export {
-  getStateFromStorage,
+  requestRecords,
+  receiveRecords,
   storageError,
   setStateFromStorage,
-  setStateFromStorage,
   populateRecords,
-  loadFromStorage,
   changeTarget,
   navigateToRoot,
   createRecord,

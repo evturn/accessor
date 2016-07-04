@@ -37,18 +37,7 @@ const storage = {
 }
 
 
-function get({ error, success }) {
-  return Rx.Observable.of(storage.get())
-    .map(response => {
-      if (response.error) {
-        return error(response)
-      } else {
-        success(response)
-      }
-
-      return response.data
-    })
-}
+const get = storage.get
 
 function set({ data, success }) {
   return Rx.Observable.of(storage.set(data))
@@ -58,5 +47,6 @@ function set({ data, success }) {
       return response.data
     })
 }
+
 
 export { get, set }

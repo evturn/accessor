@@ -1,20 +1,15 @@
-export const LOAD_RECORDS_ERROR     = '@@accessor/LOAD_RECORDS_ERROR'
-export const MOVE_RECORD            = '@@accessor/MOVE_RECORD'
-export const NAVIGATE_TO_ROOT       = '@@accessor/NAVIGATE_TO_ROOT'
-export const SELECT_CARD_VIEW       = '@@accessor/SELECT_CARD_VIEW'
-export const SELECT_TREE_VIEW       = '@@accessor/SELECT_TREE_VIEW'
+export const CHANGE_TARGET          = '@@accessor/Navigator/CHANGE_TARGET'
+export const NAVIGATE_TO_ROOT       = '@@accessor/Navigator/NAVIGATE_TO_ROOT'
+export const SELECT_CARD_VIEW       = '@@accessor/Navigator/SELECT_CARD_VIEW'
+export const SELECT_TREE_VIEW       = '@@accessor/Navigator/SELECT_TREE_VIEW'
 
+export const SET_STATE_FROM_STORAGE = '@@accessor/Storage/SET_STATE_FROM_STORAGE'
+export const STORAGE_ERROR          = '@@accessor/Storage/STORAGE_ERROR'
 
-export const GET_STATE_FROM_STORAGE = '@@accessor/GET_STATE_FROM_STORAGE'
-export const SET_STATE_FROM_STORAGE = '@@accessor/SET_STATE_FROM_STORAGE'
-export const STORAGE_ERROR          = '@@accessor/STORAGE_ERROR'
+export const RECEIVE_RECORDS        = '@@accessor/Storage/RECEIVE_RECORDS'
+export const REQUEST_RECORDS        = '@@accessor/Storage/REQUEST_RECORDS'
+export const POPULATE_RECORDS       = '@@accessor/Storage/POPULATE_RECORDS'
 
-export const LOAD_FROM_STORAGE      = '@@accessor/LOAD_FROM_STORAGE'
-export const POPULATE_RECORDS       = '@@accessor/POPULATE_RECORDS'
-
-export const CHANGE_TARGET          = '@@accessor/CHANGE_TARGET'
-
-export const CREATE_RECORD          = '@@accessor/CREATE_RECORD'
-export const UPDATE_RECORD          = '@@accessor/UPDATE_RECORD'
-
-export const REMOVE_RECORD          = '@@accessor/REMOVE_RECORD'
+export const CREATE_RECORD          = '@@accessor/Record/CREATE_RECORD'
+export const UPDATE_RECORD          = '@@accessor/Record/UPDATE_RECORD'
+export const REMOVE_RECORD          = '@@accessor/Record/REMOVE_RECORD'

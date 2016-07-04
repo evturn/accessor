@@ -2,20 +2,11 @@ import * as Rx from 'rxjs'
 import buildRecordsTree from 'utils/tree'
 import { v4 } from 'node-uuid'
 
-import * as recordActions from 'containers/App/actions'
+import * as recordActions from '../actions'
 import * as storageActions from 'utils/storage.js'
 
 const loadInitialState = _ => (
-  (actions, store) => {
-    store.dispatch(_ => recordActions.loadFromStorage())
-
-  return storageActions.get({
-      error: recordActions.storageError,
-      success: x => store.dispatch(_ => recordActions.getStateFromStorage(x))
-    })
-    .flatMap(buildRecordsTree)
-    .flatMap(recordActions.populateRecords)
-  }
+  (actions, store) => recordActions.requestRecords()
 )
 
 const changeTarget = id => (
