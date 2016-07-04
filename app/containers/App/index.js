@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react'
 
-import 'sanitize.css/sanitize.css'
+import Card from 'containers/Card'
 
-import Footer from 'components/Footer'
+import 'sanitize.css/sanitize.css'
 
 import css from './styles.css'
 
 const App = props => (
   <div className={css.wrapper}>
-    {props.children}
+    <Card />
   </div>
 )
 

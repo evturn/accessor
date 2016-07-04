@@ -6,7 +6,19 @@ import createReducer from './reducers'
 const observableMiddleware = reduxObservable()
 const devtools = window.devToolsExtension || (() => noop => noop)
 
-export default function configureStore(initialState={}, history) {
+const initialState = {
+  records: false,
+  data: false,
+  branches: false,
+  loading: false,
+  error: false,
+  target: false,
+  cardView: true,
+  treeView: false,
+  message: false,
+}
+
+export default function configureStore(state=initialState, history) {
   const middlewares = [
     observableMiddleware,
   ]
