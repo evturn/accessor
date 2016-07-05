@@ -1,18 +1,18 @@
 import {
   RECEIVE_RECORDS,
   STORAGE_ERROR,
-  SET_STATE_FROM_STORAGE,
+  SAVE_RECORD,
 } from 'containers/App/constants'
 
 const message = (state=false, action) => {
   switch (action.type) {
     case RECEIVE_RECORDS:
     case STORAGE_ERROR:
-    case SET_STATE_FROM_STORAGE:
+    case SAVE_RECORD:
       return action.message
 
     default:
-      return state
+      return false
   }
 }
 

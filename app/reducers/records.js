@@ -2,12 +2,12 @@ import { v4 } from 'node-uuid'
 
 import {
   RECEIVE_RECORDS,
-  SET_STATE_FROM_STORAGE,
+  SAVE_RECORD,
 } from 'containers/App/constants'
 
 const records = (state=false, action) => {
   switch(action.type) {
-    case SET_STATE_FROM_STORAGE:
+    case SAVE_RECORD:
     case RECEIVE_RECORDS:
       return nestRecords(action.data)
 

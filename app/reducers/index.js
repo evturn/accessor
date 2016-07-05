@@ -3,13 +3,12 @@ import { combineDelegators } from 'redux-observable'
 import { Observable } from 'rxjs'
 
 import * as storage from 'utils/storage'
-import * as recordActions from '../actions'
+import * as actions from '../actions'
 import {
   REQUEST_RECORDS,
   CREATE_RECORD,
   UPDATE_RECORD,
   REMOVE_RECORD,
-  SET_STATE_FROM_STORAGE,
 } from 'containers/App/constants'
 
 import byId from './byId'
@@ -23,40 +22,35 @@ import { cardView } from './cardView'
 import { treeView } from './treeView'
 import { branches } from './branches'
 
-const saveData = data => {
-  return Observable.of(storage.set(data))
-    .flatMap(recordActions.setStateFromStorage)
-}
-
 const fetchRecordsManager = (action$, store) => (
   action$.ofType(REQUEST_RECORDS)
     .switchMap(action => {
       return Observable.of(storage.get())
         .flatMap(x => {
           if (x.error) {
-            return recordActions.storageError(x)
+            return actions.storageError(x)
           }
 
-          return recordActions.receiveRecords(x)
+          return actions.receiveRecords(x)
         })
       })
 )
 
-const createRecordManager = (action$, store) => (
-  action$.ofType(CREATE_RECORD)
-    .switchMap(action => saveData(store.getState().data))
+const createEffectsManager = actionType => (
+  (action$, store) => (
+    action$.ofType(actionType)
+      .switchMap(action => {
+        return Observable.of(storage.set(store.getState().data))
+          .flatMap(actions.saveRecord)
+      })
+  )
 )
 
-const updateRecordManager = (action$, store) => (
-  action$.ofType(UPDATE_RECORD)
-    .switchMap(action => saveData(store.getState().data))
-)
+const createRecordManager = createEffectsManager(CREATE_RECORD)
+const updateRecordManager = createEffectsManager(UPDATE_RECORD)
+const removeRecordManager = createEffectsManager(REMOVE_RECORD)
 
-const removeRecordManager = (action$, store) => (
-  action$.ofType(REMOVE_RECORD)
-    .switchMap(action => saveData(store.getState().data))
-)
-
+export const getCurrentTarget = fromTarget.getCurrentTarget
 export const getComputedStyles = fromTarget.getComputedStyles
 
 export const rootReducer = combineReducers({

@@ -1,12 +1,12 @@
 import {
   STORAGE_ERROR,
-  SET_STATE_FROM_STORAGE,
+  SAVE_RECORD,
 } from 'containers/App/constants'
 
 const error = (state=false, action) => {
   switch (action.type) {
     case STORAGE_ERROR:
-    case SET_STATE_FROM_STORAGE:
+    case SAVE_RECORD:
       return action.error
 
     default:

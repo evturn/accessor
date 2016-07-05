@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { Observable } from 'rxjs'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
-
+import { getCurrentTarget } from '../../reducers'
 import * as actions from '../../actions'
 
 import H1 from 'components/H1'
@@ -11,6 +12,8 @@ import InputField from 'components/Input'
 
 import css from './styles.css'
 
+const { timer } = Observable
+
 class Card extends Component {
   constructor(props) {
     super(props)
@@ -18,6 +21,7 @@ class Card extends Component {
     this.state = {
       creating: false,
       prompt: false,
+      fade: false,
     }
   }
 
@@ -52,6 +56,14 @@ class Card extends Component {
     this.setState({ prompt: false })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.message) {
+      this.setState({ fade: false })
+      timer(2000)
+        .subscribe(x => this.setState({ fade: true }))
+    }
+  }
+
   submitNewRecord(value) {
     if (value.length) {
       this.props.createRecord({
@@ -67,6 +79,7 @@ class Card extends Component {
   render() {
     return (
       <div>
+        <div className={`${css.status} ${this.state.fade ? css.fade : ''}`}>{this.props.message}</div>
 
         {this.props.target
           ? <div className={css.nav}>
@@ -128,9 +141,6 @@ class Card extends Component {
               onClick={::this.createRecordAtRoot}>+</button>
           : null
         }
-
-        <div className={css.status}>{this.props.message}</div>
-
       </div>
     )
   }

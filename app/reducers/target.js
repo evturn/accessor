@@ -23,35 +23,28 @@ const target = (state=false, action) => {
 
 export default target
 
+export const getCurrentTarget = state => {
+ return !state.target ? false : state.byId[state.target]
+}
+
 export const getComputedStyles = (state, ownProps) => {
-  const isTarget = state.target.id === ownProps.id
-  const parentIsTarget = state.target.id === ownProps.parent
-  const atRoot = state.target === false && ownProps.parent === false
-  const hasChildren = ownProps.children
 
-  return (isExpanded, css) => {
+  return function computeStyles(expand, css) {
+    const current = state.target.id === ownProps.id
+    const parent = state.target.id === ownProps.parent
+    const root = state.target === false && ownProps.parent === false
+    const children = ownProps.children
+
     return {
-      derived: {
-        current: isTarget,
-        parent: parentIsTarget,
-        root: atRoot,
-        children: hasChildren,
-        expand: isExpanded
-      },
+      derived: { current, parent, root, children, expand, },
       classes: {
-        expand: isTarget || isExpanded && parentIsTarget || isExpanded && atRoot
-          ? `${css.more} ${css.open}`
-          : css.shut,
-
-        nested: isTarget && hasChildren
-          ? `${css.open} ${css.nest}`
-          : '',
-
-        title: atRoot || parentIsTarget
-          ? `${css.title} ${css.open}`
-          : isTarget
-            ? `${css.title} ${css.open} ${css.main}`
-            : css.shut,
+        expand: current || expand && parent || expand && root
+          ? `${css.more} ${css.open}` : css.shut,
+        nested: current && children
+          ? `${css.open} ${css.nest}` : '',
+        title: root || parent
+          ? `${css.title} ${css.open}` : current
+            ? `${css.title} ${css.open} ${css.main}` : css.shut,
       }
     }
   }

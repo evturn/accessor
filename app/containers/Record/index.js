@@ -5,7 +5,7 @@ import shouldPureComponentUpdate from 'react-pure-render/function'
 import InputField from 'components/Input'
 
 import * as actions from '../../actions'
-import { getComputedStyles } from '../../reducers'
+import { getComputedStyles, getCurrentTarget } from '../../reducers'
 
 import css from './styles.css'
 

@@ -3,7 +3,7 @@ import * as Rx from 'rxjs'
 import {
   SWITCH_LAYOUT,
   CHANGE_TARGET,
-  SET_STATE_FROM_STORAGE,
+  SAVE_RECORD,
   STORAGE_ERROR,
   REQUEST_RECORDS,
   RECEIVE_RECORDS,
@@ -68,9 +68,9 @@ const selectCardView = _ => ({
   treeView: false,
 })
 
-const setStateFromStorage = ({ data, error, message }) => {
+const saveRecord = ({ data, error, message }) => {
   return Rx.Observable.of({
-    type: SET_STATE_FROM_STORAGE,
+    type: SAVE_RECORD,
     error,
     message,
     data,
@@ -106,13 +106,13 @@ export {
   requestRecords,
   receiveRecords,
   storageError,
-  setStateFromStorage,
   changeTarget,
   navigateToRoot,
   createRecord,
   updateRecord,
+  removeRecord,
+  saveRecord,
   selectTreeView,
   selectCardView,
-  removeRecord,
   navigateBackwards,
 }

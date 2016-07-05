@@ -1,11 +1,11 @@
 import {
-  SET_STATE_FROM_STORAGE,
+  SAVE_RECORD,
   RECEIVE_RECORDS,
 } from 'containers/App/constants'
 
 const byId = (state={}, action) => {
   switch (action.type) {
-    case SET_STATE_FROM_STORAGE:
+    case SAVE_RECORD:
     case RECEIVE_RECORDS:
       return mapRecordsById(state, action.data)
 

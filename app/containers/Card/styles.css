@@ -95,6 +95,13 @@
   font-size: 12px;
   transition: 1s;
   transition-delay: 0.1s;
+  opacity: 1;
+}
+
+.status.fade {
+  opacity: 0;
+  transition: 1s;
+  transition-duration: 1s;
 }
 
 .perspective {

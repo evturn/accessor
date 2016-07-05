@@ -43,7 +43,6 @@ RecordMap.propTypes = {
 
 const matchStateToProps = state => ({
   records: state.records,
-  target: state.target,
   loading: state.loading,
 })
 
