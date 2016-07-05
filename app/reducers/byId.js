@@ -17,12 +17,9 @@ const byId = (state={}, action) => {
 function mapRecordsById(state, data) {
   const nextState = { ...state }
 
-  data.forEach(x => {
-    nextState[x.id] = x
-  })
+  data.forEach(x => nextState[x.id] = x)
 
   return nextState
 }
 
-
-export { byId }
+export default byId

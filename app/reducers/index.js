@@ -12,15 +12,15 @@ import {
   SET_STATE_FROM_STORAGE,
 } from 'containers/App/constants'
 
-import { records, nestRecords } from './records'
+import byId from './byId'
+import target, * as fromTarget from './target'
+import { records } from './records'
 import { data } from './data'
 import { loading } from './loading'
 import { message} from './message'
 import { error } from './error'
-import { target } from './target'
 import { cardView } from './cardView'
 import { treeView } from './treeView'
-import { byId } from './byId'
 import { branches } from './branches'
 
 const saveData = data => {
@@ -57,6 +57,7 @@ const removeRecordManager = (action$, store) => (
     .switchMap(action => saveData(store.getState().data))
 )
 
+export const getComputedStyles = fromTarget.getComputedStyles
 
 export const rootReducer = combineReducers({
   records,

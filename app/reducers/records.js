@@ -39,4 +39,4 @@ function nestRecords(data) {
     }, [])
 }
 
-export { records, nestRecords }
+export { records }

@@ -10,6 +10,7 @@ import {
 } from 'components/Switch'
 
 import * as actions from '../../actions'
+import { getComputedStyles } from '../../reducers'
 
 import css from './styles.css'
 
@@ -26,24 +27,6 @@ class Record extends Component {
   }
 
   shouldPureComponentUpdate = shouldPureComponentUpdate
-
-  computeStyles(x) {
-    return {
-      expand: x.current || x.expand && x.parent || x.expand && x.root
-        ? `${css.more} ${css.open}`
-        : css.shut,
-
-      nested: x.current && x.children
-        ? `${css.open} ${css.nest}`
-        : '',
-
-      title: x.root || x.parent
-        ? `${css.title} ${css.open}`
-        : x.current
-          ? `${css.title} ${css.open} ${css.main}`
-          : css.shut,
-    }
-  }
 
   toggleDescription() {
     this.setState({ expand: !this.state.expand})
@@ -83,14 +66,7 @@ class Record extends Component {
   }
 
   render() {
-    const derived = {
-      current: this.props.target.id === this.props.id,
-      parent: this.props.target.id === this.props.parent,
-      root: this.props.target === false && this.props.parent === false,
-      expand: this.state.expand,
-      children: this.props.children
-    }
-    const classes = this.computeStyles(derived)
+    const { classes, derived } = this.props.computeStyles(this.state.expand, css)
 
     return (
       this.props.cardView
@@ -178,11 +154,14 @@ Record.PropTypes = {
 }
 
 
-const matchStateToProps = state => ({
-  branches: state.branches,
-  target: state.target,
-  cardView: state.cardView,
-  treeView: state.treeView,
-})
+const matchStateToProps = (state, ownProps) => {
+  return {
+    branches: state.branches,
+    target: state.target,
+    cardView: state.cardView,
+    treeView: state.treeView,
+    computeStyles: getComputedStyles(state, ownProps)
+  }
+}
 
 export default connect(matchStateToProps, actions)(Record)

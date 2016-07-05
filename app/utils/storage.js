@@ -1,4 +1,9 @@
+
 const STORAGE_KEY = '@@accessor'
+
+// Uncomment to overwrite storage state with seed data
+// import newData from '../../internals/seed'
+// localStorage.setItem(STORAGE_KEY, JSON.stringify(newData))
 
 const storage = {
   get: _ => {

@@ -112,28 +112,23 @@ const data = [{
   parent: 14,
 }]
 
-function getNewIdByOldId(data) {
-  return Rx.Observable.of(data)
-    .flatMap(list => {
-      return Rx.Observable.from(list)
-        .reduce((acc, x) => {
-          acc[x.id] = v4()
+const byId = data
+  .reduce((acc, x) => {
+    acc[x.id] = v4()
 
-          return acc
-        }, {})
-        .flatMap(byId => {
-          return Rx.Observable.from(list)
-            .reduce((acc, x) => {
-              acc.push({
-                ...x,
-                id: byId[x.id],
-                parent: !x.parent ? false : byId[x.parent]
-              })
+    return acc
+  }, {})
 
-              return acc
-            }, [])
-        })
+
+const newData = data
+  .reduce((acc, x) => {
+    acc.push({
+      ...x,
+      id: byId[x.id],
+      parent: !x.parent ? false : byId[x.parent]
     })
-}
 
-module.exports = getNewIdByOldId(data)
+  return acc
+}, [])
+
+module.exports = newData

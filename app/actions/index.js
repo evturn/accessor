@@ -52,7 +52,7 @@ const navigateToRoot = target => (action, store) => {
 
   return Rx.Observable.of({
     type: CHANGE_TARGET,
-    id: false,
+    target: false,
   })
 }
 
