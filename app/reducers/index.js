@@ -12,13 +12,19 @@ import {
   SET_STATE_FROM_STORAGE,
 } from 'containers/App/constants'
 
-import { records, data } from './records'
-// import { loading, error, message } from './loading'
-import { target, loading, cardView, treeView } from './target'
-import { byId, branches } from './byId'
+import { records, nestRecords } from './records'
+import { data } from './data'
+import { loading } from './loading'
+import { message} from './message'
+import { error } from './error'
+import { target } from './target'
+import { cardView } from './cardView'
+import { treeView } from './treeView'
+import { byId } from './byId'
+import { branches } from './branches'
 
-const saveData = action => {
-  return Observable.of(storage.set(action.data))
+const saveData = data => {
+  return Observable.of(storage.set(data))
     .flatMap(recordActions.setStateFromStorage)
 }
 
@@ -37,15 +43,18 @@ const fetchRecordsManager = (action$, store) => (
 )
 
 const createRecordManager = (action$, store) => (
-  action$.ofType(CREATE_RECORD).switchMap(saveData)
+  action$.ofType(CREATE_RECORD)
+    .switchMap(action => saveData(store.getState().data))
 )
 
 const updateRecordManager = (action$, store) => (
-  action$.ofType(UPDATE_RECORD).switchMap(saveData)
+  action$.ofType(UPDATE_RECORD)
+    .switchMap(action => saveData(store.getState().data))
 )
 
 const removeRecordManager = (action$, store) => (
-  action$.ofType(REMOVE_RECORD).switchMap(saveData)
+  action$.ofType(REMOVE_RECORD)
+    .switchMap(action => saveData(store.getState().data))
 )
 
 
@@ -56,9 +65,9 @@ export const rootReducer = combineReducers({
   target,
   cardView,
   treeView,
-  message: _ => 'Sup',
-  error: _ => false,
-  loading: _ => false,
+  message,
+  error,
+  loading,
   byId,
 })
 

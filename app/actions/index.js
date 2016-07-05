@@ -34,14 +34,14 @@ const storageError = ({ error, message }) => (
 const navigateBackwards = id => (action, store) => {
   return Rx.Observable.of({
     type: CHANGE_TARGET,
-    id: !id ? false : store.getState().byId[id]
+    target: !id ? false : store.getState().byId[id]
   })
 }
 
 const changeTarget = id => (action, store) => {
   return Rx.Observable.of({
     type: CHANGE_TARGET,
-    id: !id ? false : store.getState().byId[id]
+    target: !id ? false : store.getState().byId[id]
   })
 }
 
@@ -68,29 +68,39 @@ const selectCardView = _ => ({
   treeView: false,
 })
 
-const setStateFromStorage = ({ data, error, message }) => (
-  Rx.Observable.of({
+const setStateFromStorage = ({ data, error, message }) => {
+  return Rx.Observable.of({
     type: SET_STATE_FROM_STORAGE,
-    data,
     error,
     message,
+    data,
   })
-)
+}
 
-const createRecord = record => ({
-  type: CREATE_RECORD,
-  record,
-})
+const createRecord = record => (action, store) => {
+  return Rx.Observable.of({
+    type: CREATE_RECORD,
+    record,
+    data: store.getState().data
+  })
+}
 
-const updateRecord = record => ({
-  type: UPDATE_RECORD,
-  record
-})
+const updateRecord = record => (action, store) => {
+  return Rx.Observable.of({
+    type: UPDATE_RECORD,
+    record,
+    data: store.getState().data
+  })
+}
 
-const removeRecord = record => ({
-  type: REMOVE_RECORD,
-  record,
-})
+const removeRecord = record => (action, store) => {
+  return Rx.Observable.of({
+    type: REMOVE_RECORD,
+    record,
+    data: store.getState().data,
+    branches: store.getState().branches,
+  })
+}
 
 export {
   requestRecords,

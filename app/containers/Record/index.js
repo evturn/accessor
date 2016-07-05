@@ -72,8 +72,10 @@ class Record extends Component {
   submitUpdatedRecord(value) {
     if (value.length) {
       this.props.updateRecord({
-        ...this.props,
+        more: this.props.more,
         title: value,
+        id: this.props.id,
+        parent: this.props.parent
       })
     }
 
@@ -140,10 +142,7 @@ class Record extends Component {
 
           </li>
         : <li className={css.tree}>
-            <div
-              className={css.drag}
-              onTouchStart={::this.onDragStart}
-              onTouchEnd={::this.onDragEnd}>⋯</div>
+            <div className={css.drag}>⋯</div>
 
             <div className={`${css.record} ${this.state.dragging ? css.dragging : ''}`}>
               {this.props.title}

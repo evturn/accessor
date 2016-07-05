@@ -24,6 +24,13 @@ const storage = {
   },
 
   set: data => {
+    if (data === undefined) {
+      return {
+        error: true,
+        message: `😮 Complete overwrite prevented!`
+      }
+    }
+
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
 
     return {
