@@ -31,6 +31,14 @@ class Card extends Component {
     this.setState({ creating: true })
   }
 
+  navigateBackwards() {
+    this.props.navigateBackwards(this.props.target.parent)
+  }
+
+  navigateToRoot() {
+    this.props.navigateToRoot(this.props.target)
+  }
+
   removeRecord() {
     this.setState({ prompt: true })
   }
@@ -58,26 +66,13 @@ class Card extends Component {
 
   render() {
     return (
-      <div className={css.x}>
-
-        <H1
-          className={css.header}
-          onClick={_ => this.props.navigateToRoot(this.props.target)}>
-          ⧉
-        </H1>
-
-        <H1 className={css.perspective}>
-          {this.props.treeView
-            ? <span onClick={this.props.selectCardView}>⦶</span>
-            : <span onClick={this.props.selectTreeView}>⊖</span>
-          }
-        </H1>
+      <div>
 
         {this.props.target
           ? <div className={css.nav}>
               <span
                 className={css.back}
-                onClick={_ => this.props.navigateBackwards(this.props.target.parent)}>
+                onClick={::this.navigateBackwards}>
                 ⬅︎
               </span>
               <span
@@ -111,10 +106,26 @@ class Card extends Component {
           records={this.props.records}
         />
 
+        <H1 className={css.perspective}>
+          {this.props.treeView
+            ? <span onClick={this.props.selectCardView}>⦶</span>
+            : <span onClick={this.props.selectTreeView}>⊖</span>
+          }
+        </H1>
+
+        {this.props.cardView
+          ? <div
+              className={css.header}
+              onClick={::this.navigateToRoot}>
+              ⧉
+            </div>
+          : null
+        }
+
         {!this.props.target && this.props.cardView
           ? <button
               className={css.newRoot}
-              onClick={_ => this.createRecordAtRoot()}>+</button>
+              onClick={::this.createRecordAtRoot}>+</button>
           : null
         }
 

@@ -125,6 +125,15 @@ ul ul .title {
   right: 0;
 }
 
+.ctrls.hide,
+.clip.hide {
+  opacity: 0.2;
+  transition-duration: 0.3s;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .select {
   composes: back from '../RecordMap/styles.css';
 }
@@ -150,6 +159,12 @@ ul ul .title {
 .btns {
   height: 30px;
   line-height: 30px;
+}
+
+.ctrls,
+.clip {
+  transition-duration: 0.3s;
+  opacity: 1;
 }
 
 input.field {

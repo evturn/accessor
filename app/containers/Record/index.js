@@ -3,11 +3,6 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import InputField from 'components/Input'
-import {
-  SwitchActions,
-  SwitchDrag,
-  SwitchControls,
-} from 'components/Switch'
 
 import * as actions from '../../actions'
 import { getComputedStyles } from '../../reducers'
@@ -38,6 +33,10 @@ class Record extends Component {
 
   updatingRecord() {
     this.setState({ updating: true })
+  }
+
+  changeTarget() {
+    this.props.changeTarget(this.props.id)
   }
 
   submitNewRecord(value) {
@@ -86,14 +85,21 @@ class Record extends Component {
                   </span>
               }
 
-              <SwitchControls
-                current={derived.current}
-                expand={this.state.expand}
-                toggle={::this.toggleDescription}
-                id={this.props.id}
-                changeTarget={::this.props.changeTarget}
-                hide={this.state.updating}
-              />
+              {!derived.current
+                ? <div className={`${css.ctrls} ${this.state.updating ? css.hide : ''}`}>
+                    <button
+                      className={css.select}
+                      onClick={::this.toggleDescription}>
+                      <span>{this.state.expand ? `⬆` : `⬇`}</span>
+                    </button>
+                    <button
+                      className={css.select}
+                      onClick={::this.changeTarget}>
+                      ➡︎
+                  </button>
+                  </div>
+                : null
+              }
 
             </div>
 
@@ -101,7 +107,12 @@ class Record extends Component {
               {this.props.more}
             </div>
 
-            <SwitchActions current={derived.current} />
+            {derived.current
+              ? <div className={css.btns}>
+                  <div className={css.clip}>📎</div>
+                </div>
+              : null
+            }
 
             <div className={classes.nested}>
               {derived.current
@@ -144,19 +155,18 @@ Record.PropTypes = {
     PropTypes.number,
     PropTypes.bool
   ]),
-  branches: PropTypes.object,
   target: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.object
   ]),
   cardView: PropTypes.bool,
   treeView: PropTypes.bool,
+  computeStyles: PropTypes.func,
 }
 
 
 const matchStateToProps = (state, ownProps) => {
   return {
-    branches: state.branches,
     target: state.target,
     cardView: state.cardView,
     treeView: state.treeView,
