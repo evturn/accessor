@@ -69,7 +69,7 @@ class Record extends Component {
 
     return (
       this.props.cardView
-        ? <li className={css.li}>
+        ? <li className={`${css.li} ${derived.root ? css.root : ''}`}>
             <div className={classes.title}>
 
               {this.state.updating
@@ -78,11 +78,17 @@ class Record extends Component {
                     submit={::this.submitUpdatedRecord}
                     value={this.props.title}
                   />
-                : <span
-                    className={css.text}
-                    onClick={::this.updatingRecord}>
-                    {this.props.title}
-                  </span>
+                : derived.current
+                  ? <div
+                      className={css.text}
+                      onClick={::this.updatingRecord}>
+                      {this.props.title}
+                    </div>
+                  :  <div
+                      className={css.text}
+                      onClick={::this.changeTarget}>
+                      {this.props.title}
+                    </div>
               }
 
               {!derived.current
@@ -90,13 +96,8 @@ class Record extends Component {
                     <button
                       className={css.select}
                       onClick={::this.toggleDescription}>
-                      <span>{this.state.expand ? `⬆` : `⬇`}</span>
+                      <div>{this.state.expand ? `∴` : `∵`}</div>
                     </button>
-                    <button
-                      className={css.select}
-                      onClick={::this.changeTarget}>
-                      ➡︎
-                  </button>
                   </div>
                 : null
               }

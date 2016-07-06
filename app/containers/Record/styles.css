@@ -8,6 +8,29 @@
   margin: 20px 0;
 }
 
+.li.root {
+  margin: 0;
+  min-height: 51px;
+  border-bottom: 1px solid #ccc;
+  margin-left: -45px;
+  margin-right: -45px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.li.root:first-child {
+  border-top: 1px solid #ccc;
+}
+
+.li.root .title {
+  font-weight: 300;
+  line-height: 50px;
+}
+
+.li.root .more {
+  padding: 25px 0 0;
+}
+
 .tree .record,
 .tree .records, {
   font-family: 'Helvetica Neue';
@@ -82,7 +105,6 @@ button {
   padding: 15px 0;
   font-size: 12px;
   font-family: 'helvetica Neue';
-  transition-duration: 0.3s;
 }
 
 ul ul .title {
@@ -136,6 +158,14 @@ ul ul .title {
 
 .select {
   composes: back from '../RecordMap/styles.css';
+}
+
+.select:focus {
+  outline: none;
+}
+
+.select div:focus {
+   outline: none;
 }
 
 .drag {
