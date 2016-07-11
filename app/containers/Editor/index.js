@@ -11,22 +11,32 @@ import * as labels from './constants'
 import './draft/styles.css'
 import css from './styles.css'
 
-class Input extends Component {
+class InputEditor extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
       editorState: EditorState.createEmpty(),
     }
-
-    this.onChange = editorState => this.setState({editorState})
-
-    this.handleKeyCommand = command => this._handleKeyCommand(command)
-    this.toggleBlockType = type => this._toggleBlockType(type)
-    this.toggleInlineStyle = style => this._toggleInlineStyle(style)
   }
 
-  _handleKeyCommand(command) {
+  onChange(editorState) {
+    this.setState({ editorState })
+  }
+
+  toggleBlockType(type) {
+    this.onChange(RichUtils.toggleBlockType(this.state.editorState, type))
+  }
+
+  toggleInlineStyle(style) {
+    this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, style))
+  }
+
+  togglePlaceholer() {
+    this.refs.editor.focus()
+  }
+
+  handleKeyCommand(command) {
     const newState = RichUtils.handleKeyCommand(this.state.editorState, command)
     if (newState) {
       this.onChange(newState)
@@ -35,76 +45,37 @@ class Input extends Component {
     return false
   }
 
-  _toggleBlockType(type) {
-    this.onChange(
-      RichUtils.toggleBlockType(
-        this.state.editorState,
-        type
-      )
-    )
-  }
-
-  _toggleInlineStyle(inlineStyle) {
-    this.onChange(
-      RichUtils.toggleInlineStyle(
-        this.state.editorState,
-        inlineStyle
-      )
-    )
-  }
-
-  getEditorStyle(editorState) {
-    const contentState = editorState.getCurrentContent()
-
-    return !contentState.hasText()
-      && contentState.getBlockMap().first().getType() !== 'unstyled'
-        ? `${css.editor} ${css.hidePlaceholder}`
-        : css.editor
-  }
-
-  togglePlaceholer() {
-    this.refs.editor.focus()
-  }
-
   render() {
-    const inputClass = this.getEditorStyle(this.state.editorState)
-
     return (
       <div className={css.root}>
-
-        <BlockControls
-          editorState={this.state.editorState}
-          labels={labels.headerTypes}
-          onToggle={this.toggleBlockType}
-        />
         <InlineControls
           editorState={this.state.editorState}
           labels={labels.inlineStyles}
-          onToggle={this.toggleInlineStyle}
+          onToggle={::this.toggleInlineStyle}
         />
 
         <div className={css.ctrlRow}>
           <BlockControls
             editorState={this.state.editorState}
             labels={labels.insetTypes}
-            onToggle={this.toggleBlockType}
+            onToggle={::this.toggleBlockType}
           />
           <BlockControls
             editorState={this.state.editorState}
             labels={labels.listTypes}
-            onToggle={this.toggleBlockType}
+            onToggle={::this.toggleBlockType}
           />
         </div>
 
         <div
-          className={inputClass}
+          className={css.editor}
           onClick={this.focus}>
           <Editor
             blockStyleFn={getBlockStyle}
             customStyleMap={labels.styleMap}
             editorState={this.state.editorState}
-            handleKeyCommand={this.handleKeyCommand}
-            onChange={this.onChange}
+            handleKeyCommand={::this.handleKeyCommand}
+            onChange={::this.onChange}
             ref="editor"
             spellCheck={true}
           />
@@ -183,4 +154,4 @@ const InlineControls = props => {
   )
 }
 
-export default Input
+export default InputEditor

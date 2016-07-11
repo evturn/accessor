@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import shouldPureComponentUpdate from 'react-pure-render/function'
 
 import InputField from 'components/Input'
+import InputEditor from 'containers/Editor'
 
 import * as actions from '../../actions'
 import { getComputedStyles, getCurrentTarget } from '../../reducers'
@@ -105,7 +106,7 @@ class Record extends Component {
             </div>
 
             <div className={classes.expand}>
-              {this.props.more}
+              <InputEditor />
             </div>
 
             {derived.current
