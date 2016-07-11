@@ -24,9 +24,20 @@ const inlineStyles = [
   { label: 'Code',         style: 'CODE' },
 ]
 
+const styleMap = {
+  CODE: {
+    backgroundColor: '#111111',
+    fontFamily: `'Ubuntu Mono', 'Inconsolata', 'Menlo', 'Consolas', monospace`,
+    fontSize: 16,
+    color: '#ffe600',
+    padding: 2,
+  },
+}
+
 export {
   headerTypes,
   inlineStyles,
   insetTypes,
   listTypes,
+  styleMap,
 }
