@@ -84,7 +84,7 @@ class Record extends Component {
                       onClick={::this.updatingRecord}>
                       {this.props.title}
                     </div>
-                  :  <div
+                  : <div
                       className={css.text}
                       onClick={::this.changeTarget}>
                       {this.props.title}

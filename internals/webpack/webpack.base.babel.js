@@ -15,11 +15,11 @@ module.exports = options => ({
       query: options.babelQuery,
     }, {
       test: /\.css$/,
-      exclude: /node_modules/,
+      exclude: [ /node_modules/, /draft/ ],
       loader: options.cssLoaders,
     }, {
       test: /\.css$/,
-      include: /node_modules/,
+      include: [ /node_modules/, /draft/ ],
       loaders: ['style-loader', 'css-loader'],
     }, {
       test: /\.jpe?g$|\.gif$|\.png$|\.svg$/i,

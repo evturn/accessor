@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700);
+
 html,
 body {
   height: 100%;
@@ -54,3 +56,4 @@ body.fontLoaded {
   margin-top: -870px;
   height: auto;
 }
+

@@ -21,7 +21,7 @@ function nestRecords(data) {
   function assignChildrenToParent(item) {
     const items = data
         .filter(x => x.parent === item.id)
-
+      console.log(items)
       return items.length
         ? { ...item, _children: items.map(assignChildrenToParent) }
         : { ...item }

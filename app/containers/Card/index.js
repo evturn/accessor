@@ -12,8 +12,6 @@ import InputField from 'components/Input'
 
 import css from './styles.css'
 
-const { timer } = Observable
-
 class Card extends Component {
   constructor(props) {
     super(props)
@@ -59,7 +57,7 @@ class Card extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.message) {
       this.setState({ fade: false })
-      timer(2000)
+      Observable.timer(2000)
         .subscribe(x => this.setState({ fade: true }))
     }
   }
