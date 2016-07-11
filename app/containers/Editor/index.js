@@ -29,13 +29,13 @@ class Input extends Component {
       editorState: EditorState.createEmpty(),
     }
 
-    this.focus = () => this.refs.editor.focus()
     this.onChange = editorState => this.setState({editorState})
 
     this.handleKeyCommand = command => this._handleKeyCommand(command)
-    this.toggleBlockType = type => this._toggleBlockType(type)
+    this.toggleHeaderType = type => this._toggleHeaderType(type)
     this.toggleInlineStyle = style => this._toggleInlineStyle(style)
     this.toggleInsetType = type => this._toggleInsetType(type)
+    this.toggleListType = type => this._toggleListType(type)
   }
 
   _handleKeyCommand(command) {
@@ -47,11 +47,11 @@ class Input extends Component {
     return false
   }
 
-  _toggleBlockType(blockType) {
+  _toggleHeaderType(headerType) {
     this.onChange(
       RichUtils.toggleBlockType(
         this.state.editorState,
-        blockType
+        headerType
       )
     )
   }
@@ -65,6 +65,15 @@ class Input extends Component {
     )
   }
 
+  _toggleListType(listType) {
+    this.onChange(
+      RichUtils.toggleBlockType(
+        this.state.editorState,
+        listType
+      )
+    )
+  }
+
   _toggleInlineStyle(inlineStyle) {
     this.onChange(
       RichUtils.toggleInlineStyle(
@@ -74,18 +83,17 @@ class Input extends Component {
     )
   }
 
-  checkActiveState() {
-    this.refs.editor.focus()
-    this.placeholder = ''
-  }
-
   getEditorStyle(editorState) {
     const contentState = editorState.getCurrentContent()
-    console.log(contentState.getBlockMap().first().getType())
+
     return !contentState.hasText()
       && contentState.getBlockMap().first().getType() !== 'unstyled'
         ? `${css.editor} ${css.hidePlaceholder}`
         : css.editor
+  }
+
+  togglePlaceholer() {
+    this.refs.editor.focus()
   }
 
   render() {
@@ -93,9 +101,9 @@ class Input extends Component {
 
     return (
       <div className={css.root}>
-        <BlockStyleControls
+        <HeaderStyleControls
           editorState={this.state.editorState}
-          onToggle={this.toggleBlockType}
+          onToggle={this.toggleHeaderType}
         />
         <InlineStyleControls
           editorState={this.state.editorState}
@@ -105,16 +113,19 @@ class Input extends Component {
           editorState={this.state.editorState}
           onToggle={this.toggleInsetType}
         />
+        <ListTypeControls
+          editorState={this.state.editorState}
+          onToggle={this.toggleListType}
+        />
         <div
           className={inputClass}
-          onClick={::this.checkActiveState}>
+          onClick={this.focus}>
           <Editor
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             editorState={this.state.editorState}
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
-            placeholder="Sup..."
             ref="editor"
             spellCheck={true}
           />
@@ -133,19 +144,17 @@ function getBlockStyle(block) {
 }
 
 class StyleButton extends Component {
-  constructor() {
-    super()
-    this.onToggle = e => {
-      e.preventDefault()
-      this.props.onToggle(this.props.style)
-    }
+  onToggle(e) {
+    e.preventDefault()
+    this.props.onToggle(this.props.style)
   }
 
   render() {
+
     return (
       <span
         className={this.props.active ? `${css.styleButton} ${css.activeButton}` : css.styleButton}
-        onMouseDown={this.onToggle}>
+        onMouseDown={::this.onToggle}>
         {this.props.label}
       </span>
     )
@@ -153,20 +162,20 @@ class StyleButton extends Component {
 }
 
 
-const BlockStyleControls = props => {
+const HeaderStyleControls = props => {
   const { editorState } = props
   const selection = editorState.getSelection()
-  const blockType = editorState
+  const headerType = editorState
     .getCurrentContent()
     .getBlockForKey(selection.getStartKey())
     .getType()
 
   return (
     <div className={css.controls}>
-      {labels.blockTypes.map(type =>
+      {labels.headerTypes.map(type =>
         <StyleButton
           key={type.label}
-          active={type.style === blockType}
+          active={type.style === headerType}
           label={type.label}
           onToggle={props.onToggle}
           style={type.style}
@@ -199,7 +208,28 @@ const InsetTypeControls = props => {
   )
 }
 
+const ListTypeControls = props => {
+  const { editorState } = props
+  const selection = editorState.getSelection()
+  const listType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType()
 
+  return (
+    <div className={css.controls}>
+      {labels.listTypes.map(type => (
+        <StyleButton
+          key={type.label}
+          active={type.style === listType}
+          label={type.label}
+          onToggle={props.onToggle}
+          style={type.style}
+        />
+      ))}
+    </div>
+  )
+}
 
 const InlineStyleControls = props => {
   const currentStyle = props.editorState.getCurrentInlineStyle()

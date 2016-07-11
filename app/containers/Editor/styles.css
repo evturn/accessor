@@ -39,7 +39,7 @@
   padding: 10px 20px;
 }
 
-.editor pre {
+.editor pre, {
   background-color: rgba(0, 0, 0, 0.05);
   fontFamily: 'Ubuntu Mono', 'Inconsolata', 'Menlo', 'Consolas', monospace;
   font-size: 16px;
