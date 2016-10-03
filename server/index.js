@@ -1,22 +1,16 @@
-const express = require('express')
-const logger = require('./logger')
+import 'babel-polyfill'
+import express from 'express'
+import configEnv from './middleware/config-env'
+import log from './logger'
 
-const frontend = require('./middlewares/frontendMiddleware')
-const __DEV__ = process.env.NODE_ENV !== 'production'
 const app = express()
 
-const webpackConfig = __DEV__
-  ? require('../internals/webpack/webpack.dev.babel')
-  : require('../internals/webpack/webpack.prod.babel')
+const sendFile = configEnv(app)
 
-app.use(frontend(webpackConfig))
+app.get('*', sendFile)
+app.set('port', process.env.PORT || 3000)
 
-const port = process.env.PORT || 3000
-
-app.listen(port, e => {
-  if (e) {
-    return logger.error(e)
-  }
-
-  logger.appStarted(port)
-})
+app.listen(3000, err => err
+  ? log.serverStartError(err)
+  : log.serverStarted(app.get('port'), process.env.NODE_ENV)
+)

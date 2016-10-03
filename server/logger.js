@@ -1,27 +1,48 @@
-const chalk = require('chalk')
-const ip = require('ip')
+import c from 'chalk'
 
-const divider = chalk.gray('\n-----------------------------------')
-
-const logger = {
-  error: err => {
-    console.log(chalk.red(err))
-  },
-  appStarted: (port, tunnelStarted) => {
-    console.log('Server started ' + chalk.green('🎅'))
-    if (tunnelStarted) {
-      console.log('Tunnel initialised ' + chalk.green('🎅'))
-    }
-    console.log(
-      chalk.bold('\nAccess URLs:') +
-      divider +
-      '\nLocalhost: ' + chalk.magenta('http://localhost:' + port) +
-      '\n      LAN: ' + chalk.magenta('http://' + ip.address() + ':' + port) +
-      (tunnelStarted ? '\n    Proxy: ' + chalk.magenta(tunnelStarted) : '') +
-      divider,
-      chalk.blue('\nPress ' + chalk.italic('CMD-.') + ' to stop\n')
-    )
-  },
+export default {
+  serverStartError,
+  serverStarted,
+  DBConnected,
+  DBConnectionError,
 }
 
-module.exports = logger
+function serverStarted(port, env) {
+  const n = `\n`
+  const __ =  `------------------------`
+  const _ = __ + __
+  const msg = [
+    n,
+    `${c.gray(_)}`,
+    `${c.yellow('Server started 🌐')}`,
+    `${c.bold('Running in:')} ${c.magenta(env)}`,
+    `${c.bold('Listening on:')} ${c.magenta(port)}`,
+    `${c.gray(_)}`,
+    n,
+  ].join(n)
+  console.log(msg)
+}
+
+function DBConnected() {
+  const n = `\n`
+  const msg = [
+    n,
+    `${c.green('DB connected 🖖🏽')}`,
+  ].join(n)
+  console.log(msg)
+}
+
+function DBConnectionError() {
+  const n = `\n`
+  const msg = [
+  n,
+  `${c.bgRed.white('Connection error:')}`,
+  n
+  ].join(n)
+
+  return console.error.bind(console, msg)
+}
+
+function serverStartError(err) {
+  console.log(c.red(err))
+}
