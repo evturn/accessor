@@ -1,21 +1,19 @@
 import 'babel-polyfill'
-import path from 'path'
 import express from 'express'
-import firebase from 'firebase'
+import bodyParser from 'body-parser'
 import configEnv from './middleware/config-env'
-import GetRecords from './middleware/records'
+import Records from './middleware'
 import log from './logger'
 
 const app = express()
 
+app.use(bodyParser.json())
 const sendFile = configEnv(app)
 
-firebase.initializeApp({
-  databaseURL: 'https://access-or.firebaseio.com/',
-  serviceAccount: path.resolve(process.cwd(), 'config', 'host', 'firebase-credentials.json')
-})
-
-app.get('/api/:user', GetRecords(firebase))
+app.get('/api/:user',   Records.get)
+app.post('/api/:user',  Records.create)
+app.put('/api/:user',   Records.update)
+app.delete('/api/:user', Records.remove)
 
 app.get('*', sendFile)
 app.set('port', process.env.PORT || 3000)

@@ -16,11 +16,21 @@ function fetchAll($action, store) {
 
 function recordCreated($action, store) {
   return $action.ofType(Types.CREATE_RECORD)
-    .map(action => {
-      const records = store.getState().data
-      const newRecord = { ...action.payload.record, id: records.length + 1 }
-      const data = [newRecord].concat(records)
-      return Actions.updateSuccess({ data })
+    .switchMap(action => {
+      const { record } = action.payload
+      const fetchPromise = fetch(
+        `/api/${record.user}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ record })
+      }).then(x => x.json())
+
+      return Observable.fromPromise(fetchPromise)
+        .map(Actions.updateSuccess)
+        .catch(Actions.fetchError)
     })
 }
 

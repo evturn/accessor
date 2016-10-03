@@ -58,6 +58,7 @@ class Card extends Component {
         title: value,
         more: `I live at the root and I calmy enjoy ${value}!`,
         parent: false,
+        user: this.props.user,
       })
     }
 
@@ -132,7 +133,8 @@ class Card extends Component {
 export default connect(
   state => ({
     target: state.target,
-    message: 'Sup',
+    message: `Sup ${state.user}`,
+    user: state.user,
     loading: state.loading,
     records: selectRecordsAsTree(state),
     layout: state.layout,

@@ -39,7 +39,8 @@ class Record extends Component {
       this.props.createRecord({
         title: value,
         parent: this.props.id,
-        more: `I can not shut the hell about ${value}!`
+        more: `I can not shut the hell about ${value}!`,
+        user: this.props.user,
       })
     }
 
@@ -52,7 +53,7 @@ class Record extends Component {
         more: this.props.more,
         title: value,
         id: this.props.id,
-        parent: this.props.parent
+        parent: this.props.parent,
       })
     }
 
@@ -158,13 +159,15 @@ Record.PropTypes = {
   card: PropTypes.bool,
   tree: PropTypes.bool,
   computeStyles: PropTypes.func,
+  user: PropTypes.string,
 }
 
 export default connect(
   (state, ownProps) => ({
     target: state.target,
     layout: state.layout,
-    computeStyles: selectComputedStyles(state, ownProps)
+    computeStyles: selectComputedStyles(state, ownProps),
+    user: state.user,
   }),
   Actions
 )(Record)
