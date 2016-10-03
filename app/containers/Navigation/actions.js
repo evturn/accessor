@@ -1,12 +1,13 @@
 import * as Types from '../../constants'
 
-export const fetchAll = _ => ({
-  type: Types.FETCH_ALL
+export const fetchAll = user => ({
+  type: Types.FETCH_ALL,
+  payload: { user }
 })
 
 export const fetchSuccess = data => ({
   type: Types.FETCH_SUCCESS,
-  payload: data
+  payload: { data }
 })
 
 export const fetchError = e => ({
@@ -16,5 +17,5 @@ export const fetchError = e => ({
 
 export const updateSuccess = data => ({
   type: Types.UPDATE_SUCCESS,
-  payload: data
+  payload: { data }
 })

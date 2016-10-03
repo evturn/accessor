@@ -53,7 +53,11 @@ function loadingReducer(state=false, action) {
   }
 }
 
-
+const users = ['ev', 'craig']
+const user = users[Math.floor(Math.random() * users.length)]
+function userReducer(state=user, action) {
+  return state
+}
 
 function errorReducer(state=null, action) {
   switch (action.type) {
@@ -68,6 +72,7 @@ function errorReducer(state=null, action) {
 }
 
 export default {
+  user: userReducer,
   loading: loadingReducer,
   error: errorReducer,
   branches: branchesReducer,

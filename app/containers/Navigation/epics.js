@@ -7,7 +7,7 @@ import * as Actions from './actions'
 function fetchAll($action, store) {
   return $action.ofType(Types.FETCH_ALL)
     .switchMap(action => {
-      const fetchPromise = fetch('/api').then(x => x.json())
+      const fetchPromise = fetch(`/api/${action.payload.user}`).then(x => x.json())
       return Observable.fromPromise(fetchPromise)
         .map(Actions.fetchSuccess)
         .catch(Actions.fetchError)

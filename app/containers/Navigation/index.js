@@ -9,7 +9,7 @@ import css from './style.css'
 class Navigation extends Component {
 
   componentWillMount() {
-    this.props.fetchAll()
+    this.props.fetchAll(this.props.user)
   }
 
   render() {
