@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import shouldPureComponentUpdate from 'react-pure-render/function'
-
 import LoadingHandler from 'components/LoadingHandler'
 import Record from 'containers/Record'
 import css from './styles.css'
 
 class RecordMap extends Component {
-  shouldPureComponentUpdate = shouldPureComponentUpdate
-
   renderRecord(record) {
     return (
       <Record
@@ -33,17 +29,10 @@ class RecordMap extends Component {
   }
 }
 
-RecordMap.propTypes = {
-  loading: PropTypes.bool,
-  records: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.bool,
-  ]),
-}
-
-const matchStateToProps = state => ({
-  records: state.records,
-  loading: state.loading,
-})
-
-export default connect(matchStateToProps)(RecordMap)
+export default connect(
+  (state, ownProps) => ({
+    records: ownProps.records,
+    loading: state.loading,
+    layout: state.layout,
+  })
+)(RecordMap)

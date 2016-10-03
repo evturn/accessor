@@ -1,12 +1,6 @@
 import React, { Component } from 'react'
-import {
-  Editor,
-  EditorState,
-  RichUtils,
-} from 'draft-js'
-
+import { Editor, EditorState, RichUtils } from 'draft-js'
 import * as labels from './constants'
-
 import './draft/styles.css'
 import css from './styles.css'
 

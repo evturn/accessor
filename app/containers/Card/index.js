@@ -1,15 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Observable } from 'rxjs'
-import shouldPureComponentUpdate from 'react-pure-render/function'
-
-import { getCurrentTarget } from '../../reducers'
-import * as actions from '../../actions'
-
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
 import InputField from 'components/Input'
-
+import * as Actions from './actions'
+import { selectRecordsAsTree } from './selectors'
 import css from './styles.css'
 
 class Card extends Component {
@@ -23,22 +19,16 @@ class Card extends Component {
     }
   }
 
-  shouldPureComponentUpdate = shouldPureComponentUpdate
-
-  componentDidMount() {
-    this.props.requestRecords()
-  }
-
   createRecordAtRoot() {
     this.setState({ creating: true })
   }
 
   navigateBackwards() {
-    this.props.navigateBackwards(this.props.target.parent)
+    this.props.locationChange(this.props.target.parent)
   }
 
   navigateToRoot() {
-    this.props.navigateToRoot(this.props.target)
+    this.props.locationChange(false)
   }
 
   removeRecord() {
@@ -111,20 +101,15 @@ class Card extends Component {
           </div>
         </div>
 
-        <RecordMap
-          cardView={this.props.cardView}
-          treeView={this.props.treeView}
-          records={this.props.records}
-        />
+        <RecordMap records={this.props.records} />
 
         <H1 className={css.perspective}>
-          {this.props.treeView
-            ? <span onClick={this.props.selectCardView}>⦶</span>
-            : <span onClick={this.props.selectTreeView}>⊖</span>
-          }
+          <span onClick={this.props.changeLayout}>
+            {this.props.layout.tree ? '⦶' : '⊖'}
+          </span>
         </H1>
 
-        {this.props.cardView
+        {this.props.layout.card
           ? <div
               className={css.header}
               onClick={::this.navigateToRoot}>
@@ -133,7 +118,7 @@ class Card extends Component {
           : null
         }
 
-        {!this.props.target && this.props.cardView
+        {!this.props.target && this.props.layout.card
           ? <button
               className={css.newRoot}
               onClick={::this.createRecordAtRoot}>+</button>
@@ -144,37 +129,12 @@ class Card extends Component {
   }
 }
 
-Card.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.bool,
-  ]),
-  records: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.bool,
-  ]),
-  loadInitialState: PropTypes.func,
-  changeTarget: PropTypes.func,
-  target: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object
-  ]),
-  cardView: PropTypes.bool,
-  treeView: PropTypes.bool,
-  message: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.string,
-  ]),
-}
-
-const mapStateToProps = state => ({
-  target:   state.target,
-  message:  state.message,
-  loading:  state.loading,
-  records:  state.records,
-  cardView: state.cardView,
-  treeView: state.treeView,
-})
-
-export default connect(mapStateToProps, actions)(Card)
+export default connect(
+  state => ({
+    target: state.target,
+    message: 'Sup',
+    loading: state.loading,
+    records: selectRecordsAsTree(state),
+    layout: state.layout,
+  }),
+Actions)(Card)

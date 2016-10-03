@@ -1,13 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import shouldPureComponentUpdate from 'react-pure-render/function'
-
 import InputField from 'components/Input'
 import InputEditor from 'containers/Editor'
-
-import * as actions from '../../actions'
-import { getComputedStyles, getCurrentTarget } from '../../reducers'
-
+import * as Actions from './actions'
+import { selectComputedStyles } from './selectors'
 import css from './styles.css'
 
 class Record extends Component {
@@ -22,8 +18,6 @@ class Record extends Component {
     }
   }
 
-  shouldPureComponentUpdate = shouldPureComponentUpdate
-
   toggleDescription() {
     this.setState({ expand: !this.state.expand})
   }
@@ -37,7 +31,7 @@ class Record extends Component {
   }
 
   changeTarget() {
-    this.props.changeTarget(this.props.id)
+    this.props.locationChange(this.props.id)
   }
 
   submitNewRecord(value) {
@@ -69,7 +63,7 @@ class Record extends Component {
     const { classes, derived } = this.props.computeStyles(this.state.expand, css)
 
     return (
-      this.props.cardView
+      this.props.layout.card
         ? <li className={`${css.li} ${derived.root ? css.root : ''}`}>
             <div className={classes.title}>
 
@@ -161,19 +155,16 @@ Record.PropTypes = {
     PropTypes.bool,
     PropTypes.object
   ]),
-  cardView: PropTypes.bool,
-  treeView: PropTypes.bool,
+  card: PropTypes.bool,
+  tree: PropTypes.bool,
   computeStyles: PropTypes.func,
 }
 
-
-const matchStateToProps = (state, ownProps) => {
-  return {
+export default connect(
+  (state, ownProps) => ({
     target: state.target,
-    cardView: state.cardView,
-    treeView: state.treeView,
-    computeStyles: getComputedStyles(state, ownProps)
-  }
-}
-
-export default connect(matchStateToProps, actions)(Record)
+    layout: state.layout,
+    computeStyles: selectComputedStyles(state, ownProps)
+  }),
+  Actions
+)(Record)

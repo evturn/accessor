@@ -1,6 +1,7 @@
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
+import compression from 'compression'
 import webpack from 'webpack'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import webpackDevMiddleware from 'webpack-dev-middleware'
@@ -36,6 +37,7 @@ function prodMiddleware(app) {
   const publicPath = '/'
   const outputPath = path.resolve(process.cwd(), 'build')
 
+  app.use(compression())
   app.use(publicPath, express.static(outputPath))
 
   return (req, res, next) => res.sendFile(path.resolve(outputPath, 'index.html'))

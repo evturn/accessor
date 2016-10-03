@@ -1,18 +1,19 @@
-import React, { PropTypes } from 'react'
-
-import Card from 'containers/Card'
-
+import React from 'react'
+import { Provider } from 'react-redux'
+import { BrowserRouter, Match } from 'react-router'
+import Navigation from 'containers/Navigation'
+import configureStore from '../../store'
+import './styles.css'
 import 'sanitize.css/sanitize.css'
-import css from './styles.css'
 
-const App = props => (
-  <div className={css.wrapper}>
-    <Card />
-  </div>
+const store = configureStore()
+
+const App = _ => (
+  <Provider store={store}>
+    <BrowserRouter>
+      <Match pattern="*" component={Navigation} />
+    </BrowserRouter>
+  </Provider>
 )
-
-App.propTypes = {
-  children: PropTypes.node
-}
 
 export default App
