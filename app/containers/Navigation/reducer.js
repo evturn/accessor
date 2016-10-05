@@ -1,10 +1,11 @@
+import { Record } from 'immutable'
 import * as Types from '../../constants'
 import { selectRecordsById, selectRecordsByBranches } from './selectors'
 
 function dataReducer(state=[], action) {
   switch (action.type) {
 
-    case Types.FETCH_SUCCESS:
+    case Types.LOGIN_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return action.payload.data
 
@@ -16,7 +17,7 @@ function dataReducer(state=[], action) {
 function byIdReducer(state={}, action) {
   switch (action.type) {
 
-    case Types.FETCH_SUCCESS:
+    case Types.LOGIN_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return selectRecordsById(action.payload.data)
 
@@ -28,7 +29,7 @@ function byIdReducer(state={}, action) {
 function branchesReducer(state={}, action) {
   switch (action.type) {
 
-    case Types.FETCH_SUCCESS:
+    case Types.LOGIN_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return selectRecordsByBranches(action.payload.data)
 
@@ -37,32 +38,32 @@ function branchesReducer(state={}, action) {
   }
 }
 
+const UserState = new Record({
+  displayName: null,
+  email: null,
+  photoURL: null,
+  uid: null,
+  providerId: null,
+})
 
-function loadingReducer(state=false, action) {
+function userReducer(state= new UserState(), action) {
+
   switch (action.type) {
+    case Types.INIT_AUTH:
+      return !!action.payload
 
-    case Types.FETCH_ALL:
-      return true
-
-    case Types.FETCH_ERROR:
-    case Types.FETCH_SUCCESS:
-      return false
+    case Types.AUTH_STATE_CHANGE:
+      return action.payload.user
 
     default:
       return state
   }
 }
 
-const users = ['ev', 'craig']
-const user = users[Math.floor(Math.random() * users.length)]
-function userReducer(state=user, action) {
-  return state
-}
-
 function errorReducer(state=null, action) {
   switch (action.type) {
 
-    case Types.FETCH_ERROR:
+    case Types.LOGIN_ERROR:
     case Types.UPDATE_ERROR:
       return action.payload.error
 
@@ -73,7 +74,6 @@ function errorReducer(state=null, action) {
 
 export default {
   user: userReducer,
-  loading: loadingReducer,
   error: errorReducer,
   branches: branchesReducer,
   byId: byIdReducer,

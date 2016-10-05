@@ -68,7 +68,11 @@ class Card extends Component {
   render() {
     return (
       <div>
-        <div className={`${css.status} ${this.state.fade ? css.fade : ''}`}>{this.props.message}</div>
+        <div
+          className={`${css.status} ${this.state.fade ? css.fade : ''}`}
+          onClick={this.props.logout}>
+          {this.props.message}
+        </div>
 
         {this.props.target
           ? <div className={css.nav}>
@@ -133,7 +137,7 @@ class Card extends Component {
 export default connect(
   state => ({
     target: state.target,
-    message: `Sup ${state.user}`,
+    message: `Sup ${!!state.user ? state.user.displayName : 'Why are you here?'}`,
     user: state.user,
     loading: state.loading,
     records: selectRecordsAsTree(state),

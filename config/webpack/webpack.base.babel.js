@@ -56,6 +56,12 @@ module.exports = opts => ({
       'jsnext:main',
       'main',
     ],
+    alias: {
+      containers: path.join(process.cwd(), 'app', 'containers'),
+      components: path.join(process.cwd(), 'app', 'components'),
+      src: path.join(process.cwd(), 'app'),
+      api: path.join(process.cwd(), 'app', 'api',),
+    },
   },
 
   postcss: _ => [
