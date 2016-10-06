@@ -5,7 +5,7 @@ import * as Actions from 'actions'
 import { selectCurrentRecord } from './selectors'
 
 function locationChange($action, store) {
-  return $action.ofType(Types.LOCATION_CHANGE)
+  return $action.ofType(Types.LOCATION_WILL_CHANGE)
     .map(action => {
       const record = selectCurrentRecord(store.getState(), action.payload.id)
       return Actions.currentRecord(record)

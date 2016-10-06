@@ -20,11 +20,12 @@ class RecordMap extends Component {
 
   render() {
     return (
-      this.props.records && !this.props.loading
-        ? <ul className={css.recordMap}>
-            {this.props.records.map(::this.renderRecord)}
-          </ul>
-        : <LoadingHandler loading={this.props.loading} />
+      <ul className={css.recordMap}>
+        {this.props.records && !this.props.loading
+          ? this.props.records.map(::this.renderRecord)
+          : null
+        }
+      </ul>
     )
   }
 }

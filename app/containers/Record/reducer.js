@@ -1,9 +1,9 @@
 import * as Types from 'constants'
 
-function locationReducer(state=false, action) {
+const navigationReducer = (state=false, action) => {
   switch (action.type) {
 
-    case Types.LOCATION_CHANGE:
+    case Types.LOCATION_WILL_CHANGE:
       return !!action.payload.id
 
     default:
@@ -11,7 +11,7 @@ function locationReducer(state=false, action) {
   }
 }
 
-function currentRecordReducer(state=false, action) {
+const currentRecordReducer = (state=false, action) => {
   switch (action.type) {
 
     case Types.CURRENT_RECORD:
@@ -23,6 +23,6 @@ function currentRecordReducer(state=false, action) {
 }
 
 export default {
-  notRoot: locationReducer,
+  notRoot: navigationReducer,
   target: currentRecordReducer,
 }

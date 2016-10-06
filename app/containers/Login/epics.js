@@ -19,10 +19,7 @@ function authenticateUser(action$, store) {
 function authStateChange(action$) {
   return action$.ofType(Types.INIT_AUTH)
     .map(action => {
-      if (action.payload !== null) {
-        const [ user ] = action.payload.providerData
-        return Actions.authStateChange(user)
-      }
+      return Actions.authStateChange({ user: action.payload })
     })
 }
 

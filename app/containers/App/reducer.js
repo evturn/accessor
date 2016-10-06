@@ -38,32 +38,23 @@ function branchesReducer(state={}, action) {
   }
 }
 
-const UserState = new Record({
-  displayName: null,
-  email: null,
-  photoURL: null,
-  uid: null,
-  providerId: null,
-})
-
-function userReducer(state= new UserState(), action) {
-
+const initialLocation = { pathname: '/', search: '', hash: '' }
+const locationReducer = (state=initialLocation, action) => {
+  const authenticated = { ...state, pathname: '/' }
+  const notAuthenticated = { ...state, pathname: '/login' }
   switch (action.type) {
+
+    case Types.LOGIN_SUCCESS:
+      return authenticated
+
+    case Types.LOGOUT_SUCCESS:
+      return notAuthenticated
 
     case Types.AUTH_STATE_CHANGE:
-      return action.payload.user
+      return !!action.payload.user ? authenticated : notAuthenticated
 
-    default:
-      return state
-  }
-}
-
-function errorReducer(state=null, action) {
-  switch (action.type) {
-
-    case Types.LOGIN_ERROR:
-    case Types.UPDATE_ERROR:
-      return action.payload.error
+    case Types.LOCATION_CHANGE:
+      return action.payload.location
 
     default:
       return state
@@ -71,9 +62,8 @@ function errorReducer(state=null, action) {
 }
 
 export default {
-  user: userReducer,
-  error: errorReducer,
   branches: branchesReducer,
   byId: byIdReducer,
   data: dataReducer,
+  location: locationReducer,
 }

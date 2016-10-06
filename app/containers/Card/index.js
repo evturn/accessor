@@ -24,11 +24,11 @@ class Card extends Component {
   }
 
   navigateBackwards() {
-    this.props.locationChange(this.props.target.parent)
+    this.props.locationWillChange(this.props.target.parent)
   }
 
   navigateToRoot() {
-    this.props.locationChange(false)
+    this.props.locationWillChange(false)
   }
 
   removeRecord() {
@@ -66,7 +66,6 @@ class Card extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div>
         <div

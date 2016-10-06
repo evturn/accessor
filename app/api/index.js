@@ -1,31 +1,15 @@
 import firebase from 'firebase'
-import { Observable } from 'rxjs'
-import * as Actions from 'actions'
 
 export const firebaseApp = firebase.initializeApp({
-  apiKey: 'AIzaSyDCbHA8gEmuX4LmG7AZQ9QjDWt9hDCY5iU',
-  authDomain: 'access-or.firebaseapp.com',
-  databaseURL: 'https://access-or.firebaseio.com'
+  apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
+  authDomain: 'accessor-io.firebaseapp.com',
+  databaseURL: 'https://accessor-io.firebaseio.com',
+  storageBucket: "accessor-io.appspot.com",
+  messagingSenderId: "149184924674",
 })
 
 export const firebaseAuth = firebaseApp.auth()
 export const firebaseDb = firebaseApp.database()
 
-export function init(dispatch, renderApp) {
-  Observable.create(observer => {
-    const unsubscribe = firebaseAuth.onAuthStateChanged(
-      user => {
-        if (user !== null) {
-          dispatch(Actions.authStateChange(user))
-        }
-        observer.next()
-        unsubscribe()
-      },
-      err => observer.error(err)
-    )
-  })
-  .subscribe(x => renderApp())
-}
-
-
-export { FirebaseList } from './firebase-list'
+export const apiAuth = firebase.auth()
+export const apiDB = firebase.database()

@@ -4,7 +4,9 @@ export const FETCH_ALL        = 'root/FETCH_ALL'
 export const FETCH_SUCCESS    = 'root/FETCH_SUCCESS'
 export const FETCH_ERROR      = 'root/FETCH_ERROR'
 
-export const LOCATION_CHANGE  = 'record/LOCATION_CHANGE'
+export const LOCATION_CHANGE  = 'root/LOCATION_CHANGE'
+export const LOCATION_WILL_CHANGE = 'record/LOCATION_WILL_CHANGE'
+
 export const CURRENT_RECORD   = 'record/CURRENT_RECORD'
 
 export const CREATE_RECORD    = 'record/CREATE_RECORD'

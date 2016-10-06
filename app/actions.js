@@ -1,50 +1,41 @@
 import firebase from 'firebase'
 import { firebaseAuth } from 'api'
-import { Record } from 'immutable'
 import * as Types from 'constants'
-import { FirebaseList } from 'api'
 
-export const Task = new Record({
-  completed: false,
-  key: null,
-  title: null
+export const fetchAll = user => ({
+  type: Types.FETCH_ALL,
+  payload: { user }
 })
 
-export const recordsList = new FirebaseList({
-  onLoad: loadRecordsSuccess,
-}, Task)
+export const fetchSuccess = data => ({
+  type: Types.FETCH_SUCCESS,
+  payload: { data }
+})
+
+export const fetchError = e => ({
+  type: Types.FETCH_ERROR,
+  payload: { error: e.message }
+})
+
+export const updateSuccess = data => ({
+  type: Types.UPDATE_SUCCESS,
+  payload: { data }
+})
+
+export const loadRecords = user => ({
+  type: Types.LOAD_RECORDS,
+  payload: { user }
+})
 
 export const loadRecordsSuccess = data => ({
   type: Types.LOAD_RECORDS_SUCCESS,
   payload: { data }
 })
 
-export const loadRecords = _ => ({
-  type: Types.LOAD_RECORDS,
-  payload: {
-    path: `records/ev`,
-    list: recordsList,
-  }
-})
-
 export const createRecord = record => ({
   type: Types.CREATE_RECORD,
   payload: { record }
 })
-
-export function createTaskError(error) {
-  return {
-    type: Types.CREATE_TASK_ERROR,
-    payload: error
-  }
-}
-
-export function createTaskSuccess(task) {
-  return {
-    type: Types.CREATE_TASK_SUCCESS,
-    payload: task
-  }
-}
 
 export const changeLayout = layout => ({
   type: Types.CHANGE_LAYOUT
@@ -90,8 +81,13 @@ export const logoutSuccess = _ => ({
   type: Types.LOGOUT_SUCCESS
 })
 
-export const locationChange = id => ({
+export const locationChange = location => ({
   type: Types.LOCATION_CHANGE,
+  payload: { location }
+})
+
+export const locationWillChange = id => ({
+  type: Types.LOCATION_WILL_CHANGE,
   payload: { id }
 })
 
@@ -108,24 +104,4 @@ export const updateRecord = record => ({
 export const removeRecord = record => ({
   type: Types.REMOVE_RECORD,
   payload: { record }
-})
-
-export const fetchAll = user => ({
-  type: Types.FETCH_ALL,
-  payload: { user }
-})
-
-export const fetchSuccess = data => ({
-  type: Types.FETCH_SUCCESS,
-  payload: { data }
-})
-
-export const fetchError = e => ({
-  type: Types.FETCH_ERROR,
-  payload: { error: e.message }
-})
-
-export const updateSuccess = data => ({
-  type: Types.UPDATE_SUCCESS,
-  payload: { data }
 })
