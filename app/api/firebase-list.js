@@ -5,6 +5,7 @@ export class FirebaseList {
     this._actions = actions
     this._modelClass = modelClass
     this._path = path
+    console.log(this._path)
   }
 
   get path() {

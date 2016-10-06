@@ -8,6 +8,9 @@ import { isAuthenticated } from './selectors'
 import css from './style.css'
 
 export class App extends Component {
+  componentWillMount() {
+    this.props.loadRecords()
+  }
   render() {
     return (
       <div className={css.root}>

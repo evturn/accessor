@@ -5,7 +5,7 @@ import { selectRecordsById, selectRecordsByBranches } from './selectors'
 function dataReducer(state=[], action) {
   switch (action.type) {
 
-    case Types.LOGIN_SUCCESS:
+    case Types.LOAD_RECORDS_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return action.payload.data
 
@@ -17,7 +17,7 @@ function dataReducer(state=[], action) {
 function byIdReducer(state={}, action) {
   switch (action.type) {
 
-    case Types.LOGIN_SUCCESS:
+    case Types.LOAD_RECORDS_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return selectRecordsById(action.payload.data)
 
@@ -29,7 +29,7 @@ function byIdReducer(state={}, action) {
 function branchesReducer(state={}, action) {
   switch (action.type) {
 
-    case Types.LOGIN_SUCCESS:
+    case Types.LOAD_RECORDS_SUCCESS:
     case Types.UPDATE_SUCCESS:
       return selectRecordsByBranches(action.payload.data)
 

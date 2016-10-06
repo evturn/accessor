@@ -1,16 +1,47 @@
 import fetch from 'isomorphic-fetch'
 import { Observable } from 'rxjs'
 import { combineEpics } from 'redux-observable'
+import { firebaseDb } from 'api'
+import { Record } from 'immutable'
 import * as Types from 'constants'
 import * as Actions from 'actions'
 
-function fetchAll($action, store) {
-  return $action.ofType(Types.FETCH_ALL)
+function unwrapSnapshot(snapshot) {
+  const RecordItem = new Record({
+    completed: false,
+    key: null,
+    title: null
+  })
+  const attrs = snapshot.val()
+  return {
+    ...attrs,
+    key: snapshot.key,
+  }
+}
+
+
+function loadRecords(action$, store) {
+  return action$.ofType(Types.LOAD_RECORDS)
     .switchMap(action => {
-      const fetchPromise = fetch(`/api/${action.payload.user}`).then(x => x.json())
-      return Observable.fromPromise(fetchPromise)
-        .map(Actions.fetchSuccess)
-        .catch(Actions.fetchError)
+      const { path } = action.payload
+      const ref = firebaseDb.ref(path)
+      let initialized = false
+      let list = []
+
+      return Observable.create(observer => {
+        ref.once('value', _ => {
+          initialized = true
+          observer.next(Actions.loadRecordsSuccess(list))
+        })
+
+        ref.on('child_added', snapshot => {
+          if (initialized) {
+            observer.next(Actions.onAdd(unwrapSnapshot(snapshot)))
+          } else {
+            list.push(unwrapSnapshot(snapshot))
+          }
+        })
+      })
     })
 }
 
@@ -56,7 +87,7 @@ function recordRemoved($action, store) {
     })
 }
 
-export default combineEpics(fetchAll, recordCreated, recordUpdated, recordRemoved)
+export default combineEpics(recordCreated, recordUpdated, recordRemoved, loadRecords)
 
 
 

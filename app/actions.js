@@ -1,6 +1,50 @@
 import firebase from 'firebase'
 import { firebaseAuth } from 'api'
+import { Record } from 'immutable'
 import * as Types from 'constants'
+import { FirebaseList } from 'api'
+
+export const Task = new Record({
+  completed: false,
+  key: null,
+  title: null
+})
+
+export const recordsList = new FirebaseList({
+  onLoad: loadRecordsSuccess,
+}, Task)
+
+export const loadRecordsSuccess = data => ({
+  type: Types.LOAD_RECORDS_SUCCESS,
+  payload: { data }
+})
+
+export const loadRecords = _ => ({
+  type: Types.LOAD_RECORDS,
+  payload: {
+    path: `records/ev`,
+    list: recordsList,
+  }
+})
+
+export const createRecord = record => ({
+  type: Types.CREATE_RECORD,
+  payload: { record }
+})
+
+export function createTaskError(error) {
+  return {
+    type: Types.CREATE_TASK_ERROR,
+    payload: error
+  }
+}
+
+export function createTaskSuccess(task) {
+  return {
+    type: Types.CREATE_TASK_SUCCESS,
+    payload: task
+  }
+}
 
 export const changeLayout = layout => ({
   type: Types.CHANGE_LAYOUT
@@ -53,11 +97,6 @@ export const locationChange = id => ({
 
 export const currentRecord = record => ({
   type: Types.CURRENT_RECORD,
-  payload: { record }
-})
-
-export const createRecord = record => ({
-  type: Types.CREATE_RECORD,
   payload: { record }
 })
 
