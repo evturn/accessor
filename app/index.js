@@ -5,17 +5,18 @@ import Root from 'containers/Root'
 import configureStore from './store'
 import * as Actions from 'actions'
 
-function initializeApp(Root, store) {
+const store = configureStore()
+initializeApp(store.dispatch)
+
+render(<Root store={store} />, document.getElementById('app'))
+
+function initializeApp(dispatch) {
   const unsubscribe = apiAuth.onAuthStateChanged(
     user => {
-      store.dispatch(Actions.initAuth(user))
+      dispatch(Actions.initAuth(user))
       unsubscribe()
-      render(<Root store={store} />, document.getElementById('app'))
     },
-    err => observer.error(err)
+    err => console.error(err)
   )
 }
-
-const store = configureStore()
-initializeApp(Root, store)
 

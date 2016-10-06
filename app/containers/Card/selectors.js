@@ -1,12 +1,4 @@
-export function selectLayout(state) {
-  return {
-    card: !state.card,
-    tree: !state.tree,
-  }
-}
-
-export function selectRecordsAsTree(state) {
-  const data = state.data
+export function selectRecordsAsTree(data) {
 
   function assignChildrenToParent(record) {
     const children = data.filter(x => x.parent === record.id)
@@ -23,4 +15,29 @@ export function selectRecordsAsTree(state) {
     }
     return acc
   }, [])
+}
+
+export function selectRecordsById(data) {
+  return data.reduce((acc, x) => {
+    acc[x.id] = x
+    return acc
+  }, {})
+}
+
+export function selectRecordsByBranches(data) {
+  function getOwnAncestorIds(acc, item) {
+    if (item.parent) {
+      data
+        .filter(x => x.id === item.parent)
+        .map(x => getOwnAncestorIds(acc, x))
+    }
+
+    acc.push(item.id)
+    return acc
+  }
+
+  return data.reduce((acc, x) => {
+    acc[x.id] = getOwnAncestorIds([], x)
+    return acc
+  }, {})
 }

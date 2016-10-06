@@ -5,7 +5,6 @@ import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
 import InputField from 'components/Input'
 import * as Actions from 'actions'
-import { selectRecordsAsTree } from './selectors'
 import css from './styles.css'
 
 class Card extends Component {
@@ -68,9 +67,9 @@ class Card extends Component {
   render() {
     return (
       <div>
+        {this.props.user ? <div className={css.logout} onClick={this.props.logout}>Logout</div> : null}
         <div
-          className={`${css.status} ${this.state.fade ? css.fade : ''}`}
-          onClick={this.props.logout}>
+          className={`${css.status} ${this.state.fade ? css.fade : ''}`}>
           {this.props.message}
         </div>
 
@@ -137,10 +136,10 @@ class Card extends Component {
 export default connect(
   state => ({
     target: state.target,
-    message: `Sup ${!!state.user ? state.user.displayName : 'Why are you here?'}`,
+    message: !!state.user ? `Sup ${state.user.displayName}` : 'Welcome, sign in.',
     user: state.user,
     loading: state.loading,
-    records: selectRecordsAsTree(state),
+    records: state.data.records,
     layout: state.layout,
   }),
 Actions)(Card)

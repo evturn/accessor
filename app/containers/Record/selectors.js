@@ -23,19 +23,3 @@ export const selectComputedStyles = (state, ownProps) => {
     }
   }
 }
-
-export function getTasks(state) {
-  return state.tasks
-}
-
-export function getTaskList(state) {
-  return getTasks(state).list
-}
-
-export function getTaskFilter(state) {
-  return getTasks(state).filter
-}
-
-export function getDeletedTask(state) {
-  return getTasks(state).deleted
-}

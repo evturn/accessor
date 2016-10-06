@@ -67,18 +67,23 @@ export const loginError = err => ({
 
 export const authStateChange = user => ({
   type: Types.AUTH_STATE_CHANGE,
-  payload: { user: user.providerData ? user.providerData[0] : null}
+  payload: { user }
 })
 
 export const initAuth = user => {
   return {
     type: Types.INIT_AUTH,
-    payload: user
+    payload: { user }
   }
 }
 
 export const logoutSuccess = _ => ({
   type: Types.LOGOUT_SUCCESS
+})
+
+export const logoutError = error => ({
+  type: Types.LOGOUT_ERROR,
+  payload: { error }
 })
 
 export const locationChange = location => ({

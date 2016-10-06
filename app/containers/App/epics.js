@@ -96,7 +96,7 @@ function recordRemoved($action, store) {
     })
 }
 
-export default combineEpics(renderLocation, recordCreated, recordUpdated, recordRemoved, loadRecords)
+export default combineEpics(recordCreated, recordUpdated, recordRemoved, loadRecords)
 
 
 

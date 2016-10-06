@@ -10,6 +10,17 @@
   color: #ccc;
 }
 
+.logout {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 12px;
+  z-index: 200;
+  color: #9DA0A3;
+  transition: 1s;
+  transition-delay: 0.1s;
+}
+
 .back {
   color: #2065FFFF;
   cursor: pointer;
