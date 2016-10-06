@@ -1,4 +1,4 @@
-import * as Types from '../../constants'
+import * as Types from 'constants'
 import { selectLayout } from './selectors'
 
 const layoutReducer = (state={ card: true, tree: false }, action) => {

@@ -1,5 +1,6 @@
 import firebase from 'firebase'
-import * as Actions from 'src/containers/Login/actions'
+import { Observable } from 'rxjs'
+import * as Actions from 'actions'
 
 export const firebaseApp = firebase.initializeApp({
   apiKey: 'AIzaSyDCbHA8gEmuX4LmG7AZQ9QjDWt9hDCY5iU',
@@ -10,17 +11,21 @@ export const firebaseApp = firebase.initializeApp({
 export const firebaseAuth = firebaseApp.auth()
 export const firebaseDb = firebaseApp.database()
 
-export function initApp(dispatch) {
-  return new Promise((resolve, reject) => {
-    const unsub = firebaseAuth.onAuthStateChanged(
+export function init(dispatch, renderApp) {
+  Observable.create(observer => {
+    const unsubscribe = firebaseAuth.onAuthStateChanged(
       user => {
-        dispatch(Actions.authStateChange(user))
-        unsub()
-        resolve()
+        if (user !== null) {
+          dispatch(Actions.authStateChange(user))
+        }
+        observer.next()
+        unsubscribe()
       },
-      error => reject(error)
+      err => observer.error(err)
     )
   })
+  .subscribe(x => renderApp())
 }
+
 
 export { FirebaseList } from './firebase-list'

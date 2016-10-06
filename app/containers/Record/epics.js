@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs'
 import { combineEpics } from 'redux-observable'
-import * as Types from '../../constants'
-import * as Actions from './actions'
+import * as Types from 'constants'
+import * as Actions from 'actions'
 import { selectCurrentRecord } from './selectors'
 
 function locationChange($action, store) {

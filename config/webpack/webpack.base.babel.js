@@ -60,7 +60,9 @@ module.exports = opts => ({
       containers: path.join(process.cwd(), 'app', 'containers'),
       components: path.join(process.cwd(), 'app', 'components'),
       src: path.join(process.cwd(), 'app'),
-      api: path.join(process.cwd(), 'app', 'api',),
+      actions: path.join(process.cwd(), 'app', 'actions.js'),
+      constants: path.join(process.cwd(), 'app', 'constants.js'),
+      api: path.join(process.cwd(), 'app', 'api'),
     },
   },
 

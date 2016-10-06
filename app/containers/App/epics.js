@@ -1,8 +1,8 @@
 import fetch from 'isomorphic-fetch'
 import { Observable } from 'rxjs'
 import { combineEpics } from 'redux-observable'
-import * as Types from '../../constants'
-import * as Actions from './actions'
+import * as Types from 'constants'
+import * as Actions from 'actions'
 
 function fetchAll($action, store) {
   return $action.ofType(Types.FETCH_ALL)

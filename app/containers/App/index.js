@@ -1,18 +1,33 @@
-import React from 'react'
-import { Provider } from 'react-redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { BrowserRouter, Match } from 'react-router'
-import Navigation from 'containers/Navigation'
-import './styles.css'
-import 'sanitize.css/sanitize.css'
+import Card from 'containers/Card'
+import Login from 'containers/Login'
+import * as Actions from 'actions'
+import { isAuthenticated } from './selectors'
+import css from './style.css'
 
-const App = ({ store }) => {
-  return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Match pattern="*" component={Navigation} />
-      </BrowserRouter>
-    </Provider>
-  )
+export class App extends Component {
+  render() {
+    return (
+      <div className={css.root}>
+        <Match pattern="*" component={props => {
+          return this.props.authenticated
+            ? <Card />
+            : <Login />
+          }}
+        />
+      </div>
+    )
+  }
 }
 
-export default App
+export default connect(
+  state => {
+    return {
+      ...state,
+      authenticated: isAuthenticated(state),
+    }
+  },
+  Actions
+)(App)

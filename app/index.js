@@ -1,18 +1,16 @@
 import React from 'react'
 import { render } from 'react-dom'
-import App from 'containers/App'
+import Root from 'containers/Root'
 import configureStore from './store'
-import { initApp } from 'api'
+import { init } from 'api'
 
 const store = configureStore()
 
-function renderApp(App) {
+const renderApp = _ => {
   render(
-    <App store={store} />,
+    <Root store={store} />,
     document.getElementById('app')
   )
 }
 
-initApp(store.dispatch)
-  .then(_ => renderApp(App))
-  .catch(e => console.error(e))
+init(store.dispatch, renderApp)

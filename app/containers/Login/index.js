@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { firebaseAuth } from 'api'
-import * as Actions from './actions'
+import * as Actions from 'actions'
 import LoadingIndicator from 'components/LoadingIndicator'
 import css from './style.css'
 

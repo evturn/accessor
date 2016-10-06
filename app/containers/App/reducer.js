@@ -1,5 +1,5 @@
 import { Record } from 'immutable'
-import * as Types from '../../constants'
+import * as Types from 'constants'
 import { selectRecordsById, selectRecordsByBranches } from './selectors'
 
 function dataReducer(state=[], action) {
@@ -49,8 +49,6 @@ const UserState = new Record({
 function userReducer(state= new UserState(), action) {
 
   switch (action.type) {
-    case Types.INIT_AUTH:
-      return !!action.payload
 
     case Types.AUTH_STATE_CHANGE:
       return action.payload.user

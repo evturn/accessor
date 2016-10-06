@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import InputField from 'components/Input'
 import InputEditor from 'containers/Editor'
-import * as Actions from './actions'
+import * as Actions from 'actions'
 import { selectComputedStyles } from './selectors'
 import css from './styles.css'
 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs'
 import H1 from 'components/H1'
 import RecordMap from 'containers/RecordMap'
 import InputField from 'components/Input'
-import * as Actions from './actions'
+import * as Actions from 'actions'
 import { selectRecordsAsTree } from './selectors'
 import css from './styles.css'
 

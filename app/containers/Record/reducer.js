@@ -1,4 +1,4 @@
-import * as Types from '../../constants'
+import * as Types from 'constants'
 
 function locationReducer(state=false, action) {
   switch (action.type) {

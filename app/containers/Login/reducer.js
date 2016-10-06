@@ -1,5 +1,5 @@
 import { Record } from 'immutable'
-import * as Types from '../../constants'
+import * as Types from 'constants'
 
 const loadingReducer  = (state=false, action) => {
   switch (action.type) {
