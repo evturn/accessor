@@ -32,9 +32,9 @@ export const loadRecordsSuccess = data => ({
   payload: { data }
 })
 
-export const createRecord = record => ({
+export const createRecord = ({ key, data }) => ({
   type: Types.CREATE_RECORD,
-  payload: { record }
+  payload: { key, data }
 })
 
 export const changeLayout = layout => ({

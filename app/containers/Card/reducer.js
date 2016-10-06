@@ -7,6 +7,7 @@ const dataReducer = (state=initialData, action) => {
 
     case Types.LOAD_RECORDS_SUCCESS:
     case Types.UPDATE_SUCCESS:
+    console.log(action)
       const { data } = action.payload
 
       return Object.assign({}, state, {

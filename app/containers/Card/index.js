@@ -54,10 +54,11 @@ class Card extends Component {
   submitNewRecord(value) {
     if (value.length) {
       this.props.createRecord({
-        title: value,
-        more: `I live at the root and I calmy enjoy ${value}!`,
-        parent: false,
-        user: this.props.user,
+        key: this.props.user.id,
+        data: {
+          title: value,
+          parent: false,
+        }
       })
     }
 

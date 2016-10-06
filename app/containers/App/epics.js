@@ -6,15 +6,6 @@ import { Record } from 'immutable'
 import * as Types from 'constants'
 import * as Actions from 'actions'
 
-function renderLocation(action$) {
-  return action$.ofType(Types.AUTH_STATE_CHANGE)
-    .map(action => !!action.payload.user)
-    .map(user => user ? '/' : '/login')
-    .map(pathname => ({ pathname, search: '', hash: '' }))
-    .map(Actions.locationChange)
-}
-
-
 function unwrapSnapshot(snapshot) {
   const RecordItem = new Record({
     completed: false,
@@ -27,7 +18,6 @@ function unwrapSnapshot(snapshot) {
     key: snapshot.key,
   }
 }
-
 
 function loadRecords(action$, store) {
   return action$.ofType(Types.LOAD_RECORDS)
@@ -96,7 +86,7 @@ function recordRemoved($action, store) {
     })
 }
 
-export default combineEpics(recordCreated, recordUpdated, recordRemoved, loadRecords)
+export default combineEpics(loadRecords)
 
 
 
