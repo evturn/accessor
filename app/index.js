@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { apiAuth } from 'api'
 import Root from 'containers/Root'
 import configureStore from './store'
-import * as Actions from 'actions'
+import * as Actions from 'api/actions'
 
 const store = configureStore()
 initializeApp(store.dispatch)

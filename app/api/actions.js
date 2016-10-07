@@ -1,6 +1,5 @@
 import firebase from 'firebase'
-import { firebaseAuth } from 'api'
-import * as Types from 'constants'
+import * as Types from 'api/constants'
 
 export const fetchAll = user => ({
   type: Types.FETCH_ALL,

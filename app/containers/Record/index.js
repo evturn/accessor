@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import InputField from 'components/Input'
 import InputEditor from 'containers/Editor'
-import * as Actions from 'actions'
-import { selectComputedStyles } from './selectors'
+import * as Actions from 'api/actions'
+import { selectComputedStyles } from 'api/selectors'
 import css from './styles.css'
 
 class Record extends Component {

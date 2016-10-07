@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Match } from 'react-router'
 import Card from 'containers/Card'
 import Login from 'containers/Login'
-import * as Actions from 'actions'
+import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class App extends Component {
