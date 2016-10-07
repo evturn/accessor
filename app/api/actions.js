@@ -54,9 +54,16 @@ export const githubAuth = _ => ({
   payload: { provider: new firebase.auth.GithubAuthProvider() }
 })
 
-export const loginSuccess = result => ({
+export const initAuth = user => {
+  return {
+    type: Types.INIT_AUTH,
+    payload: { user }
+  }
+}
+
+export const loginSuccess = user => ({
   type: Types.LOGIN_SUCCESS,
-  payload: { user: result.user }
+  payload: { user },
 })
 
 export const loginError = err => ({
@@ -69,12 +76,6 @@ export const authStateChange = user => ({
   payload: { user }
 })
 
-export const initAuth = user => {
-  return {
-    type: Types.INIT_AUTH,
-    payload: { user }
-  }
-}
 
 export const logoutSuccess = _ => ({
   type: Types.LOGOUT_SUCCESS

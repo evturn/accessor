@@ -12,7 +12,7 @@ export class App extends Component {
       <Router
         location={this.props.location}>
         <div className={css.root}>
-          <Match pattern="/" component={Card} />
+          <Match pattern="/" exactly component={Card} />
           <Match pattern="/login" exactly component={Login} />
         </div>
       </Router>

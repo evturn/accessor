@@ -102,7 +102,7 @@
   text-align: center;
   color: #ccc;
   box-shadow: 0px 3px -1px #ccc;
-  background-color: #fff;
+  background: transparent;
   font-size: 12px;
   transition: 1s;
   transition-delay: 0.1s;
@@ -138,9 +138,13 @@
 }
 
 .input {
+  position: absolute;
   font-size: 14px;
-  margin: 20px 0 0 0;
-  height: 21px;
+  width: 100%;
+  height: 25px;
+  top: 60px;
+  left: 15px;
+  right: 15px;
   composes: field from '../../components/Input/styles.css';
 }
 

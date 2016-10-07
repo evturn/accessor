@@ -7,8 +7,13 @@ import * as Actions from 'api/actions'
 function initAuth(action$) {
   return action$.ofType(Types.INIT_AUTH)
     .map(action => action.payload.user)
-    .map(user => user !== null ? { id: user.uid, ...user.providerData[0] } : null)
-    .map(Actions.authStateChange)
+    .map(user => {
+      if (!!user) {
+        return Actions.loginSuccess({ id: user.uid, ...user.providerData[0] })
+      } else {
+        return Actions.locationChange({ pathname: '/login' })
+      }
+    })
 }
 
 function authenticateUser(action$, store) {
@@ -19,9 +24,29 @@ function authenticateUser(action$, store) {
         apiAuth.signInWithPopup(provider)
         .then(x => x)
       )
+      .map(res => res.user)
+      .map(user => ({ id: user.uid, ...user.providerData[0] }))
       .map(Actions.loginSuccess)
       .catch(Actions.loginError)
     })
+}
+
+
+function listenForChanges(action$, store) {
+  return action$.ofType(Types.LOGIN_SUCCESS)
+    .map(action => {
+      const user = action.payload.user
+      if (!!user) {
+        apiDB
+        .ref('records')
+        .child(user.id)
+        .on('value', x => {
+          store.dispatch(Actions.updateSuccess(x.val()))
+        })
+      }
+      return { pathname: '/' }
+    })
+    .map(Actions.locationChange)
 }
 
 function unauthenticateUser(action$) {
@@ -31,6 +56,12 @@ function unauthenticateUser(action$) {
       .map(Actions.logoutSuccess)
       .catch(Actions.logoutError)
     })
+}
+
+function redirectToLogin(action$) {
+  return action$.ofType(Types.LOGOUT_SUCCESS)
+    .mapTo({ pathname: '/login' })
+    .map(Actions.locationChange)
 }
 
 function createRecord(action$, store) {
@@ -47,27 +78,9 @@ function createRecord(action$, store) {
 
       return Observable.empty()
     })
-
 }
 
-function listenForChanges(action$, store) {
-  return action$.ofType(Types.AUTH_STATE_CHANGE)
-    .switchMap(action => {
-      const user = action.payload.user
-      if (!!user) {
-        apiDB
-        .ref('records')
-        .child(user.id)
-        .on('value', x => {
-          store.dispatch(Actions.updateSuccess(x.val()))
-        })
-      }
-
-      return Observable.empty()
-    })
-}
-
-export default combineEpics(authenticateUser, unauthenticateUser, initAuth, createRecord, listenForChanges)
+export default combineEpics(authenticateUser, unauthenticateUser, initAuth, createRecord, listenForChanges, redirectToLogin)
 
 /////////////////////////////////////////////////////
 // BELOW IS NOT IN USE
@@ -128,10 +141,3 @@ function recordRemoved($action, store) {
     })
 }
 
-function renderLocation(action$) {
-  return action$.ofType(Types.AUTH_STATE_CHANGE)
-    .map(action => !!action.payload.user)
-    .map(user => user ? '/' : '/login')
-    .map(pathname => ({ pathname }))
-    .map(Actions.locationChange)
-}

@@ -43,14 +43,6 @@ class Card extends Component {
     this.setState({ prompt: false })
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.message) {
-      this.setState({ fade: false })
-      Observable.timer(2000)
-        .subscribe(x => this.setState({ fade: true }))
-    }
-  }
-
   submitNewRecord(value) {
     if (value.length) {
       this.props.createRecord({
@@ -140,6 +132,7 @@ export default connect(
     message: !!state.user ? `Sup ${state.user.displayName}` : 'Welcome, sign in.',
     user: state.user,
     loading: state.loading,
+    location: state.location,
     records: state.data.records,
     layout: state.layout,
   }),
