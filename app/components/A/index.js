@@ -3,8 +3,8 @@ import Link from 'react-router/Link'
 
 function A(props) {
   return (
-    <Link
-      style={{ color: '#41ADDD' }}
+    <a
+      style={{ color: props.color || '#000' }}
       {...props}
     />
   )

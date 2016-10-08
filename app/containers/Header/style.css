@@ -1,0 +1,44 @@
+.header {
+  position: fixed;
+  background-color: #039BE5;
+  color: #fff;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 1;
+}
+
+.title {
+  text-align: center;
+  margin: 0;
+  font-style: italic;
+  font-weight: 300;
+  color: #fff;
+  font-size: 32px;
+}
+
+.title:after {
+  content: "Accessor";
+}
+
+.shrink {
+  font-size: 16px;
+  line-height: 50px;
+  transition: 0.3s;
+  animation-duration: 0.5s;
+}
+
+.logout {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 14px 20px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.logout:after {
+  content: "Logout";
+}

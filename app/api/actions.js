@@ -69,23 +69,13 @@ export const updateSuccess = data => ({
   payload: { data }
 })
 
-export const loadRecords = user => ({
-  type: Types.LOAD_RECORDS,
-  payload: { user }
-})
-
-export const loadRecordsSuccess = data => ({
-  type: Types.LOAD_RECORDS_SUCCESS,
-  payload: { data }
+export const locationChange = id => ({
+  type: Types.LOCATION_CHANGE,
+  payload: { id }
 })
 
 export const changeLayout = layout => ({
   type: Types.CHANGE_LAYOUT
-})
-
-export const locationChange = location => ({
-  type: Types.LOCATION_CHANGE,
-  payload: { location }
 })
 
 export const locationWillChange = id => ({

@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import Redirect from 'react-router/Redirect'
 import LoadingIndicator from 'components/LoadingIndicator'
 import Button from 'components/Button'
-import H1 from 'components/H1'
 import { githubAuth, twitterAuth } from 'api/actions'
 import css from './style.css'
 
@@ -13,17 +12,14 @@ export function Login(props) {
   }
 
   return (
-    <div className={css.login}>
-      <H1 className={css.title} />
-      <div className={css.middle}>
-        {props.loading
-          ? <LoadingIndicator />
-          : <div>
-              <Button onClick={props.githubAuth}>Github</Button>
-              <Button onClick={props.twitterAuth}>Twitter</Button>
-            </div>
-        }
-      </div>
+    <div className={css.root}>
+      {props.loading
+        ? <LoadingIndicator />
+        : <div className={css.providers}>
+            <Button onClick={props.githubAuth}>Github</Button>
+            <Button onClick={props.twitterAuth}>Twitter</Button>
+          </div>
+      }
     </div>
   )
 }

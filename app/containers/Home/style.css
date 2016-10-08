@@ -1,35 +1,3 @@
-.header {
-  position: fixed;
-  background-color: #fff;
-  top: 0;
-  right: 0;
-  left: 0;
-  margin: 0 auto;
-  width: 100%;
-  border-bottom: 1px solid #ccc;
-}
-
-.title {
-  text-align: center;
-  line-height: 50px;
-  font-style: italic;
-  font-weight: 300;
-}
-
-.title:after {
-  content: "Accessor";
-}
-
-.logout {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 14px 20px;
-  font-size: 15px;
-  text-align: center;
-  color: #039BE5;
-}
-
-.logout:after {
-  content: "Logout";
+.root {
+  padding-top: 50px;
 }

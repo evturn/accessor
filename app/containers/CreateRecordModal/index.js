@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Modal from 'components/Modal'
-import InputField from 'components/Input'
+import Input from 'components/Input'
 import { createRecord, closeModal } from 'api/actions'
 import css from './style.css'
 
@@ -24,7 +24,7 @@ export class CreateRecordModal extends Component {
       <Modal
         open={this.props.open}
         onClose={this.props.closeModal}>
-        <InputField
+        <Input
           className={css.input}
           onSubmit={::this.createRecord} />
         <div className={css.label} />

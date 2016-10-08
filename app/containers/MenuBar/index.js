@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import classNames from 'classnames/bind'
 import { connect } from 'react-redux'
-import A from 'components/A'
+import Link from 'react-router/Link'
 import { launchModal } from 'api/actions'
 import css from './style.css'
 
@@ -12,7 +12,7 @@ class MenuBar extends Component {
       <div className={c('menu')}>
         <ul className={c('ul')}>
           <li className={c('li')}>
-            <A to="/">⏏</A>
+            <Link to="/" style={ {color: '#fff' }}>⏏</Link>
           </li>
           <li className={c('li')}>◉</li>
           <li

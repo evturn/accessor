@@ -15,8 +15,6 @@ export const CLOSE_MODAL       = 'ui/CLOSE_MODAL'
 
 export const CREATE_RECORD     = 'root/CREATE_RECORD'
 
-
-
 export const CHANGE_TARGET     = '@@accessor/Navigator/CHANGE_TARGET'
 
 export const LOCATION_CHANGE  = 'root/LOCATION_CHANGE'

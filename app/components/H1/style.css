@@ -1,6 +1,3 @@
 .h1 {
-  font-size: 32px;
-  font-family: 'Helvetica Neue';
-  font-weight: 200;
-  margin-top: 0;
+  composes: h1 from 'styles'
 }

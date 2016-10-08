@@ -39,6 +39,7 @@
   font-size: 15px;
   text-align: center;
   color: #fff;
+  z-index: 2;
 }
 
 .close:after {

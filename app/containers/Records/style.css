@@ -1,9 +1,14 @@
-.content {
-  margin-top: 50px;
-  margin-bottom: 48px;
+.records {
+  overflow-y: scroll;
 }
 
-.record {
+.record{
   padding: 13.6px 20px;
   border-bottom: 1px solid #ccc;
 }
+
+.link {
+  color: #000;
+}
+
+
