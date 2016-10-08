@@ -9,27 +9,6 @@
   border-bottom: 1px solid #ccc;
 }
 
-.input {
-  width: 100%;
-  height: 30px;
-  font-size: 18px;
-  line-height: 50px;
-  font-weight: 300;
-  outline: none;
-  border-bottom: 1px solid #ccc;
-}
-
-.label {
-  font-size: 12px;
-  text-transform: uppercase;
-  font-weight: 500;
-  color: #ccc;
-}
-
-.label:after {
-  content: "Title";
-}
-
 .title {
   text-align: center;
   line-height: 50px;

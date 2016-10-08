@@ -6,7 +6,6 @@ const initialData = { items: [], records: [], byId: {}, branches: {} }
 const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
-    case Types.LOAD_RECORDS_SUCCESS:
     case Types.UPDATE_SUCCESS:
       const data = selectDataAsList(action.payload.data)
 
