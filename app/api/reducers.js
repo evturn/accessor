@@ -22,27 +22,15 @@ const dataReducer = (state=initialData, action) => {
   }
 }
 
-const initialLayout= { card: true, tree: false }
-const layoutReducer = (state=initialLayout, action) => {
+const initialUI = { modal: false }
+const uiReducer = (state=initialUI, action) => {
   switch(action.type) {
 
-    case Types.CHANGE_LAYOUT:
-      return { card: !state.card, tree: !state.tree }
+    case Types.LAUNCH_MODAL:
+      return Object.assign({}, state, { modal: true })
 
-    default:
-      return state
-  }
-}
-
-const initialLocation = { pathname: '/', search: '', hash: '' }
-const locationReducer = (state=initialLocation, action) => {
-
-  switch (action.type) {
-
-    case Types.LOCATION_CHANGE:
-      return Object.assign({}, state, {
-        ...action.payload.location
-      })
+    case Types.CLOSE_MODAL:
+      return Object.assign({}, state, { modal: false })
 
     default:
       return state
@@ -92,22 +80,17 @@ function errorReducer(state=null, action) {
   }
 }
 
-const navigationReducer = (state=false, action) => {
+const authReducer = (state=null, action) => {
   switch (action.type) {
 
-    case Types.LOCATION_WILL_CHANGE:
-      return !!action.payload.id
+    case Types.AUTH_STATE_CHANGE:
+      return action.payload.isAuthenticated
 
-    default:
-      return state
-  }
-}
+    case Types.LOGIN_SUCCESS:
+      return true
 
-const currentRecordReducer = (state=false, action) => {
-  switch (action.type) {
-
-    case Types.CURRENT_RECORD:
-      return action.payload.record
+    case Types.LOGOUT_SUCCESS:
+      return false
 
     default:
       return state
@@ -115,12 +98,10 @@ const currentRecordReducer = (state=false, action) => {
 }
 
 export default combineReducers({
+  isAuthenticated: authReducer,
   data: dataReducer,
   user: userReducer,
   loading: loadingReducer,
-  location: locationReducer,
-  notRoot: navigationReducer,
-  target: currentRecordReducer,
   error: errorReducer,
-  layout: layoutReducer,
+  ui: uiReducer,
 })

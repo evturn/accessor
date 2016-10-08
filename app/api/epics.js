@@ -7,36 +7,30 @@ import * as Actions from 'api/actions'
 function initAuth(action$) {
   return action$.ofType(Types.INIT_AUTH)
     .map(action => action.payload.user)
-    .map(user => {
-      if (!!user) {
-        return Actions.loginSuccess({ id: user.uid, ...user.providerData[0] })
-      } else {
-        return Actions.locationChange({ pathname: '/login' })
-      }
-    })
+    .map(user => !!user ? { id: user.uid, ...user.providerData[0] } : false)
+    .map(user => ({ user: user || null, isAuthenticated: !!user }))
+    .map(Actions.authStateChange)
 }
 
-function authenticateUser(action$, store) {
+function login(action$, store) {
   return action$.ofType(Types.AUTHENTICATING)
-    .switchMap(action => {
-      const { provider } = action.payload
-      return Observable.fromPromise(
-        apiAuth.signInWithPopup(provider)
-        .then(x => x)
-      )
-      .map(res => res.user)
-      .map(user => ({ id: user.uid, ...user.providerData[0] }))
-      .map(Actions.loginSuccess)
-      .catch(Actions.loginError)
-    })
+    .map(action => action.payload.provider)
+    .switchMap(provider => Observable.fromPromise(apiAuth.signInWithPopup(provider).then(x => x.user)))
+    .map(Actions.loginSuccess)
+    .catch(Actions.loginError)
 }
 
+function loginSuccess(action$, store) {
+  return action$.ofType(Types.LOGIN_SUCCESS)
+    .map(action => action.payload.user)
+    .map(Actions.initAuth)
+}
 
 function listenForChanges(action$, store) {
-  return action$.ofType(Types.LOGIN_SUCCESS)
-    .map(action => {
-      const user = action.payload.user
-      if (!!user) {
+  return action$.ofType(Types.AUTH_STATE_CHANGE)
+    .map(action => action.payload)
+    .map(({ user, isAuthenticated }) => {
+      if (isAuthenticated) {
         apiDB
         .ref('records')
         .child(user.id)
@@ -44,12 +38,11 @@ function listenForChanges(action$, store) {
           store.dispatch(Actions.updateSuccess(x.val()))
         })
       }
-      return { pathname: '/' }
     })
-    .map(Actions.locationChange)
+    .switchMap(Actions.nothing)
 }
 
-function unauthenticateUser(action$) {
+function logout(action$) {
   return action$.ofType(Types.LOGOUT)
     .switchMap(action => {
       return Observable.fromPromise(apiAuth.signOut().then(x => x))
@@ -58,29 +51,27 @@ function unauthenticateUser(action$) {
     })
 }
 
-function redirectToLogin(action$) {
-  return action$.ofType(Types.LOGOUT_SUCCESS)
-    .mapTo({ pathname: '/login' })
-    .map(Actions.locationChange)
-}
-
 function createRecord(action$, store) {
   return action$.ofType(Types.CREATE_RECORD)
-    .switchMap(action => {
-        const key = apiDB
-          .ref(`records/${action.payload.key}`)
-          .push()
-          .key
-
-        apiDB
-          .ref(`records/${action.payload.key}`)
-          .update({ [key]: { ...action.payload.data } })
-
-      return Observable.empty()
+    .map(action => action.payload)
+    .switchMap(({ path, data }) => {
+      const ref = apiDB.ref(path)
+      return Observable.of(ref)
+        .map(ref => ref.push().key)
+        .map(key => ({ [key]: { ...data } }))
+        .map(child => ref.update(child))
+        .switchMap(Actions.nothing)
     })
 }
 
-export default combineEpics(authenticateUser, unauthenticateUser, initAuth, createRecord, listenForChanges, redirectToLogin)
+export default combineEpics(
+  initAuth,
+  login,
+  loginSuccess,
+  listenForChanges,
+  logout,
+  createRecord,
+)
 
 /////////////////////////////////////////////////////
 // BELOW IS NOT IN USE

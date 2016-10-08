@@ -1,23 +1,13 @@
-import React, { PropTypes } from 'react'
-
-import styles from './styles.css'
+import React from 'react'
+import Link from 'react-router/Link'
 
 function A(props) {
   return (
-    <a
-      className={
-        props.className || styles.link
-      }
-      { ...props }
+    <Link
+      style={{ color: '#41ADDD' }}
+      {...props}
     />
   )
-}
-
-A.propTypes = {
-  className: PropTypes.string,
-  href: PropTypes.string.isRequired,
-  target: PropTypes.string,
-  children: PropTypes.node.isRequired,
 }
 
 export default A

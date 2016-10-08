@@ -1,0 +1,45 @@
+.modal {
+  position: fixed;
+  right: 0;
+  left: 0;
+  width: 100vw;
+  background-color: #fff;
+  color: #000;
+  height: 100vh;
+  font-family: 'Helvetica Neue';
+  font-weight: 200;
+  transition: 0.3s;
+}
+
+.hide {
+  composes: modal;
+  top: 100vh;
+  bottom: -100vh;
+}
+
+.show {
+  composes: modal;
+  top: 0;
+  bottom: 0;
+}
+
+.bar {
+  display: relative;
+  height: 45px;
+  background-color: #039BE5;
+  width: 100%
+}
+
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 5px 10px;
+  font-size: 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.close:after {
+  content: "Close";
+}

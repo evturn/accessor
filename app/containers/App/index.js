@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Match } from 'react-router'
-import Card from 'containers/Card'
+import Match from 'react-router/Match'
+import Link from 'react-router/Link'
+import Redirect from 'react-router/Redirect'
+import Router from 'react-router/BrowserRouter'
+
+import Records from 'containers/Records'
 import Login from 'containers/Login'
 import * as Actions from 'api/actions'
 import css from './style.css'
@@ -9,22 +13,38 @@ import css from './style.css'
 export class App extends Component {
   render() {
     return (
-      <Router
-        location={this.props.location}>
+      <Router>
         <div className={css.root}>
-          <Match pattern="/" exactly component={Card} />
-          <Match pattern="/login" exactly component={Login} />
+          <Match
+            pattern="/login"
+            component={Login}
+            isAuthenticated={this.props.isAuthenticated} />
+          <MatchWhenAuthorized
+            pattern="/"
+            component={Records}
+            isAuthenticated={this.props.isAuthenticated} />
         </div>
       </Router>
     )
   }
 }
 
+const MatchWhenAuthorized = ({ component: Component, isAuthenticated, ...rest }) => (
+  <Match {...rest} render={props =>
+    isAuthenticated
+      ? <Component {...props} />
+      : <Redirect to={{
+          pathname: '/login',
+          state: { from: props.location }
+        }}/>
+  } />
+)
+
+
 export default connect(
-  state => {
-    return {
-      ...state
-    }
-  },
+  state => ({
+    ...state,
+    isAuthenticated: state.isAuthenticated
+  }),
   Actions
 )(App)

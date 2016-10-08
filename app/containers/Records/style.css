@@ -1,0 +1,8 @@
+.logout {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  height: 50px;
+  width: 100px;
+  z-index: 99;
+}
