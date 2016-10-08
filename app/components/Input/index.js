@@ -12,7 +12,7 @@ class InputField extends Component {
   }
 
   submit() {
-    this.props.submit(this.state.formValue)
+    this.props.onSubmit(this.state.formValue)
     this.setState({ formValue: '' })
     this.input.value = ''
   }

@@ -1,8 +1,66 @@
+.header {
+  position: fixed;
+  background-color: #fff;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+.content {
+  margin-top: 50px;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  height: 30px;
+  font-size: 18px;
+  line-height: 50px;
+  font-weight: 300;
+  outline: none;
+  border-bottom: 1px solid #ccc;
+}
+
+.label {
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #ccc;
+}
+
+.label:after {
+  content: "Title";
+}
+
+.record {
+  padding: 13.6px 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.title {
+  text-align: center;
+  line-height: 50px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.title:after {
+  content: "Accessor";
+}
+
 .logout {
   position: absolute;
-  right: 15px;
-  top: 15px;
-  height: 50px;
-  width: 100px;
-  z-index: 99;
+  right: 0;
+  top: 0;
+  padding: 14px 20px;
+  font-size: 15px;
+  text-align: center;
+  color: #039BE5;
+}
+
+.logout:after {
+  content: "Logout";
 }

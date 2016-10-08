@@ -59,9 +59,9 @@ export const closeModal = _ => ({
 ////////////////
 // DATA
 ////////////////
-export const createRecord = ({ key, data }) => ({
+export const createRecord = ({ path, data }) => ({
   type: Types.CREATE_RECORD,
-  payload: { key, data }
+  payload: { path, data }
 })
 
 export const updateSuccess = data => ({

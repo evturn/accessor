@@ -9,6 +9,7 @@
   font-family: 'Helvetica Neue';
   font-weight: 200;
   transition: 0.3s;
+  z-index: 9;
 }
 
 .hide {
@@ -34,12 +35,16 @@
   position: absolute;
   right: 0;
   top: 0;
-  padding: 5px 10px;
-  font-size: 24px;
+  padding: 14px 20px;
+  font-size: 15px;
   text-align: center;
   color: #fff;
 }
 
 .close:after {
   content: "Close";
+}
+
+.body {
+  padding: 15px;
 }

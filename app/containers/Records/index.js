@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Redirect from 'react-router/Redirect'
 import classNames from 'classnames/bind'
-import Modal from 'containers/Modal'
+import Modal from 'components/Modal'
 import MenuBar from 'containers/MenuBar'
 import InputField from 'components/Input'
 import * as Actions from 'api/actions'
@@ -13,33 +13,51 @@ class Records extends Component {
     super(props)
   }
 
+  createRecord(value) {
+    if (value.length) {
+      this.props.createRecord({
+        path: `records/${this.props.user.id}`,
+        data: {
+          title: value,
+          parent: false,
+        }
+      })
+      this.props.closeModal()
+    }
+  }
+
   render() {
     return (
       <div>
-        <Logout onClick={this.props.logout} />
+        <div className={css.header}>
+          <div className={css.title} />
+          <div className={css.logout} onClick={this.props.logout} />
+        </div>
+        <div className={css.content}>
         {this.props.records
-          ? this.props.records.map((x, i) => <div key={i}>{x.title}</div>)
+          ? this.props.records.map((x, i) => <div className={css.record} key={i}>{x.title}</div>)
           : null
         }
+        </div>
         <MenuBar />
-        <Modal />
+        <Modal
+          open={this.props.open}
+          onClose={this.props.closeModal}>
+          <InputField
+            className={css.input}
+            onSubmit={::this.createRecord} />
+          <div className={css.label} />
+        </Modal>
       </div>
     )
   }
-}
-
-function Logout(props) {
-  return (
-    <div
-      className={css.logout}
-      onClick={props.onClick}>Logout</div>
-  )
 }
 
 export default connect(
   state => ({
     user: state.user,
     records: state.data.records,
+    open: state.ui.modal,
   }),
-  Actions)
-(Records)
+  Actions
+)(Records)
