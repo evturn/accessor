@@ -1,4 +1,4 @@
-import { apiAuth, apiDB } from 'api'
+import { API } from 'api'
 import { Observable } from 'rxjs'
 import { combineEpics } from 'redux-observable'
 import * as Types from 'api/constants'
@@ -15,7 +15,7 @@ function initAuth(action$) {
 function login(action$, store) {
   return action$.ofType(Types.AUTHENTICATING)
     .map(action => action.payload.provider)
-    .switchMap(provider => Observable.fromPromise(apiAuth.signInWithPopup(provider).then(x => x.user)))
+    .switchMap(provider => Observable.fromPromise(API.Auth.signInWithPopup(provider).then(x => x.user)))
     .map(Actions.loginSuccess)
     .catch(Actions.loginError)
 }
@@ -31,7 +31,7 @@ function listenForChanges(action$, store) {
     .map(action => action.payload)
     .map(({ user, isAuthenticated }) => {
       if (isAuthenticated) {
-        apiDB
+        API.DB
         .ref('records')
         .child(user.id)
         .on('value', x => {
@@ -45,7 +45,7 @@ function listenForChanges(action$, store) {
 function logout(action$) {
   return action$.ofType(Types.LOGOUT)
     .switchMap(action => {
-      return Observable.fromPromise(apiAuth.signOut().then(x => x))
+      return Observable.fromPromise(API.Auth.signOut().then(x => x))
       .map(Actions.logoutSuccess)
       .catch(Actions.logoutError)
     })
@@ -55,7 +55,7 @@ function createRecord(action$, store) {
   return action$.ofType(Types.CREATE_RECORD)
     .map(action => action.payload)
     .switchMap(({ path, data }) => {
-      const ref = apiDB.ref(path)
+      const ref = API.DB.ref(path)
       return Observable.of(ref)
         .map(ref => ref.push().key)
         .map(key => ({ [key]: { ...data } }))
@@ -89,7 +89,7 @@ function loadRecords(action$, store) {
   return action$.ofType(Types.LOAD_RECORDS)
     .switchMap(action => {
       const { path } = action.payload
-      const ref = apiDB.ref(path)
+      const ref = API.DB.ref(path)
       let initialized = false
       let list = []
 

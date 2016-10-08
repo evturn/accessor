@@ -5,7 +5,7 @@ import Link from 'react-router/Link'
 import Redirect from 'react-router/Redirect'
 import Router from 'react-router/BrowserRouter'
 
-import Records from 'containers/Records'
+import Home from 'containers/Home'
 import Login from 'containers/Login'
 import * as Actions from 'api/actions'
 import css from './style.css'
@@ -21,7 +21,7 @@ export class App extends Component {
             isAuthenticated={this.props.isAuthenticated} />
           <MatchWhenAuthorized
             pattern="/"
-            component={Records}
+            component={Home}
             isAuthenticated={this.props.isAuthenticated} />
         </div>
       </Router>

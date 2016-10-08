@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { apiAuth } from 'api'
+import { API } from 'api'
 import Root from 'containers/Root'
 import configureStore from './store'
 import * as Actions from 'api/actions'
@@ -11,7 +11,7 @@ initializeApp(store.dispatch)
 render(<Root store={store} />, document.getElementById('app'))
 
 function initializeApp(dispatch) {
-  const unsubscribe = apiAuth.onAuthStateChanged(
+  const unsubscribe = API.Auth.onAuthStateChanged(
     user => {
       dispatch(Actions.initAuth(user))
       unsubscribe()
