@@ -1,11 +1,11 @@
-.sk-fading-circle {
+.circle {
   margin: 2em auto;
   width: 40px;
   height: 40px;
   position: relative;
 }
 
-.skCircle {
+.o {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -13,11 +13,7 @@
   top: 0;
 }
 
-.loading {
-  margin: 25% auto;
-}
-
-.skCircle::before {
+.o::before {
   content: '';
   display: block;
   margin: 0 auto;
@@ -25,109 +21,109 @@
   height: 15%;
   background-color: #FFF;
   border-radius: 100%;
-  animation: sk-circleFadeDelay 1.2s infinite ease-in-out both;
+  animation: oFadeDelay 1.2s infinite ease-in-out both;
 }
 
-.sk-circle2 {
-  composes: skCircle;
+.o2 {
+  composes: o;
   transform: rotate(30deg);
 }
 
-.sk-circle3 {
-  composes: skCircle;
+.o3 {
+  composes: o;
   transform: rotate(60deg);
 }
 
-.sk-circle4 {
-  composes: skCircle;
+.o4 {
+  composes: o;
   transform: rotate(90deg);
 }
 
-.sk-circle5 {
-  composes: skCircle;
+.o5 {
+  composes: o;
   transform: rotate(120deg);
 }
 
-.sk-circle6 {
-  composes: skCircle;
+.o6 {
+  composes: o;
   transform: rotate(150deg);
 }
 
-.sk-circle7 {
-  composes: skCircle;
+.o7 {
+  composes: o;
   transform: rotate(180deg);
 }
 
-.sk-circle8 {
-  composes: skCircle;
+.o8 {
+  composes: o;
   transform: rotate(210deg);
 }
 
-.sk-circle9 {
-  composes: skCircle;
+.o9 {
+  composes: o;
   transform: rotate(240deg);
 }
 
-.sk-circle10 {
-  composes: skCircle;
+.o10 {
+  composes: o;
   transform: rotate(270deg);
 }
 
-.sk-circle11 {
-  composes: skCircle;
+.o11 {
+  composes: o;
   transform: rotate(300deg);
 }
 
-.sk-circle12 {
-  composes: skCircle;
+.o12 {
+  composes: o;
   transform: rotate(330deg);
 }
 
-.sk-circle2::before {
+.o2::before {
   animation-delay: -1.1s;
 }
 
-.sk-circle3::before {
+.o3::before {
   animation-delay: -1s;
 }
 
-.sk-circle4::before {
+.o4::before {
   animation-delay: -0.9s;
 }
 
-.sk-circle5::before {
+.o5::before {
   animation-delay: -0.8s;
 }
 
-.sk-circle6::before {
+.o6::before {
   animation-delay: -0.7s;
 }
 
-.sk-circle7::before {
+.o7::before {
   animation-delay: -0.6s;
 }
 
-.sk-circle8::before {
+.o8::before {
   animation-delay: -0.5s;
 }
 
-.sk-circle9::before {
+.o9::before {
   animation-delay: -0.4s;
 }
 
-.sk-circle10::before {
+.o10::before {
   animation-delay: -0.3s;
 }
 
-.sk-circle11::before {
+.o11::before {
   animation-delay: -0.2s;
 }
 
-.sk-circle12::before {
+.o12::before {
   animation-delay: -0.1s;
 }
 
-@keyframes sk-circleFadeDelay {
+@keyframes oFadeDelay {
   0%,
   39%,
   100% {

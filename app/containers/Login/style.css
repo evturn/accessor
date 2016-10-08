@@ -1,4 +1,26 @@
 .login {
   height: 100vh;
   background-color: #039BE5;
+  position: relative;
+}
+
+.title {
+  text-align: center;
+  margin: 0;
+  font-style: italic;
+  font-weight: 300;
+  color: #fff;
+}
+
+.title:after {
+  content: "Accessor";
+}
+
+.middle {
+  position: absolute;
+  top: 35%;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #039BE5;
 }

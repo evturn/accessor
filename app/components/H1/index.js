@@ -1,10 +1,9 @@
 import React from 'react'
-
-import styles from './styles.css'
+import css from './style.css'
 
 function H1(props) {
   return (
-    <h1 className={styles.heading1} { ...props } />
+    <h1 className={css.h1} { ...props } />
   )
 }
 
