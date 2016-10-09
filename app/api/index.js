@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import { Observable } from 'rxjs/Observable'
 
 export const firebaseApp = firebase.initializeApp({
   apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
@@ -11,4 +12,34 @@ export const firebaseApp = firebase.initializeApp({
 export const API = {
   Auth: firebase.auth(),
   DB: firebase.database(),
+
+  auth() {
+    return firebase.auth()
+  },
+
+  database() {
+    return firebase.database()
+  },
+
+  rootRef() {
+    return firebase.database().ref('records')
+  },
+
+  childRef(x) {
+    return firebase.database().ref('records').child(x)
+  },
+
+  pathRef(x) {
+    return firebase.database().ref(`records/${x}`)
+  }
+}
+
+export class Observe$ extends Observable {
+  static only(value) {
+    return value ? Observable.of(value) : Observable.empty()
+  }
+
+  static onlyIf(value, exists) {
+    return !!exists ? Observable.of(value) : Observable.empty()
+  }
 }
