@@ -9,10 +9,11 @@ export class CreateRecordModal extends Component {
   createRecord(value) {
     if (value.length) {
       this.props.createRecord({
-        path: `records/${this.props.user.id}`,
+        ref: `records/${this.props.user.id}`,
         data: {
           title: value,
           parent: false,
+          back: '/',
         }
       })
       this.props.closeModal()

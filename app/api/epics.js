@@ -54,12 +54,13 @@ function logout(action$) {
 function createRecord(action$, store) {
   return action$.ofType(Types.CREATE_RECORD)
     .map(action => action.payload)
-    .switchMap(({ path, data }) => {
-      const ref = API.DB.ref(path)
-      return Observable.of(ref)
+    .switchMap(({ ref, data }) => {
+      const rootRef = API.DB.ref(ref)
+      return Observable.of(rootRef)
         .map(ref => ref.push().key)
-        .map(key => ({ [key]: { ...data, url: `${path}/${key}` }}))
-        .map(child => ref.update(child))
+        .map(id => ({ ...data, id, url: `records/${id}` }))
+        .map(x => ({ [x.id]: x }))
+        .map(x => rootRef.update(x))
         .switchMap(Actions.nothing)
     })
 }
