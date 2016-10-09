@@ -12,46 +12,22 @@ function initAuth(action$) {
     .map(Actions.authStateChange)
 }
 
-function login(action$, store) {
-  return action$.ofType(Types.AUTHENTICATING)
-    .map(action => action.payload.provider)
-    .switchMap(provider => Observable.fromPromise(API.Auth.signInWithPopup(provider).then(x => x.user)))
-    .map(Actions.loginSuccess)
-    .catch(Actions.loginError)
-}
-
-function loginSuccess(action$, store) {
-  return action$.ofType(Types.LOGIN_SUCCESS)
-    .map(action => action.payload.user)
-    .map(Actions.initAuth)
-}
-
-function listenForChanges(action$, store) {
+function listenForChanges(action$) {
   return action$.ofType(Types.AUTH_STATE_CHANGE)
     .map(action => action.payload)
-    .map(({ user, isAuthenticated }) => {
-      if (isAuthenticated) {
-        API.DB
+    .map(({ user, isAuthenticated }) => isAuthenticated ? user : false)
+    .switchMap(user => Observable.defer(_ => user ? Observable.of(user.id) : Actions.nothing()))
+    .switchMap(child => Observable.create(observer => {
+      API.DB
         .ref('records')
-        .child(user.id)
+        .child(child)
         .on('value', x => {
-          store.dispatch(Actions.updateSuccess(x.val()))
+          observer.next(Actions.updateSuccess(x.val()))
         })
-      }
-    })
-    .switchMap(Actions.nothing)
+    }))
 }
 
-function logout(action$) {
-  return action$.ofType(Types.LOGOUT)
-    .switchMap(action => {
-      return Observable.fromPromise(API.Auth.signOut().then(x => x))
-      .map(Actions.logoutSuccess)
-      .catch(Actions.logoutError)
-    })
-}
-
-function createRecord(action$, store) {
+function createRecord(action$) {
   return action$.ofType(Types.CREATE_RECORD)
     .map(action => action.payload)
     .switchMap(({ ref, data }) => {
@@ -63,6 +39,29 @@ function createRecord(action$, store) {
         .map(x => rootRef.update(x))
         .switchMap(Actions.nothing)
     })
+}
+
+function login(action$) {
+  return action$.ofType(Types.AUTHENTICATING)
+    .map(action => action.payload.provider)
+    .switchMap(provider => Observable.fromPromise(API.Auth.signInWithPopup(provider)))
+    .map(x => x.user)
+    .map(Actions.loginSuccess)
+    .catch(Actions.loginError)
+}
+
+function loginSuccess(action$) {
+  return action$.ofType(Types.LOGIN_SUCCESS)
+    .map(action => action.payload.user)
+    .map(Actions.initAuth)
+}
+
+function logout(action$) {
+  return action$.ofType(Types.LOGOUT)
+    .switchMap(action => Observable.fromPromise(API.Auth.signOut())
+      .map(Actions.logoutSuccess)
+      .catch(Actions.logoutError)
+    )
 }
 
 export default combineEpics(

@@ -13,8 +13,8 @@ render(<Root store={store} />, document.getElementById('app'))
 function initializeApp(dispatch) {
   const unsubscribe = API.Auth.onAuthStateChanged(
     user => {
-      dispatch(Actions.initAuth(user))
       unsubscribe()
+      dispatch(Actions.initAuth(user))
     },
     err => console.error(err)
   )
