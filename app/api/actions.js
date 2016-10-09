@@ -5,6 +5,11 @@ import * as Types from 'api/constants'
 ////////////////
 // AUTH
 ////////////////
+
+export const init = _ => ({
+  type: Types.INIT
+})
+
 export const initAuth = user => ({
   type: Types.INIT_AUTH,
   payload: { user }

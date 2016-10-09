@@ -12,6 +12,16 @@ export const API = {
   Auth: firebase.auth(),
   DB: firebase.database(),
 
+  init(observer) {
+    const unsubscribe = firebase.auth().onAuthStateChanged(
+      x => {
+        unsubscribe()
+        observer.next(x)
+      },
+      e => observer.error(e)
+    )
+  },
+
   auth() {
     return firebase.auth()
   },
@@ -30,5 +40,5 @@ export const API = {
 
   pathRef(x) {
     return firebase.database().ref(`records/${x}`)
-  }
+  },
 }

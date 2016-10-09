@@ -1,4 +1,4 @@
-
+export const INIT              = 'auth/INIT'
 export const INIT_AUTH         = 'auth/INIT_AUTH'
 export const AUTH_STATE_CHANGE = 'auth/AUTH_STATE_CHANGE'
 
