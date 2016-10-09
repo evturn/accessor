@@ -1,53 +1,78 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Observable } from 'rxjs'
-import classNames from 'classnames/bind'
+import { TransitionMotion, spring } from 'react-motion'
+import Match from 'react-router/Match'
+import Link from 'react-router/Link'
 import css from './style.css'
 
-export class Record extends Component {
-  constructor(props) {
-    super(props)
-    this.state = { enter: false }
-  }
-
-  componentDidMount() {
-    this.unsubscribe = Observable
-      .timer(100)
-      .map(::this.toggleView)
-      .subscribe()
-  }
-
-  componentWillUnMount() {
-    this.unsubscribe()
-  }
-
-  toggleView() {
-    this.setState({ enter: !this.state.enter })
-  }
-
-  render() {
-    const { enter } = this.state
-    const { c } = this.props
-    return (
-      <div className={c('view', { enter })}>
-      <div className={c('bar')}>
-        <div className={c('title')} />
-        <div className={c('close')} onClick={::this.toggleView} />
+export const Record = props => {
+  const { records, title, back } = props
+  return (
+    <div>
+      <div className={css.bar}>
+        <div className={css.title} />
+        <div className={css.close}>
+          <Link className={css.back} to={back}>Back</Link>
+        </div>
       </div>
-      <div className={c('body')}>
-        <input className={c('input')} defaultValue={this.props.title} />
-        <div className={c('label')} />
-      </div>
-      </div>
+      <div className={css.body}>
+        <input className={css.input} defaultValue={title} />
+        <div className={css.label} />
 
-    )
-  }
+        <div className={css.items}>
+          {records.map(x =>
+            <div key={x.id} className={css.child}>
+              <Link className={css.to} to={x.url}>{x.title}</Link>
+            </div>
+          )}
+        </div>
+
+      </div>
+    </div>
+  )
+}
+
+const view = {
+  position: 'fixed',
+  backgroundColor: '#fff',
+  top: 0,
+  bottom: 0,
+  left: 'auto',
+  height: '100%',
+  transition: '0.3s',
+  right: '-100vh',
+}
+
+export const MatchedRecords = ({ items, ...rest }) => {
+  const styles = items.map((x, i)=> ({
+      key: x.id,
+      data: x,
+      style: { right: 0 },
+    }))
+  return (
+    <Match {...rest} children={({ matched, ...props}) => (
+      <TransitionMotion
+        willEnter={_ => ({ right: spring(0) })}
+        styles={styles}>
+        {interpolatedStyles => (
+          <div>
+            {interpolatedStyles.map((config, i) => (
+              <div
+                key={config.key}
+                style={{ ...view, ...config.style, zIndex: 100 - i }}>
+                <Record {...config.data} />
+              </div>
+            ))}
+          </div>
+        )}
+      </TransitionMotion>
+    )}/>
+  )
 }
 
 export default connect(
   (state, ownProps) => {
     return {
-      ...state.data.byId[ownProps.params.id],
-      c: classNames.bind(css),
+      items: state.data.branches[ownProps.params.id]
     }
-})(Record)
+})(MatchedRecords)

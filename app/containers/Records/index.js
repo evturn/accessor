@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Match from 'react-router/Match'
 import Link from 'react-router/Link'
+import Match from 'react-router/Match'
 import Record from 'containers/Record'
 import css from './style.css'
 
@@ -9,31 +9,34 @@ export class Records extends Component {
   render() {
     return (
       <div className={css.records}>
-        {this.props.records
-          ? this.props.records.map(
-              x =>
-                <div
-                  key={x.id}
-                  className={css.record}>
-                  <Link
-                    className={css.link}
-                    to={`/records/${x.id}`}>
-                    {x.title}
-                  </Link>
-                </div>
-            )
-          : null
-        }
-
+        <RootRecords items={this.props.records}/>
         <Match pattern="/records/:id" component={Record} />
       </div>
     )
   }
 }
 
+const RootRecords = ({ items }) => {
+  return (
+    <div>
+      {items
+        ? items.map(x =>
+            <div key={x.id} className={css.record}>
+              <Link
+                className={css.link}
+                to={x.url}>
+                {x.title}
+              </Link>
+            </div>
+          )
+        : 'No records.'
+      }
+    </div>
+  )
+}
+
 export default connect(
   state => ({
-    user: state.user,
-    records: state.data.records,
+    records: state.data.records
   })
 )(Records)

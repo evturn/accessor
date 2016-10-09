@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { selectDataAsList, selectRecordsAsTree, selectRecordsById, selectRecordsByBranches } from 'api/selectors'
+import populate from 'api/selectors'
 import * as Types from 'api/constants'
 
 const initialData = { items: [], records: [], byId: {}, branches: {} }
@@ -7,13 +7,8 @@ const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
     case Types.UPDATE_SUCCESS:
-      const data = selectDataAsList(action.payload.data)
-
       return Object.assign({}, state, {
-        items: data,
-        records: selectRecordsAsTree(data),
-        byId: selectRecordsById(data),
-        branches: selectRecordsByBranches(data),
+        ...populate(action.payload.data)
       })
 
     default:

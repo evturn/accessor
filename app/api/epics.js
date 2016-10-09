@@ -58,7 +58,7 @@ function createRecord(action$, store) {
       const ref = API.DB.ref(path)
       return Observable.of(ref)
         .map(ref => ref.push().key)
-        .map(key => ({ [key]: {...data} }))
+        .map(key => ({ [key]: { ...data, url: `${path}/${key}` }}))
         .map(child => ref.update(child))
         .switchMap(Actions.nothing)
     })

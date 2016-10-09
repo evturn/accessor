@@ -1,15 +1,3 @@
-.view {
-  position: fixed;
-  background-color: #fff;
-  right: -100vw;
-  top: 0;
-  bottom: 0;
-  left: auto;
-  z-index: 5000;
-  height: 100%;
-  transition: 0.3s;
-}
-
 .body {
   padding: 15px;
   width: 100vw;
@@ -29,10 +17,6 @@
   composes: label-title from 'styles';
 }
 
-.view.enter {
-  right: 0;
-}
-
 .bar {
   display: relative;
   height: 45px;
@@ -45,14 +29,13 @@
   right: 0;
   top: 0;
   padding: 14px 20px;
-  font-size: 15px;
   text-align: center;
-  color: #fff;
   z-index: 2;
 }
 
-.close:after {
-  content: "Back";
+.back {
+  font-size: 15px;
+  color: #fff;
 }
 
 .title {
@@ -67,4 +50,20 @@
 
 .title:after {
   content: "Record";
+}
+
+.items {
+  padding-top: 15px;
+}
+
+.child {
+  display: block;
+  width: 100%;
+  height: 35px;
+}
+
+.to {
+  color: #000;
+  width: 100%;
+  height: 100%;
 }
