@@ -9,7 +9,7 @@ export class CreateRecordModal extends Component {
   createRecord(value) {
     if (value.length) {
       this.props.createRecord({
-        ref: `records/${this.props.user.id}`,
+        child: this.props.user.id,
         data: {
           title: value,
           parent: false,

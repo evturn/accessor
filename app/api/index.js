@@ -1,5 +1,4 @@
 import firebase from 'firebase'
-import { Observable } from 'rxjs/Observable'
 
 export const firebaseApp = firebase.initializeApp({
   apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
@@ -31,15 +30,5 @@ export const API = {
 
   pathRef(x) {
     return firebase.database().ref(`records/${x}`)
-  }
-}
-
-export class Observe$ extends Observable {
-  static only(value) {
-    return value ? Observable.of(value) : Observable.empty()
-  }
-
-  static onlyIf(value, exists) {
-    return !!exists ? Observable.of(value) : Observable.empty()
   }
 }

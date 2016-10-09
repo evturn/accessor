@@ -1,32 +1,50 @@
-import { API, Observe$ } from 'api'
+import { API } from 'api'
+import { Observable as Observe$ } from 'rxjs/Observable'
+import { combineEpics } from 'redux-observable'
 import * as Types from 'api/constants'
 import * as Actions from 'api/actions'
-import { combineEpics } from 'redux-observable'
 
-function initAuth(action$) {
+const epics = [
+  init,
+  login,
+  loginSuccess,
+  listenForChanges,
+  logout,
+  createRecord
+]
+
+export default combineEpics(...epics)
+
+function init(action$) {
   return action$.ofType(Types.INIT_AUTH)
     .map(action => action.payload.user)
-    .map(user => !!user ? { id: user.uid, ...user.providerData[0] } : false)
-    .map(user => ({ user: user || null, isAuthenticated: !!user }))
-    .map(Actions.authStateChange)
+    .filter(user => !!user)
+    .switchMap(user => Observe$.of(user)
+      .pluck('providerData')
+      .elementAt(0)
+      .map(x => ({ ...x, id: user.uid }))
+      .map(user => ({ user,  isAuthenticated: true }))
+      .map(Actions.authStateChange)
+    )
 }
 
 function listenForChanges(action$) {
   return action$.ofType(Types.AUTH_STATE_CHANGE)
     .map(action => action.payload)
-    .switchMap(({ user, isAuthenticated }) => Observe$.onlyIf(user.id, isAuthenticated))
-    .switchMap(child => Observe$.create(observer => {
-      API
-        .childRef(child)
-        .on('value', x => observer.next(Actions.updateSuccess(x.val())))
+    .filter(x => !!x.isAuthenticated)
+    .map(x => x.user.id)
+    .switchMap(x => Observe$.create(observer => {
+      API.childRef(x).on('value', x => observer.next(x))
     }))
+    .map(x => x.val())
+    .map(Actions.updateSuccess)
 }
 
 function createRecord(action$) {
   return action$.ofType(Types.CREATE_RECORD)
     .map(action => action.payload)
-    .switchMap(({ ref, data }) => {
-      const rootRef = API.rootRef(ref)
+    .switchMap(({ child, data }) => {
+      const rootRef = API.childRef(child)
       return Observe$.of(rootRef)
         .map(ref => ref.push().key)
         .map(id => ({ ...data, id, url: `records/${id}` }))
@@ -58,12 +76,3 @@ function logout(action$) {
       .catch(Actions.logoutError)
     )
 }
-
-export default combineEpics(
-  initAuth,
-  login,
-  loginSuccess,
-  listenForChanges,
-  logout,
-  createRecord,
-)
