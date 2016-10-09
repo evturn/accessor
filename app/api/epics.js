@@ -15,12 +15,11 @@ const epics = [
   function initAuth(action$) {
     return action$.ofType(Types.INIT_AUTH)
       .map(action => action.payload.user)
-      .filter(user => !!user)
       .switchMap(user => Observe$.of(user)
         .pluck('providerData')
         .elementAt(0)
         .map(x => ({ ...x, id: user.uid }))
-        .map(user => ({ user,  isAuthenticated: true }))
+        .map(user => ({ user }))
         .map(Actions.authStateChange)
       )
   },
@@ -28,8 +27,7 @@ const epics = [
   function listenForChanges(action$) {
     return action$.ofType(Types.AUTH_STATE_CHANGE)
       .map(action => action.payload)
-      .filter(x => !!x.isAuthenticated)
-      .map(x => x.user.id)
+      .pluck('user', 'id')
       .switchMap(x => Observe$.create(observer => {
         API.childRef(x).on('value', x => observer.next(x))
       }))
@@ -54,7 +52,8 @@ const epics = [
   function login(action$) {
     return action$.ofType(Types.AUTHENTICATING)
       .map(action => action.payload.provider)
-      .switchMap(provider => Observe$.fromPromise(API.Auth.signInWithPopup(provider)))
+      .map(API.authProvider)
+      .switchMap(provider => Observe$.fromPromise(provider))
       .map(x => x.user)
       .map(Actions.loginSuccess)
       .catch(Actions.loginError)

@@ -38,6 +38,9 @@ const MatchWhenAuthorized = ({ component: Component, isAuthenticated, ...rest })
 )
 
 export default connect(
-  state => ({ ...state, isAuthenticated: state.isAuthenticated }),
+  state => ({
+    ...state,
+    isAuthenticated: state.isAuthenticated
+  }),
   { init }
 )(App)

@@ -26,12 +26,12 @@ export const logout = _ => ({
 
 export const twitterAuth = _ => ({
   type: Types.AUTHENTICATING,
-  payload: { provider: new firebase.auth.TwitterAuthProvider() }
+  payload: { provider: 'twitter' }
 })
 
 export const githubAuth = _ => ({
   type: Types.AUTHENTICATING,
-  payload: { provider: new firebase.auth.GithubAuthProvider() }
+  payload: { provider: 'github' }
 })
 
 export const loginSuccess = user => ({

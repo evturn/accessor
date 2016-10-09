@@ -77,8 +77,9 @@ function errorReducer(state=null, action) {
 const authReducer = (state=null, action) => {
   switch (action.type) {
 
+    case Types.INIT_AUTH:
     case Types.AUTH_STATE_CHANGE:
-      return action.payload.isAuthenticated
+      return !!action.payload.user
 
     case Types.LOGIN_SUCCESS:
       return true

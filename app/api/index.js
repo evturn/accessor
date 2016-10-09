@@ -22,6 +22,14 @@ export const API = {
     )
   },
 
+  authProvider(provider) {
+    const services = {
+      twitter: new firebase.auth.TwitterAuthProvider(),
+      github: new firebase.auth.GithubAuthProvider(),
+    }
+    return firebase.auth().signInWithPopup(services[provider])
+  },
+
   auth() {
     return firebase.auth()
   },
