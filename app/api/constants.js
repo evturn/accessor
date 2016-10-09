@@ -14,6 +14,8 @@ export const LAUNCH_MODAL      = 'ui/LAUNCH_MODAL'
 export const CLOSE_MODAL       = 'ui/CLOSE_MODAL'
 
 export const CREATE_RECORD     = 'root/CREATE_RECORD'
+export const REMOVE_RECORD     = 'root/REMOVE_RECORD'
+export const UPDATE_SUCCESS   = 'root/UPDATE_SUCCESS'
 
 export const CHANGE_TARGET     = '@@accessor/Navigator/CHANGE_TARGET'
 
@@ -21,7 +23,5 @@ export const LOCATION_CHANGE  = 'root/LOCATION_CHANGE'
 export const LOCATION_WILL_CHANGE = 'record/LOCATION_WILL_CHANGE'
 export const CURRENT_RECORD   = 'record/CURRENT_RECORD'
 export const UPDATE_RECORD    = 'record/UPDATE_RECORD'
-export const REMOVE_RECORD    = 'record/REMOVE_RECORD'
-export const UPDATE_SUCCESS   = 'root/UPDATE_SUCCESS'
 export const UPDATE_ERROR     = 'root/UPDATE_ERROR'
 export const CHANGE_LAYOUT    = 'card/CHANGE_LAYOUT'

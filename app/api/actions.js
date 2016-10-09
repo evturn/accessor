@@ -69,6 +69,11 @@ export const createRecord = ({ child, data }) => ({
   payload: { child, data }
 })
 
+export const removeRecord = (id, child) => ({
+  type: Types.REMOVE_RECORD,
+  payload: { id, child }
+})
+
 export const updateSuccess = data => ({
   type: Types.UPDATE_SUCCESS,
   payload: { data }
@@ -95,11 +100,6 @@ export const currentRecord = record => ({
 
 export const updateRecord = record => ({
   type: Types.UPDATE_RECORD,
-  payload: { record }
-})
-
-export const removeRecord = record => ({
-  type: Types.REMOVE_RECORD,
   payload: { record }
 })
 

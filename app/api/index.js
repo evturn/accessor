@@ -38,6 +38,10 @@ export const API = {
     return firebase.database()
   },
 
+  ref(x) {
+    return firebase.database().ref(x)
+  },
+
   rootRef() {
     return firebase.database().ref('records')
   },

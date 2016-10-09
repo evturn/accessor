@@ -28,9 +28,8 @@ const epics = [
     return action$.ofType(Types.AUTH_STATE_CHANGE)
       .map(action => action.payload)
       .pluck('user', 'id')
-      .switchMap(x => Observe$.create(observer => {
-        API.childRef(x).on('value', x => observer.next(x))
-      }))
+      .map(API.childRef)
+      .switchMap(ref => Observe$.create(observer => ref.on('value', x => observer.next(x))))
       .map(x => x.val())
       .map(Actions.updateSuccess)
   },
@@ -47,6 +46,12 @@ const epics = [
           .map(x => rootRef.update(x))
           .switchMap(Observe$.empty)
       })
+  },
+
+  function removeRecord(action$) {
+    return action$.ofType(Types.REMOVE_RECORD)
+      .map(action => action.payload)
+      .map(Observe$.empty)
   },
 
   function login(action$) {

@@ -3,18 +3,24 @@ import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Match from 'react-router/Match'
 import Record from 'containers/Record'
+import { removeRecord } from 'api/actions'
 import css from './style.css'
 
-export const Records = ({ items }) => {
+export const Records = ({ items, removeRecord, user }) => {
   return (
     <div className={css.records}>
-      {items.map(x =>
-        <div key={x.id} className={css.record}>
-          <Link className={css.link} to={x.url}>
-            {x.title}
-          </Link>
-        </div>
-      )}
+      <ul>
+        {items.map(x =>
+          <li key={x.id} className={css.item}>
+            <Link className={css.link} to={x.url}>
+              <div  className={css.record}>
+                {x.title}
+              </div>
+            </Link>
+            <div className={css.remove} onClick={_ => removeRecord({ id: x.id, child: user.id })} />
+          </li>
+        )}
+      </ul>
       <Match pattern="/records/:id" component={Record} />
     </div>
   )
@@ -23,5 +29,7 @@ export const Records = ({ items }) => {
 export default connect(
   state => ({
     items: state.data.records,
-  })
+    user: state.user,
+  }),
+  { removeRecord }
 )(Records)
