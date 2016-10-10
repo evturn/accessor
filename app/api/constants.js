@@ -25,3 +25,5 @@ export const CURRENT_RECORD   = 'record/CURRENT_RECORD'
 export const UPDATE_RECORD    = 'record/UPDATE_RECORD'
 export const UPDATE_ERROR     = 'root/UPDATE_ERROR'
 export const CHANGE_LAYOUT    = 'card/CHANGE_LAYOUT'
+
+export const OK_200           = 'root/OK_200'

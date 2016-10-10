@@ -52,7 +52,7 @@ function userReducer(state=null, action) {
     case Types.LOGOUT_SUCCESS:
       return null
 
-    case Types.LOGIN_SUCCESS:
+    case Types.INIT_AUTH:
     case Types.AUTH_STATE_CHANGE:
       return action.payload.user
 
@@ -80,9 +80,6 @@ const authReducer = (state=null, action) => {
     case Types.INIT_AUTH:
     case Types.AUTH_STATE_CHANGE:
       return !!action.payload.user
-
-    case Types.LOGIN_SUCCESS:
-      return true
 
     case Types.LOGOUT_SUCCESS:
       return false

@@ -33,17 +33,10 @@ const epics = [
   function login(action$) {
     return action$.ofType(Types.AUTHENTICATING)
       .pluck('payload', 'provider')
-      .map(API.authProvider)
-      .mergeMap(provider => Observe$.fromPromise(provider))
-      .map(x => x.user)
-      .map(Actions.loginSuccess)
-      .catch(Actions.loginError)
-  },
-
-  function loginSuccess(action$) {
-    return action$.ofType(Types.LOGIN_SUCCESS)
-      .pluck('payload', 'user')
+      .mergeMap(API.authProvider)
+      .pluck('user')
       .map(Actions.initAuth)
+      .catch(Actions.loginError)
   },
 
   function createRecord(action$) {
@@ -56,7 +49,7 @@ const epics = [
           .map(id => ({ ...data, id, url: `records/${id}` }))
           .map(x => ({ [x.id]: x }))
           .map(x => rootRef.update(x))
-          .switchMap(Observe$.empty)
+          .map(Actions.OK200)
       })
   },
 

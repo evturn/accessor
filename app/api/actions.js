@@ -68,6 +68,10 @@ export const createRecord = ({ child, data }) => ({
   payload: { child, data }
 })
 
+export const OK200 = _ => ({
+  type: Types.OK_200
+})
+
 export const removeRecord = (id, child) => ({
   type: Types.REMOVE_RECORD,
   payload: { id, child }
