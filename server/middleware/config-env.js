@@ -26,7 +26,7 @@ function devMiddleware(app) {
 
   app.use(middleware)
   app.use(webpackHotMiddleware(compiler))
-  app.use(express.static(path.join(process.cwd(), '/')))
+  // app.use(express.static(path.join(process.cwd(), '/')))
 
 
   const file = fs.readFileSync(path.join(process.cwd(), 'build', 'index.html'))

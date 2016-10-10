@@ -14,24 +14,36 @@ const epics = [
 
   function initAuth(action$) {
     return action$.ofType(Types.INIT_AUTH)
-      .map(action => action.payload.user)
-      .switchMap(user => Observe$.of(user)
-        .pluck('providerData')
-        .elementAt(0)
-        .map(x => ({ ...x, id: user.uid }))
-        .map(user => ({ user }))
-        .map(Actions.authStateChange)
-      )
+      .pluck('payload', 'user')
+      .switchMap(user => !!user ? Observe$.of(user) : Observe$.empty())
+      .pluck('uid')
+      .map(id => ({ user: { id } }))
+      .map(Actions.authStateChange)
   },
 
   function listenForChanges(action$) {
     return action$.ofType(Types.AUTH_STATE_CHANGE)
-      .map(action => action.payload)
-      .pluck('user', 'id')
+      .pluck('payload', 'user', 'id')
       .map(API.childRef)
       .switchMap(ref => Observe$.create(observer => ref.on('value', x => observer.next(x))))
       .map(x => x.val())
       .map(Actions.updateSuccess)
+  },
+
+  function login(action$) {
+    return action$.ofType(Types.AUTHENTICATING)
+      .pluck('payload', 'provider')
+      .map(API.authProvider)
+      .mergeMap(provider => Observe$.fromPromise(provider))
+      .map(x => x.user)
+      .map(Actions.loginSuccess)
+      .catch(Actions.loginError)
+  },
+
+  function loginSuccess(action$) {
+    return action$.ofType(Types.LOGIN_SUCCESS)
+      .pluck('payload', 'user')
+      .map(Actions.initAuth)
   },
 
   function createRecord(action$) {
@@ -52,22 +64,6 @@ const epics = [
     return action$.ofType(Types.REMOVE_RECORD)
       .map(action => action.payload)
       .map(Observe$.empty)
-  },
-
-  function login(action$) {
-    return action$.ofType(Types.AUTHENTICATING)
-      .map(action => action.payload.provider)
-      .map(API.authProvider)
-      .switchMap(provider => Observe$.fromPromise(provider))
-      .map(x => x.user)
-      .map(Actions.loginSuccess)
-      .catch(Actions.loginError)
-  },
-
-  function loginSuccess(action$) {
-    return action$.ofType(Types.LOGIN_SUCCESS)
-      .map(action => action.payload.user)
-      .map(Actions.initAuth)
   },
 
   function logout(action$) {

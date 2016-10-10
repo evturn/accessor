@@ -1,4 +1,3 @@
-import firebase from 'firebase'
 import { Observable } from 'rxjs'
 import * as Types from 'api/constants'
 
