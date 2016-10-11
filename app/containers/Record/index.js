@@ -5,8 +5,7 @@ import Match from 'react-router/Match'
 import Link from 'react-router/Link'
 import css from './style.css'
 
-export const Record = props => {
-  const { records, title, back } = props
+export const Record = ({ children, title, back }) => {
   return (
     <div>
       <div className={css.bar}>
@@ -20,7 +19,7 @@ export const Record = props => {
         <div className={css.label} />
 
         <div className={css.items}>
-          {records.map(x =>
+          {children.map(x =>
             <div key={x.id} className={css.child}>
               <Link className={css.to} to={x.url}>{x.title}</Link>
             </div>

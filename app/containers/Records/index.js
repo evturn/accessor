@@ -7,6 +7,10 @@ import { removeRecord } from 'api/actions'
 import css from './style.css'
 
 export const Records = ({ items, removeRecord, user }) => {
+  function removeRecurse(dependents) {
+    return _ => dependents.map(x => removeRecord({ id: x, child: user.id }))
+  }
+
   return (
     <div className={css.records}>
       <ul>
@@ -17,7 +21,7 @@ export const Records = ({ items, removeRecord, user }) => {
                 {x.title}
               </div>
             </Link>
-            <div className={css.remove} onClick={_ => removeRecord({ id: x.id, child: user.id })} />
+            <div className={css.remove} onClick={removeRecurse(x.dependents)} />
           </li>
         )}
       </ul>

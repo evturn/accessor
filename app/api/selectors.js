@@ -7,7 +7,7 @@ export default map => {
   return {
     items,
     branches: getParentRecurse(),
-    records: getChildrenRecurse(),
+    records: getChildrenRecurse().map(getDependentsRecurse),
     byId: getById(),
   }
 
@@ -23,7 +23,7 @@ export default map => {
 
   function getChildren(item) {
     const children = items.filter(x => x.parent === item.id)
-    item.records = children.length ? children.map(getChildren) : []
+    item.children = children.length ? children.map(getChildren) : []
     return item
   }
 
@@ -47,7 +47,7 @@ export default map => {
     return items.reduce((acc, item) => {
       acc[item.id] = {
         ...item,
-        records: items.filter(x => x.parent === item.id),
+        children: items.filter(x => x.parent === item.id),
         parent: items.filter(x => x.parent && x.id === item.parent)[0] || false,
       }
       return acc
@@ -55,6 +55,19 @@ export default map => {
   }
 }
 
+function getDependentsRecurse(item) {
+
+  function getChildId(item, acc) {
+    if (item.children.length) {
+      item.children.map(x => getChildId(x, acc))
+    }
+    acc.push(item.id)
+    return acc
+  }
+
+  item.dependents = getChildId(item, [])
+  return item
+}
 
 
 
