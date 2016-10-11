@@ -21,6 +21,19 @@ export const API = {
     )
   },
 
+  currentUser() {
+    const user = firebase.auth().currentUser
+    return {
+      user: user
+        ? {
+            ...user.providerData[0],
+            id: user.uid,
+            records: `records/${user.uid}`,
+          }
+        : false
+      }
+  },
+
   ref(x) {
     return firebase.database().ref(x)
   },
