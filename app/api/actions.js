@@ -67,9 +67,9 @@ export const OK200 = _ => ({
   type: Types.OK_200
 })
 
-export const removeRecord = (id, child) => ({
+export const removeRecord = ({ child, id }) => ({
   type: Types.REMOVE_RECORD,
-  payload: { id, child }
+  payload: { child, id }
 })
 
 export const updateSuccess = data => ({

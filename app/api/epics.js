@@ -59,8 +59,9 @@ const epics = [
 
   function removeRecord(action$) {
     return action$.ofType(Types.REMOVE_RECORD)
-      .map(action => action.payload)
-      .map(Observe$.empty)
+      .pluck('payload')
+      .map(x => API.ref(`records/${x.child}`).child(x.id).remove())
+      .map(Actions.OK200)
   }
 
 ]
