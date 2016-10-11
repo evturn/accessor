@@ -21,15 +21,6 @@ const epics = [
       .map(Actions.authStateChange)
   },
 
-  function listenForChanges(action$) {
-    return action$.ofType(Types.AUTH_STATE_CHANGE)
-      .pluck('payload', 'user', 'id')
-      .map(API.childRef)
-      .switchMap(ref => Observe$.create(observer => ref.on('value', x => observer.next(x))))
-      .map(x => x.val())
-      .map(Actions.updateSuccess)
-  },
-
   function providerSignIn(action$) {
     return action$.ofType(Types.PROVIDER_SIGN_IN)
       .pluck('payload', 'provider')
@@ -37,6 +28,22 @@ const epics = [
       .pluck('user')
       .map(Actions.initAuth)
       .catch(Actions.loginError)
+  },
+
+  function providerSignOut(action$) {
+    return action$.ofType(Types.PROVIDER_SIGN_OUT)
+      .mergeMap(API.providerSignOut)
+      .map(Actions.unauthorize)
+      .catch(Actions.logoutError)
+  },
+
+  function listenForChanges(action$) {
+    return action$.ofType(Types.AUTH_STATE_CHANGE)
+      .pluck('payload', 'user', 'id')
+      .map(API.childRef)
+      .switchMap(ref => Observe$.create(observer => ref.on('value', x => observer.next(x))))
+      .map(x => x.val())
+      .map(Actions.updateSuccess)
   },
 
   function createRecord(action$) {
@@ -57,14 +64,6 @@ const epics = [
     return action$.ofType(Types.REMOVE_RECORD)
       .map(action => action.payload)
       .map(Observe$.empty)
-  },
-
-  function logout(action$) {
-    return action$.ofType(Types.LOGOUT)
-      .switchMap(action => Observe$.fromPromise(API.Auth.signOut())
-        .map(Actions.logoutSuccess)
-        .catch(Actions.logoutError)
-      )
   }
 
 ]

@@ -32,6 +32,10 @@ export const API = {
     return firebase.auth().signInWithPopup(services[provider])
   },
 
+  providerSignOut() {
+    return firebase.auth().signOut()
+  },
+
   auth() {
     return firebase.auth()
   },

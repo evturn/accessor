@@ -20,7 +20,11 @@ export const authStateChange = ({ user, isAuthenticated }) => ({
 })
 
 export const logout = _ => ({
-  type: Types.LOGOUT
+  type: Types.PROVIDER_SIGN_OUT
+})
+
+export const unauthorize = _ => ({
+  type: Types.UNAUTHORIZE
 })
 
 export const twitterAuth = _ => ({
@@ -33,18 +37,9 @@ export const githubAuth = _ => ({
   payload: { provider: 'github' }
 })
 
-export const loginSuccess = user => ({
-  type: Types.LOGIN_SUCCESS,
-  payload: { user }
-})
-
 export const loginError = err => ({
   type: Types.LOGIN_ERROR,
   payload: { error: err.message }
-})
-
-export const logoutSuccess = _ => ({
-  type: Types.LOGOUT_SUCCESS
 })
 
 export const logoutError = error => ({

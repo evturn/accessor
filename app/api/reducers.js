@@ -11,7 +11,7 @@ const dataReducer = (state=initialData, action) => {
         ...populate(action.payload.data)
       })
 
-    case Types.LOGOUT_SUCCESS:
+    case Types.UNAUTHORIZE:
       return initialData
 
     default:
@@ -42,8 +42,7 @@ const loadingReducer  = (state=false, action) => {
 
     case Types.EPIC_END:
     case Types.LOGIN_ERROR:
-    case Types.LOGIN_SUCCESS:
-    case Types.LOGOUT_SUCCESS:
+    case Types.UNAUTHORIZE:
       return false
 
     default:
@@ -54,7 +53,7 @@ const loadingReducer  = (state=false, action) => {
 function userReducer(state=null, action) {
   switch (action.type) {
 
-    case Types.LOGOUT_SUCCESS:
+    case Types.UNAUTHORIZE:
       return null
 
     case Types.INIT_AUTH:
@@ -86,7 +85,7 @@ const authReducer = (state=null, action) => {
     case Types.AUTH_STATE_CHANGE:
       return !!action.payload.user
 
-    case Types.LOGOUT_SUCCESS:
+    case Types.UNAUTHORIZE:
       return false
 
     default:

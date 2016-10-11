@@ -3,12 +3,14 @@ export const INIT              = 'auth/INIT'
 export const INIT_AUTH         = 'auth/INIT_AUTH'
 export const AUTH_STATE_CHANGE = 'auth/AUTH_STATE_CHANGE'
 
-export const PROVIDER_SIGN_IN    = 'auth/PROVIDER_SIGN_IN'
+export const PROVIDER_SIGN_IN  = 'auth/PROVIDER_SIGN_IN'
+export const PROVIDER_SIGN_OUT = 'auth/PROVIDER_SIGN_OUT'
+export const UNAUTHORIZE       = 'auth/UNAUTHORIZE'
+
 export const LOGIN_SUCCESS     = 'auth/LOGIN_SUCCESS'
 export const LOGIN_ERROR       = 'auth/LOGIN_ERROR'
 
 export const LOGOUT            = 'auth/LOGOUT'
-export const LOGOUT_SUCCESS    = 'auth/LOGOUT_SUCCESS'
 export const LOGOUT_ERROR      = 'auth/LOGOUT_ERROR'
 
 export const LAUNCH_MODAL      = 'ui/LAUNCH_MODAL'
