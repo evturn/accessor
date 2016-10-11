@@ -7,9 +7,9 @@ const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
     case Types.UPDATE_SUCCESS:
-      return Object.assign({}, state, {
-        ...populate(action.payload.data)
-      })
+      return !!action.payload.data
+        ? Object.assign({}, state, {...populate(action.payload.data)})
+        : initialData
 
     case Types.UNAUTHORIZE:
       return initialData
