@@ -25,17 +25,18 @@ export const API = {
     const user = firebase.auth().currentUser
     return {
       user: user
-        ? {
-            ...user.providerData[0],
-            id: user.uid,
-            records: `records/${user.uid}`,
-          }
+        ? {...user.providerData[0], id: user.uid, records: `records/${user.uid}`}
         : false
       }
   },
 
   ref(x) {
     return firebase.database().ref(x)
+  },
+
+  rootRef() {
+    const key = firebase.auth().currentUser.uid
+    return firebase.database().ref(`records/${key}`)
   },
 
   providerSignIn(provider) {
