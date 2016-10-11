@@ -9,12 +9,9 @@ export class CreateRecordModal extends Component {
   createRecord(value) {
     if (value.length) {
       this.props.createRecord({
-        child: this.props.user.id,
-        data: {
-          title: value,
-          parent: false,
-          back: '/',
-        }
+        title: value,
+        parent: false,
+        back: '/',
       })
       this.props.closeModal()
     }
