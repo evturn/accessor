@@ -30,10 +30,10 @@ const epics = [
       .map(Actions.updateSuccess)
   },
 
-  function login(action$) {
-    return action$.ofType(Types.AUTHENTICATING)
+  function providerSignIn(action$) {
+    return action$.ofType(Types.PROVIDER_SIGN_IN)
       .pluck('payload', 'provider')
-      .mergeMap(API.authProvider)
+      .mergeMap(API.providerSignIn)
       .pluck('user')
       .map(Actions.initAuth)
       .catch(Actions.loginError)

@@ -23,5 +23,12 @@ export default function configureStore(state) {
     compose(...enhancers)
   )
 
+  if (module.hot) {
+    module.hot.accept('api/epics', _ => {
+      const rootEpic = require('api/epics')
+      epicMiddleware.replaceEpic(rootEpic)
+    })
+  }
+
   return store
 }

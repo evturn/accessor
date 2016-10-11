@@ -24,12 +24,12 @@ export const logout = _ => ({
 })
 
 export const twitterAuth = _ => ({
-  type: Types.AUTHENTICATING,
+  type: Types.PROVIDER_SIGN_IN,
   payload: { provider: 'twitter' }
 })
 
 export const githubAuth = _ => ({
-  type: Types.AUTHENTICATING,
+  type: Types.PROVIDER_SIGN_IN,
   payload: { provider: 'github' }
 })
 

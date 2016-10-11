@@ -1,8 +1,9 @@
+export { EPIC_END } from 'redux-observable'
 export const INIT              = 'auth/INIT'
 export const INIT_AUTH         = 'auth/INIT_AUTH'
 export const AUTH_STATE_CHANGE = 'auth/AUTH_STATE_CHANGE'
 
-export const AUTHENTICATING    = 'auth/AUTHENTICATING'
+export const PROVIDER_SIGN_IN    = 'auth/PROVIDER_SIGN_IN'
 export const LOGIN_SUCCESS     = 'auth/LOGIN_SUCCESS'
 export const LOGIN_ERROR       = 'auth/LOGIN_ERROR'
 

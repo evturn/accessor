@@ -24,7 +24,7 @@ export const API = {
     )
   },
 
-  authProvider(provider) {
+  providerSignIn(provider) {
     const services = {
       twitter: new firebase.auth.TwitterAuthProvider(),
       github: new firebase.auth.GithubAuthProvider(),

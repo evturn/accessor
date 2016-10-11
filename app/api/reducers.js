@@ -11,6 +11,9 @@ const dataReducer = (state=initialData, action) => {
         ...populate(action.payload.data)
       })
 
+    case Types.LOGOUT_SUCCESS:
+      return initialData
+
     default:
       return state
   }
@@ -34,11 +37,13 @@ const uiReducer = (state=initialUI, action) => {
 const loadingReducer  = (state=false, action) => {
   switch (action.type) {
 
-    case Types.AUTHENTICATING:
+    case Types.PROVIDER_SIGN_IN:
       return true
 
+    case Types.EPIC_END:
     case Types.LOGIN_ERROR:
     case Types.LOGIN_SUCCESS:
+    case Types.LOGOUT_SUCCESS:
       return false
 
     default:
