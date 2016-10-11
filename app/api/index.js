@@ -11,9 +11,6 @@ export const firebaseApp = firebase.initializeApp({
 })
 
 export const API = {
-  Auth: firebase.auth(),
-  DB: firebase.database(),
-
   init(observer) {
     const unsubscribe = firebase.auth().onAuthStateChanged(
       x => {
@@ -22,6 +19,10 @@ export const API = {
       },
       e => observer.error(e)
     )
+  },
+
+  ref(x) {
+    return firebase.database().ref(x)
   },
 
   providerSignIn(provider) {
@@ -34,29 +35,5 @@ export const API = {
 
   providerSignOut() {
     return firebase.auth().signOut()
-  },
-
-  auth() {
-    return firebase.auth()
-  },
-
-  database() {
-    return firebase.database()
-  },
-
-  ref(x) {
-    return firebase.database().ref(x)
-  },
-
-  rootRef() {
-    return firebase.database().ref('records')
-  },
-
-  childRef(x) {
-    return firebase.database().ref('records').child(x)
-  },
-
-  pathRef(x) {
-    return firebase.database().ref(`records/${x}`)
   },
 }

@@ -5,8 +5,9 @@ import rootReducer from 'api/reducers'
 import rootEpic from 'api/epics'
 
 export default function configureStore(state) {
+  const epicMiddleware = createEpicMiddleware(rootEpic)
   const middleware = [
-    createEpicMiddleware(rootEpic),
+    epicMiddleware,
   ]
 
   if (__DEV__) {

@@ -40,7 +40,7 @@ const epics = [
   function listenForChanges(action$) {
     return action$.ofType(Types.AUTH_STATE_CHANGE)
       .pluck('payload', 'user', 'id')
-      .map(API.childRef)
+      .map(x => API.ref('records').child(x))
       .switchMap(ref => Observe$.create(observer => ref.on('value', x => observer.next(x))))
       .map(x => x.val())
       .map(Actions.updateSuccess)
@@ -49,15 +49,12 @@ const epics = [
   function createRecord(action$) {
     return action$.ofType(Types.CREATE_RECORD)
       .map(action => action.payload)
-      .switchMap(({ child, data }) => {
-        const rootRef = API.childRef(child)
-        return Observe$.of(rootRef)
-          .map(ref => ref.push().key)
-          .map(id => ({ ...data, id, url: `records/${id}` }))
-          .map(x => ({ [x.id]: x }))
-          .map(x => rootRef.update(x))
-          .map(Actions.OK200)
-      })
+      .map(({ child, data }) => ({ data, ref: API.ref('records').child(child) }))
+      .switchMap(({ ref, data }) => Observe$.of(ref.push().key)
+        .map(x => ({...data, id: x, url: `records/${x}`}))
+        .map(x => ref.update({ [x.id]: x }))
+        .map(Actions.OK200)
+      )
   },
 
   function removeRecord(action$) {
