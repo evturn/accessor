@@ -21,6 +21,21 @@ export const API = {
     )
   },
 
+  onceValue(observer) {
+    const key = firebase.auth().currentUser.uid
+    firebase.database()
+      .ref(`records/${key}`)
+      .once('value')
+      .then(x => observer.next(x))
+  },
+
+  onValue(observer) {
+    const key = firebase.auth().currentUser.uid
+    firebase.database()
+      .ref(`records/${key}`)
+      .on('value', x => observer.next(x))
+  },
+
   currentUser() {
     const user = firebase.auth().currentUser
     return {

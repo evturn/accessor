@@ -55,9 +55,22 @@ export const closeModal = _ => ({
   type: Types.CLOSE_MODAL
 })
 
+export const loadUser = _ => ({
+  type: Types.LOAD_USER
+})
+
+export const createUser = _ => ({
+  type: Types.CREATE_USER
+})
+
 ////////////////
 // DATA
 ////////////////
+export const assembleData = data => ({
+  type: Types.ASSEMBLE_DATA,
+  payload: { data }
+})
+
 export const createRecord = data => ({
   type: Types.CREATE_RECORD,
   payload: { data }

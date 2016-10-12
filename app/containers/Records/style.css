@@ -15,6 +15,11 @@
   position: relative;
 }
 
+.item:hover .remove {
+  display: block;
+  z-index: 10;
+}
+
 .remove {
   display: none;
   position: absolute;
@@ -30,6 +35,3 @@
   content: "✕";
 }
 
-.item:hover .remove {
-  display: block;
-}

@@ -7,14 +7,14 @@ import LoadingIndicator from 'components/LoadingIndicator'
 import { removeRecord } from 'api/actions'
 import css from './style.css'
 
-export const Records = ({ items, removeRecord, user }) => {
+export const Records = ({ items, removeRecord, user, loading }) => {
   function removeRecurse(dependents) {
     return _ => dependents.map(x => removeRecord({ id: x, child: user.id }))
   }
 
   return (
     <div className={css.records}>
-      {!items.length
+      {loading
         ? <LoadingIndicator />
         : <ul>
             {items.map(x =>
@@ -36,8 +36,9 @@ export const Records = ({ items, removeRecord, user }) => {
 
 export default connect(
   state => ({
-    items: state.data.records,
+    items: state.data.items,
     user: state.user,
+    loading: state.loading,
   }),
   { removeRecord }
 )(Records)

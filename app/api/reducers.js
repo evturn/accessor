@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
-import populate from 'api/selectors'
 import * as Types from 'api/constants'
 
-const initialData = { items: [], records: [], byId: {}, branches: {} }
+const initialData = { items: [] }
 const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
     case Types.UPDATE_SUCCESS:
-      return !!action.payload.data
-        ? Object.assign({}, state, {...populate(action.payload.data)})
+      const data = action.payload.data
+      return !!data
+        ? Object.assign({}, state, {...data})
         : initialData
 
     case Types.UNAUTHORIZE:
@@ -38,11 +38,13 @@ const loadingReducer  = (state=false, action) => {
   switch (action.type) {
 
     case Types.PROVIDER_SIGN_IN:
+    case Types.INIT_AUTH:
       return true
 
     case Types.EPIC_END:
     case Types.LOGIN_ERROR:
     case Types.UNAUTHORIZE:
+    case Types.UPDATE_SUCCESS:
       return false
 
     default:
