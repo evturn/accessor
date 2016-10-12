@@ -15,7 +15,7 @@ export const API = {
     const unsubscribe = firebase.auth().onAuthStateChanged(
       x => {
         unsubscribe()
-        observer.next(x)
+        observer.next(!!x)
       },
       e => observer.error(e)
     )
@@ -38,11 +38,10 @@ export const API = {
 
   currentUser() {
     const user = firebase.auth().currentUser
-    return {
-      user: user
-        ? {...user.providerData[0], id: user.uid, records: `records/${user.uid}`}
-        : false
-      }
+    return !!user
+      ? {...user.providerData[0], id: user.uid, records: `records/${user.uid}`}
+      : false
+
   },
 
   ref(x) {

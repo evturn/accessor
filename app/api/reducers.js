@@ -34,61 +34,35 @@ const uiReducer = (state=initialUI, action) => {
   }
 }
 
-const loadingReducer  = (state=false, action) => {
+const initialAuth = { loading: false, isAuthenticated: null, redirect: false }
+const authReducer = (state=initialAuth, action) => {
   switch (action.type) {
+
+    case Types.INIT_AUTH:
+      return Object.assign({}, state, {
+        loading: true,
+        isAuthenticated: action.payload.user,
+        redirect: action.payload.user,
+      })
 
     case Types.PROVIDER_SIGN_IN:
-    case Types.INIT_AUTH:
-      return true
+      return Object.assign({}, state, {
+        loading: true,
+      })
 
-    case Types.EPIC_END:
-    case Types.LOGIN_ERROR:
-    case Types.UNAUTHORIZE:
-    case Types.UPDATE_SUCCESS:
-      return false
-
-    default:
-      return state
-  }
-}
-
-function userReducer(state=null, action) {
-  switch (action.type) {
+    case Types.AUTHORIZE:
+      return Object.assign({}, state, {
+        loading: false,
+        isAuthenticated: true,
+        redirect: true,
+      })
 
     case Types.UNAUTHORIZE:
-      return null
-
-    case Types.INIT_AUTH:
-    case Types.AUTH_STATE_CHANGE:
-      return action.payload.user
-
-    default:
-      return state
-  }
-}
-
-function errorReducer(state=null, action) {
-  switch (action.type) {
-
-    case Types.LOGIN_ERROR:
-    case Types.LOGOUT_ERROR:
-    case Types.UPDATE_ERROR:
-      return action.payload.error
-
-    default:
-      return state
-  }
-}
-
-const authReducer = (state=null, action) => {
-  switch (action.type) {
-
-    case Types.INIT_AUTH:
-    case Types.AUTH_STATE_CHANGE:
-      return !!action.payload.user
-
-    case Types.UNAUTHORIZE:
-      return false
+      return Object.assign({}, state, {
+        loading: false,
+        isAuthenticated: false,
+        redirect: false,
+      })
 
     default:
       return state
@@ -96,10 +70,7 @@ const authReducer = (state=null, action) => {
 }
 
 export default combineReducers({
-  isAuthenticated: authReducer,
   data: dataReducer,
-  user: userReducer,
-  loading: loadingReducer,
-  error: errorReducer,
   ui: uiReducer,
+  auth: authReducer,
 })

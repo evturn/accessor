@@ -14,9 +14,9 @@ export const initAuth = user => ({
   payload: { user }
 })
 
-export const authStateChange = ({ user, isAuthenticated }) => ({
+export const authStateChange = user => ({
   type: Types.AUTH_STATE_CHANGE,
-  payload: { user, isAuthenticated }
+  payload: { user }
 })
 
 export const logout = _ => ({
@@ -25,6 +25,10 @@ export const logout = _ => ({
 
 export const unauthorize = _ => ({
   type: Types.UNAUTHORIZE
+})
+
+export const authorize = _ => ({
+  type: Types.AUTHORIZE
 })
 
 export const twitterAuth = _ => ({

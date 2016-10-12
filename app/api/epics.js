@@ -15,17 +15,14 @@ const epics = [
   function initAuth(action$) {
     return action$.ofType(Types.INIT_AUTH)
       .pluck('payload', 'user')
-      .switchMap(user => !!user ? Observe$.of(user) : Observe$.empty())
-      .pluck('uid')
-      .map(id => ({ user: { id } }))
-      .map(Actions.authStateChange)
+      .map(x => x ? Actions.authorize() : Actions.unauthorize())
   },
 
   function providerSignIn(action$) {
     return action$.ofType(Types.PROVIDER_SIGN_IN)
       .pluck('payload', 'provider')
-      .mergeMap(API.providerSignIn)
-      .pluck('user')
+      .switchMap(x => Observe$.fromPromise(API.providerSignIn(x)))
+      .map(x => !!x)
       .map(Actions.initAuth)
       .catch(Actions.loginError)
   },
@@ -38,7 +35,7 @@ const epics = [
   },
 
   function listenForChanges(action$) {
-    return action$.ofType(Types.AUTH_STATE_CHANGE)
+    return action$.ofType(Types.AUTHORIZE)
       .switchMapTo(Observe$.create(API.onceValue))
       .map(x => !!x.val())
       .map(x => x ? Actions.loadUser() : Actions.createUser())

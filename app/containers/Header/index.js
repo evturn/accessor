@@ -19,7 +19,7 @@ export const Header = ({ c, isAuthenticated, logout }) => {
 export default connect(
   state => ({
     c: classNames.bind(css),
-    isAuthenticated: !!state.isAuthenticated,
+    isAuthenticated: !!state.auth.isAuthenticated,
   }),
   { logout }
 )(Header)

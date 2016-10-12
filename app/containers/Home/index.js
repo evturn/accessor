@@ -24,7 +24,6 @@ class Home extends Component {
 
 export default connect(
   state => ({
-    user: state.user,
     open: state.ui.modal,
   }),
   { logout }

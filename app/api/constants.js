@@ -6,6 +6,7 @@ export const AUTH_STATE_CHANGE = 'auth/AUTH_STATE_CHANGE'
 export const PROVIDER_SIGN_IN  = 'auth/PROVIDER_SIGN_IN'
 export const PROVIDER_SIGN_OUT = 'auth/PROVIDER_SIGN_OUT'
 export const UNAUTHORIZE       = 'auth/UNAUTHORIZE'
+export const AUTHORIZE         = 'auth/AUTHORIZE'
 
 export const LOGIN_SUCCESS     = 'auth/LOGIN_SUCCESS'
 export const LOGIN_ERROR       = 'auth/LOGIN_ERROR'

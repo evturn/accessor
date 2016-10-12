@@ -9,7 +9,7 @@ import css from './style.css'
 
 export const Records = ({ items, removeRecord, user, loading }) => {
   function removeRecurse(dependents) {
-    return _ => dependents.map(x => removeRecord({ id: x, child: user.id }))
+    return _ => dependents.map(id => removeRecord({ id }))
   }
 
   return (
@@ -37,8 +37,7 @@ export const Records = ({ items, removeRecord, user, loading }) => {
 export default connect(
   state => ({
     items: state.data.items,
-    user: state.user,
-    loading: state.loading,
+    loading: state.auth.loading,
   }),
   { removeRecord }
 )(Records)

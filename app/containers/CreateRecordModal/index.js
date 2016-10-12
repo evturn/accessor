@@ -33,7 +33,6 @@ export class CreateRecordModal extends Component {
 
 export default connect(
   state => ({
-    user: state.user,
     open: state.ui.modal,
   }),
   { createRecord, closeModal }
