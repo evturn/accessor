@@ -15,14 +15,10 @@
   position: relative;
 }
 
-.item:hover .remove {
-  display: block;
-  z-index: 10;
-}
-
 .remove {
-  display: none;
+  display: block;
   position: absolute;
+  z-index: 10;
   right: 15px;
   top: 15px;
   height: 20px;
@@ -33,5 +29,14 @@
 
 .remove:after {
   content: "✕";
+}
+
+@media (min-width: 1025px) {
+  .remove {
+    display: none;
+  }
+  .item:hover .remove {
+    display: block;
+  }
 }
 
