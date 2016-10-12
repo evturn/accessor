@@ -9,6 +9,7 @@ const epics = [
   function init(action$) {
     return action$.ofType(Types.INIT)
       .switchMapTo(Observe$.create(API.init))
+      .delay(400)
       .map(Actions.initAuth)
   },
 

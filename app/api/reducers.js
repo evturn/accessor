@@ -38,9 +38,13 @@ const initialAuth = { loading: false, isAuthenticated: null, redirect: false }
 const authReducer = (state=initialAuth, action) => {
   switch (action.type) {
 
-    case Types.INIT_AUTH:
+    case Types.INIT:
       return Object.assign({}, state, {
         loading: true,
+      })
+
+    case Types.INIT_AUTH:
+      return Object.assign({}, state, {
         isAuthenticated: action.payload.user,
         redirect: action.payload.user,
       })

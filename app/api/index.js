@@ -41,7 +41,6 @@ export const API = {
     return !!user
       ? {...user.providerData[0], id: user.uid, records: `records/${user.uid}`}
       : false
-
   },
 
   ref(x) {
