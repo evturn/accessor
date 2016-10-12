@@ -5,7 +5,7 @@ import Match from 'react-router/Match'
 import Link from 'react-router/Link'
 import css from './style.css'
 
-export const Record = ({ children, title, back }) => {
+export const RecordView = ({ children, title, back }) => {
   return (
     <div>
       <div className={css.bar}>
@@ -59,7 +59,7 @@ export const MatchedRecords = ({ items, ...rest }) => {
               <div
                 key={config.key}
                 style={{ ...view, ...config.style, zIndex: 100 - i }}>
-                <Record {...config.data} />
+                <RecordView {...config.data} />
               </div>
             ))}
           </div>

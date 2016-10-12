@@ -1,12 +1,3 @@
-.circle {
-  position: relative;
-  margin: 2em auto;
-  right: 0;
-  left: 0;
-  width: 40px;
-  height: 40px;
-}
-
 .root {
   position: absolute;
   top: 35%;
@@ -15,135 +6,67 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.w {
+  position: relative;
+  margin: 2em auto;
+  right: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.wave {
+  animation-fill-mode: both;
+  display: inline-block;
+  height: 35px;
+  width: 4px;
+  margin: 2px;
+  border-radius: 2px;
+}
+
+.w.light .wave {
+  background-color: #fff;
+}
+
+.w.dark .wave {
   background-color: #039BE5;
 }
 
-.o {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  left: 0;
-  top: 0;
+.w1 {
+  composes: wave;
+  animation: scaley 1s 0.1s infinite cubic-bezier(.2,.68,.18,1.08);
 }
 
-.o::before {
-  content: '';
-  display: block;
-  margin: 0 auto;
-  width: 15%;
-  height: 15%;
-  background-color: #FFF;
-  border-radius: 100%;
-  animation: oFadeDelay 1.2s infinite ease-in-out both;
+.w2 {
+  composes: wave;
+  animation: scaley 1s 0.2s infinite cubic-bezier(.2,.68,.18,1.08);
 }
 
-.o2 {
-  composes: o;
-  transform: rotate(30deg);
+.w3 {
+  composes: wave;
+  animation: scaley 1s 0.30000000000000004s infinite cubic-bezier(.2,.68,.18,1.08);
 }
 
-.o3 {
-  composes: o;
-  transform: rotate(60deg);
+.w4 {
+  composes: wave;
+  animation: scaley 1s 0.4s infinite cubic-bezier(.2,.68,.18,1.08);
 }
 
-.o4 {
-  composes: o;
-  transform: rotate(90deg);
+.w5 {
+  composes: wave;
+  animation: scaley 1s 0.5s infinite cubic-bezier(.2,.68,.18,1.08);
 }
 
-.o5 {
-  composes: o;
-  transform: rotate(120deg);
-}
-
-.o6 {
-  composes: o;
-  transform: rotate(150deg);
-}
-
-.o7 {
-  composes: o;
-  transform: rotate(180deg);
-}
-
-.o8 {
-  composes: o;
-  transform: rotate(210deg);
-}
-
-.o9 {
-  composes: o;
-  transform: rotate(240deg);
-}
-
-.o10 {
-  composes: o;
-  transform: rotate(270deg);
-}
-
-.o11 {
-  composes: o;
-  transform: rotate(300deg);
-}
-
-.o12 {
-  composes: o;
-  transform: rotate(330deg);
-}
-
-.o2::before {
-  animation-delay: -1.1s;
-}
-
-.o3::before {
-  animation-delay: -1s;
-}
-
-.o4::before {
-  animation-delay: -0.9s;
-}
-
-.o5::before {
-  animation-delay: -0.8s;
-}
-
-.o6::before {
-  animation-delay: -0.7s;
-}
-
-.o7::before {
-  animation-delay: -0.6s;
-}
-
-.o8::before {
-  animation-delay: -0.5s;
-}
-
-.o9::before {
-  animation-delay: -0.4s;
-}
-
-.o10::before {
-  animation-delay: -0.3s;
-}
-
-.o11::before {
-  animation-delay: -0.2s;
-}
-
-.o12::before {
-  animation-delay: -0.1s;
-}
-
-@keyframes oFadeDelay {
-  0%,
-  39%,
-  100% {
-    opacity: 0;
+@keyframes scaley {
+  0% {
+    transform: scaleY(1.0);
   }
-
-  40% {
-    opacity: 1;
+  50% {
+    transform: scaleY(0.4);
+  }
+  100% {
+    transform: scaleY(1.0);
   }
 }
