@@ -9,7 +9,7 @@ import css from './style.css'
 
 export const Records = ({ items, removeRecord, user, loading }) => {
   function removeRecurse(dependents) {
-    return _ => dependents.map(id => removeRecord({ id }))
+    return _ => dependents.map(removeRecord)
   }
 
   return (

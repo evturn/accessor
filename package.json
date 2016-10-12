@@ -5,14 +5,9 @@
   "scripts": {
     "start": "NODE_ENV=development babel-node server",
     "check": "npm-check -u",
-    "clean:client": "rimraf ./build",
-    "clean:server": "rimraf ./lib",
-    "clean": "NODE_ENV=production npm run clean:client && npm run clean:server",
-    "build:client": "NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p",
-    "build:server": "NODE_ENV=production mkdir lib && babel server -d lib",
+    "clean": "rimraf ./build",
     "prebuild": "npm run clean",
-    "build": "npm run build:client && npm run build:server",
-    "start:prod": "NODE_ENV=production node lib/admin",
+    "build": "NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p",
     "login": "firebase login",
     "init": "firebase init",
     "deploy": "firebase deploy"
