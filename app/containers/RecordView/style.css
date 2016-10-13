@@ -1,5 +1,5 @@
 .body {
-  padding: 30px 15px 15px;
+  padding: 30px 20px 20px;
   width: 100vw;
 }
 
@@ -114,8 +114,8 @@
   display: block;
   position: absolute;
   z-index: 10;
-  right: 15px;
-  top: 0;
+  right: 0;
+  top: 5px;
   height: 20px;
   width: 20px;
   color: #000;
@@ -133,4 +133,16 @@
   .item:hover .remove {
     display: block;
   }
+}
+
+.view {
+  position: fixed;
+  background-color: #fff;
+  top: 0;
+  bottom: 0;
+  left: auto;
+  height: 100%;
+  transition: 0.3s;
+  right: 0;
+  z-index: 10;
 }

@@ -18,7 +18,7 @@ class Home extends Component {
           pattern="/"
           component={Records} />
         <Match
-          pattern="/records/:id"
+          pattern="/records"
           component={RecordMatches} />
         <MenuBar />
         <CreateRecordModal />

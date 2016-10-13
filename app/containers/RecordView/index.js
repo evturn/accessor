@@ -2,18 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Input from 'components/Input'
-import { updateItem, deleteData } from 'api/actions'
 import css from './style.css'
 
-export const RecordView = ({ updateItem, deleteData, ...rest }) => {
+const RecordView = ({ updateItem, deleteData, ...rest }) => {
   return (
-    <div>
+    <div className={css.view} style={rest.style}>
+
       <div className={css.bar}>
         <div className={css.left}>
           <Link
             className={css.delete}
             to={rest.back}
-            onClick={_ => deleteData(dependents)} />
+            onClick={_ => deleteData(rest.dependents)} />
         </div>
         <div className={css.header} />
         <div className={css.right}>
@@ -30,6 +30,7 @@ export const RecordView = ({ updateItem, deleteData, ...rest }) => {
           items={rest.children}
           onSubmit={updateItem} />
       </div>
+
     </div>
   )
 }
@@ -53,4 +54,4 @@ const ChildRecords = ({ items, onSubmit }) => {
 }
 
 
-export default connect(null, { updateItem, deleteData })(RecordView)
+export default RecordView
