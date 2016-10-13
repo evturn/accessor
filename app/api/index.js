@@ -43,6 +43,11 @@ export const API = {
       : false
   },
 
+  remove(id) {
+    const user = firebase.auth().currentUser
+    return firebase.database().ref(`records/${user.uid}`).child(id).remove()
+  },
+
   ref(x) {
     return firebase.database().ref(x)
   },

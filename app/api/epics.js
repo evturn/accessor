@@ -79,15 +79,14 @@ const epics = [
       )
   },
 
-  function removeRecord(action$) {
-    return action$.ofType(Types.REMOVE_RECORD)
-      .pluck('payload', 'id')
-      .map(id => API.rootRef().child(id).remove())
+  function deleteData(action$) {
+    return action$.ofType(Types.DELETE_DATA)
+      .pluck('payload', 'ids')
+      .mergeMap(ids => ids.map(API.remove))
       .map(Actions.OK200)
   }
 
 ]
-
 
 function mapDataToList(x) {
   return Object.keys(x).reduce((acc, key) => {

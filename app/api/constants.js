@@ -1,36 +1,26 @@
 export { EPIC_END } from 'redux-observable'
-export const INIT              = 'auth/INIT'
-export const INIT_AUTH         = 'auth/INIT_AUTH'
-export const AUTH_STATE_CHANGE = 'auth/AUTH_STATE_CHANGE'
 
-export const PROVIDER_SIGN_IN  = 'auth/PROVIDER_SIGN_IN'
-export const PROVIDER_SIGN_OUT = 'auth/PROVIDER_SIGN_OUT'
-export const UNAUTHORIZE       = 'auth/UNAUTHORIZE'
-export const AUTHORIZE         = 'auth/AUTHORIZE'
+export const INIT              = 'INIT'
+export const INIT_AUTH         = 'INIT_AUTH'
 
-export const LOGIN_SUCCESS     = 'auth/LOGIN_SUCCESS'
-export const LOGIN_ERROR       = 'auth/LOGIN_ERROR'
+export const AUTHORIZE         = 'AUTHORIZE'
+export const UNAUTHORIZE       = 'UNAUTHORIZE'
+export const AUTH_STATE_CHANGE = 'AUTH_STATE_CHANGE'
 
-export const LOGOUT            = 'auth/LOGOUT'
-export const LOGOUT_ERROR      = 'auth/LOGOUT_ERROR'
+export const PROVIDER_SIGN_IN  = 'PROVIDER_SIGN_IN'
+export const PROVIDER_SIGN_OUT = 'PROVIDER_SIGN_OUT'
 
-export const LAUNCH_MODAL      = 'ui/LAUNCH_MODAL'
-export const CLOSE_MODAL       = 'ui/CLOSE_MODAL'
+export const OK_200            = 'OK_200'
 
-export const ASSEMBLE_DATA     = 'root/ASSEMBLE_DATA'
-export const LOAD_USER         = 'root/LOAD_USER'
-export const CREATE_USER       = 'root/CREATE_USER'
-export const CREATE_RECORD     = 'root/CREATE_RECORD'
-export const REMOVE_RECORD     = 'root/REMOVE_RECORD'
-export const UPDATE_SUCCESS   = 'root/UPDATE_SUCCESS'
+export const LOAD_USER         = 'LOAD_USER'
 
-export const CHANGE_TARGET     = '@@accessor/Navigator/CHANGE_TARGET'
+export const ASSEMBLE_DATA     = 'ASSEMBLE_DATA'
+export const UPDATE_SUCCESS    = 'UPDATE_SUCCESS'
 
-export const LOCATION_CHANGE  = 'root/LOCATION_CHANGE'
-export const LOCATION_WILL_CHANGE = 'record/LOCATION_WILL_CHANGE'
-export const CURRENT_RECORD   = 'record/CURRENT_RECORD'
-export const UPDATE_RECORD    = 'record/UPDATE_RECORD'
-export const UPDATE_ERROR     = 'root/UPDATE_ERROR'
-export const CHANGE_LAYOUT    = 'card/CHANGE_LAYOUT'
+export const CREATE_RECORD     = 'CREATE_RECORD'
+export const DELETE_DATA       = 'DELETE_DATA'
 
-export const OK_200           = 'root/OK_200'
+export const LAUNCH_MODAL      = 'LAUNCH_MODAL'
+export const CLOSE_MODAL       = 'CLOSE_MODAL'
+
+export const CREATE_USER       = 'CREATE_USER'

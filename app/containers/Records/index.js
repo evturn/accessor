@@ -4,14 +4,10 @@ import Link from 'react-router/Link'
 import Match from 'react-router/Match'
 import RecordView from 'containers/RecordView'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { removeRecord } from 'api/actions'
+import { deleteData } from 'api/actions'
 import css from './style.css'
 
-export const Records = ({ items, removeRecord, user, loading }) => {
-  function removeRecurse(dependents) {
-    return _ => dependents.map(removeRecord)
-  }
-
+export const Records = ({ items, deleteData, user, loading }) => {
   return (
     <div className={css.records}>
       {loading
@@ -24,7 +20,7 @@ export const Records = ({ items, removeRecord, user, loading }) => {
                     {x.title}
                   </div>
                 </Link>
-                <div className={css.remove} onClick={removeRecurse(x.dependents)} />
+                <div className={css.remove} onClick={_ => deleteData(x.dependents)} />
               </li>
             )}
           </ul>
@@ -39,5 +35,5 @@ export default connect(
     items: state.data.items,
     loading: state.auth.loading,
   }),
-  { removeRecord }
+  { deleteData }
 )(Records)
