@@ -9,7 +9,7 @@
   font-family: 'Helvetica Neue';
   font-weight: 200;
   transition: 0.3s;
-  z-index: 9;
+  z-index: 11;
 }
 
 .hide {

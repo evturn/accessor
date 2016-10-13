@@ -34,11 +34,11 @@
   position: absolute;
   right: 0;
   top: 0;
-  padding: 14px 20px;
-  font-size: 15px;
+  padding: 5px 20px;
+  font-size: 26px;
   text-align: center;
 }
 
 .logout:after {
-  content: "Logout";
+  content: "☉";
 }

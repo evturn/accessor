@@ -64,13 +64,13 @@
   margin: 0;
   font-weight: 300;
   color: #fff;
-  font-size: 16px;
+  font-size: 36px;
   line-height: 50px;
-  background-color: #039BE5;
+  background-color: #0288D1;
 }
 
 .title:after {
-  content: "Record";
+  content: "⌁";
 }
 
 .items {

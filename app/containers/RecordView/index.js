@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
+import Button from 'components/Button'
 import { deleteData } from 'api/actions'
 import css from './style.css'
 
@@ -10,13 +11,17 @@ export const RecordView = ({ children, parent, dependents, deleteData, title, ba
     <div>
       <div className={css.bar}>
         <div className={css.left}>
-          <div className={css.delete} onClick={_ => deleteData(dependents)} />
+          <Link
+            className={css.delete}
+            to={back}
+            onClick={_ => deleteData(dependents)} />
         </div>
         <div className={css.title} />
         <div className={css.right}>
           <Link className={css.back} to={back}>Back</Link>
         </div>
       </div>
+
       <div className={css.body}>
         <input className={css.input} defaultValue={title} />
         <div className={css.label} />
