@@ -151,11 +151,7 @@ function getParentRecurse(items) {
 
 function getById(items) {
   return items.reduce((acc, item) => {
-    acc[item.id] = {
-      ...item,
-      children: items.filter(x => x.parent === item.id),
-      parent: items.filter(x => x.parent && x.id === item.parent)[0] || false,
-    }
+    acc[item.id] = item
     return acc
   }, {})
 }

@@ -4,11 +4,11 @@ import Match from 'react-router/Match'
 import RecordView from 'containers/RecordView'
 import { updateItem, deleteData } from 'api/actions'
 
-export const RecordMatches = ({ updateItem, deleteData, branches }) => {
+export const RecordMatches = ({ updateItem, deleteData, byId }) => {
   return (
     <div>
       <Match pattern=":id" children={({ params, ...rest }) => {
-        const item = branches[params.id].filter(x => x.id === params.id)[0]
+        const item = byId[params.id]
         return (
           <RecordView
             {...item}
@@ -23,7 +23,7 @@ export const RecordMatches = ({ updateItem, deleteData, branches }) => {
 
 export default connect(
   state => ({
-    branches: state.data.branches
+    byId: state.data.byId
   }),
   { updateItem, deleteData }
 )(RecordMatches)

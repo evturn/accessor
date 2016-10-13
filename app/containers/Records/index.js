@@ -10,7 +10,7 @@ export const Records = ({ items, deleteData, user, loading }) => {
     <div className={css.records}>
       {loading
         ? <LoadingIndicator />
-        : <ul>
+        :  <ul>
             {items.map(x =>
               <li key={x.id} className={css.item}>
                 <Link className={css.link} to={x.url}>
