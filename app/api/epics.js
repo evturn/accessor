@@ -91,7 +91,13 @@ const epics = [
       .pluck('payload', 'ids')
       .mergeMap(ids => ids.map(API.remove))
       .map(Actions.deleteSuccess)
-  }
+  },
+
+  function closeModal(action$) {
+    return action$.ofType(Types.CLOSE_MODAL)
+      .delay(400)
+      .map(Actions.unmountModal)
+  },
 
 ]
 

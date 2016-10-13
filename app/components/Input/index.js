@@ -9,48 +9,68 @@ class Input extends Component {
     this.state = {
       defaultValue: props.value || '',
       formValue: props.value || '',
+      onSubmit: props.onSubmit,
     }
   }
 
-  submit() {
-    const value = this.state.formValue.trim()
-    if (value !== '') {
-      this.setState({defaultValue: this.state.formValue})
-      this.props.onSubmit(this.state.formValue)
-    } else {
-      this.setState({formValue: this.state.defaultValue})
-    }
+  componentWillReceiveProps(nextProps) {
+    const { value, onSubmit } = nextProps
+    this.setState({
+      defaultValue: value || '',
+      formValue: value || '',
+      onSubmit,
+    })
   }
 
-  edit(e) {
+  submit(value) {
+    const { onSubmit } = this.state
+    this.setState({
+      defaultValue: value,
+      formValue: value,
+    })
+    onSubmit(value)
+  }
+
+  onKeyPress(e) {
+    const { isModal } = this.props
+    if (!isModal) {
+      this.setState({formValue: e.target.value})
+    }
     if (e.charCode === 13) {
       this.input.blur()
-    } else {
-      this.setState({ formValue: e.target.value })
+    }
+  }
+
+  onBlur(e) {
+    if (e.target.value && e.target.value.trim() !== '') {
+      ::this.submit(e.target.value.trim())
     }
   }
 
   getBackingInstance(input) {
     this.input = input
-
-    if (
-      this.props.on
-      && this.input !== null
-    ) {
+    if (this.props.on && this.props.isModal && this.input !== null) {
       this.input.focus()
     }
   }
 
   render() {
+    const { isModal, className } = this.props
+    const { formValue } = this.state
+    const control = !isModal
+      ? {value: formValue, onChange: ::this.onKeyPress}
+      : {defaultValue: formValue}
+    const props = {
+      className,
+      onBlur: ::this.onBlur,
+      onKeyPress: ::this.onKeyPress,
+      ref: ::this.getBackingInstance,
+      type: 'text',
+      ...control,
+    }
+
     return (
-      <input
-        className={this.props.className}
-        onBlur={::this.submit}
-        onChange={::this.edit}
-        onKeyPress={::this.edit}
-        value={this.state.formValue}
-        ref={::this.getBackingInstance}
-      />
+      <input {...props } />
     )
   }
 }

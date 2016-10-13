@@ -111,6 +111,10 @@ export const closeModal = _ => ({
   type: Types.CLOSE_MODAL
 })
 
+export const unmountModal = _ => ({
+  type: Types.UNMOUNT_MODAL
+})
+
 export const renderInput = _ => ({
   type: Types.RENDER_INPUT
 })

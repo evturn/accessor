@@ -2,40 +2,48 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Input from 'components/Input'
+import { updateItem, deleteData } from 'api/actions'
 import css from './style.css'
 
-const RecordView = ({ updateItem, deleteData, ...rest }) => {
+const RecordView = ({ updateItem, deleteData, ...props }) => {
   return (
-    <div className={css.view} style={rest.style}>
-
-      <div className={css.bar}>
-        <div className={css.left}>
-          <Link
-            className={css.delete}
-            to={rest.back}
-            onClick={_ => deleteData(rest.dependents)} />
-        </div>
-        <div className={css.header} />
-        <div className={css.right}>
-          <Link className={css.back} to={rest.back}>Back</Link>
-        </div>
-      </div>
-
+    <div className={css.view}>
+      <RecordNav {...props} onDelete={deleteData} />
       <div className={css.body}>
-        <Input
-          className={css.title}
-          value={rest.title}
-          onSubmit={val => updateItem({...rest, title: val})} />
-        <ChildRecords
-          items={rest.children}
-          onSubmit={updateItem} />
+        <RecordTitle {...props} onSubmit={updateItem} />
+        <ChildRecords items={props.children} onSubmit={updateItem} />
       </div>
-
     </div>
   )
 }
 
-const ChildRecords = ({ items, onSubmit }) => {
+const RecordNav = ({ onDelete, ...props }) => {
+  return (
+    <div className={css.bar}>
+      <div className={css.left}>
+        <Link
+          className={css.delete}
+          to={props.back}
+          onClick={_ => onDelete(props.dependents)} />
+      </div>
+      <div className={css.header} />
+      <div className={css.right}>
+        <Link
+          className={css.back}
+          to={props.back}>Back</Link>
+      </div>
+    </div>
+  )
+}
+
+const RecordTitle = ({ onSubmit, ...props }) => (
+  <Input
+    className={css.title}
+    value={props.title}
+    onSubmit={val => onSubmit({...props, title: val})} />
+)
+
+const ChildRecords = ({ onSubmit, items }) => {
   if (!items.length) { return null }
   return (
     <div className={css.items}>
@@ -53,5 +61,7 @@ const ChildRecords = ({ items, onSubmit }) => {
   )
 }
 
-
-export default RecordView
+export default connect(
+  null,
+  { updateItem, deleteData }
+)(RecordView)

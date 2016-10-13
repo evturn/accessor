@@ -27,6 +27,7 @@ export const DELETE_SUCCESS    = 'DELETE_SUCCESS'
 
 export const LAUNCH_MODAL      = 'LAUNCH_MODAL'
 export const CLOSE_MODAL       = 'CLOSE_MODAL'
+export const UNMOUNT_MODAL     = 'UNMOUNT_MODAL'
 export const RENDER_INPUT      = 'RENDER_INPUT'
 
 export const CREATE_USER       = 'CREATE_USER'

@@ -2,31 +2,37 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Match from 'react-router/Match'
 import Link from 'react-router/Link'
+import CreateRecordModal from 'containers/CreateRecordModal'
 import { launchModal } from 'api/actions'
 import css from './style.css'
 
 const Menu = ({ className, onClick }) => {
   return (
-    <div className={className}>
-      <ul className={css.ul}>
-        <li className={css.li}>◉</li>
-        <li className={css.lg} onClick={onClick} />
-        <li className={css.li}><Link className={css.link} to="/" >⏏</Link></li>
-      </ul>
-    </div>
+    <ul className={css.ul}>
+      <li className={css.li}>◉</li>
+      <li className={css.lg} onClick={onClick} />
+      <li className={css.li}><Link className={css.link} to="/" >⏏</Link></li>
+    </ul>
   )
 }
 
-const MenuBar = ({ launchModal, addSubRecord }) => {
+const MenuBar = ({ launchModal, unmounted }) => {
   return (
-    <Match pattern="/" children={({ location }) =>
-      <Menu
-        className={location.pathname.length > 1 ? css.view : css.main}
-        onClick={launchModal} />
-    } />
+    <Match pattern="/:route/:id" children={({ params }) => {
+      return (
+        <div className={params ? css.view : css.main}>
+          <Menu onClick={launchModal} />
+          {!unmounted ? <CreateRecordModal parent={params ? params.id : false} /> : null}
+        </div>
+      )
+    }} />
   )
 }
 
-export default connect(null, {
-  launchModal,
-})(MenuBar)
+export default connect(
+  state => ({
+    open: state.ui.modal,
+    unmounted: state.ui.unmounted,
+  }),
+  { launchModal }
+)(MenuBar)

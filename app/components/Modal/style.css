@@ -8,6 +8,7 @@
   height: 100vh;
   font-family: 'Helvetica Neue';
   font-weight: 200;
+  transition-delay: 0.2s;
   transition: 0.3s;
   z-index: 11;
 }

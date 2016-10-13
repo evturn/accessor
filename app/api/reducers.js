@@ -17,6 +17,7 @@ const dataReducer = (state=initialData, action) => {
     }
 
     case Types.CREATE_SUCCESS:
+    case Types.UPDATE_SUCCESS:
     case Types.DELETE_SUCCESS:
       return Object.assign({}, state, {
         items: state._items
@@ -30,18 +31,24 @@ const dataReducer = (state=initialData, action) => {
   }
 }
 
-const initialUI = { modal: false }
+const initialUI = { modal: false, unmounted: true }
 const uiReducer = (state=initialUI, action) => {
   switch(action.type) {
 
+    case Types.UNMOUNT_MODAL:
+      return Object.assign({}, state, {
+        unmounted: true,
+      })
+
     case Types.LAUNCH_MODAL:
       return Object.assign({}, state, {
-        modal: true
+        modal: true,
+        unmounted: false,
       })
 
     case Types.CLOSE_MODAL:
       return Object.assign({}, state, {
-        modal: false
+        modal: false,
       })
 
     default:
