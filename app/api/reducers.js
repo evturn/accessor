@@ -1,15 +1,26 @@
 import { combineReducers } from 'redux'
 import * as Types from 'api/constants'
 
-const initialData = { items: [] }
+const initialData = { items: [], initialized: false }
 const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
-    case Types.UPDATE_SUCCESS:
-      const data = action.payload.data
-      return !!data
-        ? Object.assign({}, state, {...data})
-        : initialData
+    case Types.ASSEMBLED: {
+      const { data } = action.payload
+      const dataState = !!data ? data : initialData
+
+      return Object.assign({}, state, {
+        ...dataState,
+        items: !state.initialized ? dataState._items : state.items,
+        initialized: true,
+      })
+    }
+
+    case Types.CREATE_SUCCESS:
+    case Types.DELETE_SUCCESS:
+      return Object.assign({}, state, {
+        items: state._items
+      })
 
     case Types.UNAUTHORIZE:
       return initialData
@@ -24,10 +35,14 @@ const uiReducer = (state=initialUI, action) => {
   switch(action.type) {
 
     case Types.LAUNCH_MODAL:
-      return Object.assign({}, state, { modal: true })
+      return Object.assign({}, state, {
+        modal: true
+      })
 
     case Types.CLOSE_MODAL:
-      return Object.assign({}, state, { modal: false })
+      return Object.assign({}, state, {
+        modal: false
+      })
 
     default:
       return state

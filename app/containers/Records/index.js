@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Match from 'react-router/Match'
-import RecordView from 'containers/RecordView'
+import RecordMatches from 'containers/RecordMatches'
 import LoadingIndicator from 'components/LoadingIndicator'
 import { deleteData } from 'api/actions'
 import css from './style.css'
@@ -25,7 +25,7 @@ export const Records = ({ items, deleteData, user, loading }) => {
             )}
           </ul>
       }
-      <Match pattern="/records/:id" component={RecordView} />
+      <Match pattern="/records/:id" component={RecordMatches} />
     </div>
   )
 }

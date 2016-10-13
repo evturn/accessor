@@ -19,6 +19,35 @@ const epics = [
       .map(x => x ? Actions.authorize() : Actions.unauthorize())
   },
 
+  function listenForChanges(action$) {
+    return action$.ofType(Types.AUTHORIZE)
+      .switchMapTo(Observe$.create(API.onceValue))
+      .map(x => !!x.val())
+      .map(x => x ? Actions.loadUser() : Actions.createUser())
+  },
+
+  function loadUser(action$) {
+    return action$.ofType(Types.LOAD_USER)
+      .map(API.rootRef)
+      .switchMapTo(Observe$.create(API.onValue))
+      .map(x => x.val())
+      .map(Actions.assembleData)
+  },
+
+  function assembleData(action$) {
+    return action$.ofType(Types.ASSEMBLE_DATA)
+      .pluck('payload', 'data')
+      .switchMap(x => Observe$.of(x)
+        .map(mapDataToList)
+        .map(x => ({
+          _items: getChildrenRecurse(x).map(getDependentsRecurse),
+          branches: getParentRecurse(x),
+          byId: getById(x),
+        }))
+      )
+      .map(Actions.assembled)
+  },
+
   function providerSignIn(action$) {
     return action$.ofType(Types.PROVIDER_SIGN_IN)
       .pluck('payload', 'provider')
@@ -35,37 +64,8 @@ const epics = [
       .catch(Actions.logoutError)
   },
 
-  function listenForChanges(action$) {
-    return action$.ofType(Types.AUTHORIZE)
-      .switchMapTo(Observe$.create(API.onceValue))
-      .map(x => !!x.val())
-      .map(x => x ? Actions.loadUser() : Actions.createUser())
-  },
-
-  function loadUser(action$) {
-    return action$.ofType(Types.LOAD_USER)
-      .map(API.rootRef)
-      .switchMapTo(Observe$.create(API.onValue))
-      .map(x => x.val())
-      .map(Actions.assembleData)
-  },
-
   function createUser(action$) {
     return action$.ofType(Types.CREATE_USER)
-      .map(Actions.updateSuccess)
-  },
-
-  function assembleData(action$) {
-    return action$.ofType(Types.ASSEMBLE_DATA)
-      .pluck('payload', 'data')
-      .switchMap(x => Observe$.of(x)
-        .map(mapDataToList)
-        .map(x => ({
-          items: getChildrenRecurse(x).map(getDependentsRecurse),
-          branches: getParentRecurse(x),
-          byId: getById(x),
-        }))
-      )
       .map(Actions.updateSuccess)
   },
 
@@ -75,7 +75,7 @@ const epics = [
       .map(x => ({data: x, ref: API.rootRef()}))
       .switchMap(({ data, ref }) => Observe$.of(ref.push().key)
         .map(key => ref.update({[key]: {...data, id: key, url: `records/${key}`}}))
-        .map(Actions.OK200)
+        .map(Actions.createSuccess)
       )
   },
 
@@ -83,7 +83,7 @@ const epics = [
     return action$.ofType(Types.DELETE_DATA)
       .pluck('payload', 'ids')
       .mergeMap(ids => ids.map(API.remove))
-      .map(Actions.OK200)
+      .map(Actions.deleteSuccess)
   }
 
 ]

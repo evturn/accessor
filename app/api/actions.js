@@ -75,18 +75,27 @@ export const assembleData = data => ({
   payload: { data }
 })
 
+export const assembled = data => ({
+  type: Types.ASSEMBLED,
+  payload: { data }
+})
+
 export const createRecord = data => ({
   type: Types.CREATE_RECORD,
   payload: { data }
 })
 
-export const OK200 = _ => ({
-  type: Types.OK_200
+export const createSuccess = _ => ({
+  type: Types.CREATE_SUCCESS
 })
 
 export const deleteData = ids => ({
   type: Types.DELETE_DATA,
   payload: { ids }
+})
+
+export const deleteSuccess = _ => ({
+  type: Types.DELETE_SUCCESS
 })
 
 export const updateSuccess = data => ({

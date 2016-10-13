@@ -15,10 +15,14 @@ export const OK_200            = 'OK_200'
 export const LOAD_USER         = 'LOAD_USER'
 
 export const ASSEMBLE_DATA     = 'ASSEMBLE_DATA'
+export const ASSEMBLED         = 'ASSEMBLED'
+
 export const UPDATE_SUCCESS    = 'UPDATE_SUCCESS'
 
 export const CREATE_RECORD     = 'CREATE_RECORD'
+export const CREATE_SUCCESS    = 'CREATE_SUCCESS'
 export const DELETE_DATA       = 'DELETE_DATA'
+export const DELETE_SUCCESS    = 'DELETE_SUCCESS'
 
 export const LAUNCH_MODAL      = 'LAUNCH_MODAL'
 export const CLOSE_MODAL       = 'CLOSE_MODAL'

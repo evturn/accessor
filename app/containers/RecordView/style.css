@@ -24,7 +24,21 @@
   width: 100%
 }
 
-.close {
+.bar-btn {
+  font-size: 15px;
+  color: #fff;
+}
+
+.left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 14px 20px;
+  text-align: center;
+  z-index: 2;
+}
+
+.right {
   position: absolute;
   right: 0;
   top: 0;
@@ -33,9 +47,16 @@
   z-index: 2;
 }
 
+.delete {
+  composes: bar-btn;
+}
+
+.delete:after {
+  content: "Delete";
+}
+
 .back {
-  font-size: 15px;
-  color: #fff;
+  composes: bar-btn;
 }
 
 .title {
