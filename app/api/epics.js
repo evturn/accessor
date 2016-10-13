@@ -74,9 +74,16 @@ const epics = [
       .pluck('payload', 'data')
       .map(x => ({data: x, ref: API.rootRef()}))
       .switchMap(({ data, ref }) => Observe$.of(ref.push().key)
-        .map(key => ref.update({[key]: {...data, id: key, url: `records/${key}`}}))
+        .map(key => ref.update({[key]: {...data, id: key, url: `/records/${key}`}}))
         .map(Actions.createSuccess)
       )
+  },
+
+  function updateItem(action$) {
+    return action$.ofType(Types.UPDATE_ITEM)
+      .pluck('payload', 'item')
+      .map(x => API.rootRef().child(x.id).update(x))
+      .map(Actions.updateSuccess)
   },
 
   function deleteData(action$) {

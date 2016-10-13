@@ -1,25 +1,30 @@
 import React, { Component } from 'react'
-
+import { connect } from 'react-redux'
 import css from './styles.css'
 
-class InputField extends Component {
+class Input extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
+      defaultValue: props.value || '',
       formValue: props.value || '',
     }
   }
 
   submit() {
-    this.props.onSubmit(this.state.formValue)
-    this.setState({ formValue: '' })
-    this.input.value = ''
+    const value = this.state.formValue.trim()
+    if (value !== '') {
+      this.setState({defaultValue: this.state.formValue})
+      this.props.onSubmit(this.state.formValue)
+    } else {
+      this.setState({formValue: this.state.defaultValue})
+    }
   }
 
   edit(e) {
     if (e.charCode === 13) {
-      this.submit()
+      this.input.blur()
     } else {
       this.setState({ formValue: e.target.value })
     }
@@ -28,7 +33,10 @@ class InputField extends Component {
   getBackingInstance(input) {
     this.input = input
 
-    if (this.input !== null && !this.props.preventAutoFocus) {
+    if (
+      this.props.on
+      && this.input !== null
+    ) {
       this.input.focus()
     }
   }
@@ -40,11 +48,15 @@ class InputField extends Component {
         onBlur={::this.submit}
         onChange={::this.edit}
         onKeyPress={::this.edit}
-        defaultValue={this.state.formValue}
+        value={this.state.formValue}
         ref={::this.getBackingInstance}
       />
     )
   }
 }
 
-export default InputField
+export default connect(
+  state => ({
+    on: state.ui.modal,
+  })
+)(Input)

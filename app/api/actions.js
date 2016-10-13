@@ -51,14 +51,6 @@ export const logoutError = error => ({
   payload: { error }
 })
 
-export const launchModal = _ => ({
-  type: Types.LAUNCH_MODAL
-})
-
-export const closeModal = _ => ({
-  type: Types.CLOSE_MODAL
-})
-
 export const loadUser = _ => ({
   type: Types.LOAD_USER
 })
@@ -98,36 +90,27 @@ export const deleteSuccess = _ => ({
   type: Types.DELETE_SUCCESS
 })
 
+export const updateItem = item => ({
+  type: Types.UPDATE_ITEM,
+  payload: { item }
+})
+
 export const updateSuccess = data => ({
   type: Types.UPDATE_SUCCESS,
   payload: { data }
 })
 
-export const locationChange = id => ({
-  type: Types.LOCATION_CHANGE,
-  payload: { id }
-})
-
-export const changeLayout = layout => ({
-  type: Types.CHANGE_LAYOUT
-})
-
-export const locationWillChange = id => ({
-  type: Types.LOCATION_WILL_CHANGE,
-  payload: { id }
-})
-
-export const currentRecord = record => ({
-  type: Types.CURRENT_RECORD,
-  payload: { record }
-})
-
-export const updateRecord = record => ({
-  type: Types.UPDATE_RECORD,
-  payload: { record }
-})
-
 ////////////////
-// EMPTY ACTION
+// UI
 ////////////////
-export const nothing = _ => Observable.empty()
+export const launchModal = _ => ({
+  type: Types.LAUNCH_MODAL
+})
+
+export const closeModal = _ => ({
+  type: Types.CLOSE_MODAL
+})
+
+export const renderInput = _ => ({
+  type: Types.RENDER_INPUT
+})

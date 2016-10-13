@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
-import Match from 'react-router/Match'
-import MenuBar from 'containers/MenuBar'
 import LoadingIndicator from 'components/LoadingIndicator'
 import { deleteData, openModal } from 'api/actions'
 import css from './style.css'
@@ -25,7 +23,6 @@ export const Records = ({ items, deleteData, user, loading }) => {
             )}
           </ul>
       }
-      <MenuBar onClick={openModal} />
     </div>
   )
 }
@@ -35,5 +32,5 @@ export default connect(
     items: state.data.items,
     loading: state.auth.loading,
   }),
-  { deleteData, openModal }
+  { deleteData }
 )(Records)

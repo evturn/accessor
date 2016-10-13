@@ -20,14 +20,13 @@ const Menu = ({ className, onClick }) => {
 const MenuBar = ({ launchModal, addSubRecord }) => {
   return (
     <Match pattern="/" children={({ location }) =>
-      location.pathname.length > 1
-        ? <Menu className={css.view} onClick={addSubRecord} />
-        : <Menu className={css.main} onClick={launchModal} />
+      <Menu
+        className={location.pathname.length > 1 ? css.view : css.main}
+        onClick={launchModal} />
     } />
   )
 }
 
 export default connect(null, {
   launchModal,
-  addSubRecord: _ => console.log('Woo!')
 })(MenuBar)

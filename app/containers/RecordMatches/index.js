@@ -17,10 +17,10 @@ const view = {
 
 export const RecordMatches = ({ items, ...rest }) => {
   const styles = items.map((x, i)=> ({
-      key: x.id,
-      data: x,
-      style: { right: 0 },
-    }))
+    key: x.id,
+    data: x,
+    style: { right: 0 },
+  }))
   return (
     <Match {...rest} children={({ matched, ...props}) => (
       <TransitionMotion
