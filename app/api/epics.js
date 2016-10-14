@@ -19,7 +19,7 @@ const epics = [
       .map(x => x ? Actions.authorize() : Actions.unauthorize())
   },
 
-  function listenForChanges(action$) {
+  function authorize(action$) {
     return action$.ofType(Types.AUTHORIZE)
       .switchMapTo(Observe$.create(API.onceValue))
       .map(x => !!x.val())
@@ -36,18 +36,6 @@ const epics = [
   function assembleData(action$) {
     return action$.ofType(Types.ASSEMBLE_DATA)
       .pluck('payload', 'data')
-      .switchMap(x => Observe$.of(x)
-        .map(x => ({ _data: x, _items: withDependents(withChildren(x))}))
-        .map(x => ({ _data: x._data, _items: getChildrenRecurse(x._items)}))
-        .map(x => ({
-          _data: x._data,
-          _items: x._items,
-          byId: x._data.reduce((acc, item) => {
-            acc[item.id] = item
-            return acc
-          }, {}),
-        }))
-      )
       .map(Actions.assembled)
   },
 
@@ -89,7 +77,7 @@ const epics = [
         .map(x => x.children.length ? x.children.map(x => x.id) : x.children)
         .map(children => ({...item, children}))
       )
-      .map(item => API.ref(`records/${API.currentUser().id}/${item.index}`).update(item))
+      .map(item => API.ref(`records/${API.currentUser().id}/${item.id}`).update(item))
       .map(Actions.updateSuccess)
   },
 
@@ -108,52 +96,6 @@ const epics = [
 
 ]
 
-function withChildren(items) {
-  return items.reduce((acc, x) => {
-    x.children = items
-      .filter(y => y.parent === x.id)
-      .map(x => x.id)
-    acc.push(x)
-    return acc
-  }, [])
-}
 
-function withDependents(items) {
-  function getChildId(id, acc) {
-    const item = items.filter(x => x.id === id)[0]
-    if (item && item.children) {
-      item.children.map(x => {
-        acc.push(x)
-        getChildId(x, acc)
-      })
-    }
-    acc.push(id)
-    return acc
-  }
-
-  return items.map(x => {
-    return {
-      ...x,
-      dependents: getChildId(x.id, [])
-    }
-  })
-}
-
-function getChildrenRecurse(items) {
-
-  function getChildren(item) {
-    const children = items.filter(x => x.parent === item.id)
-    item.children = children.length ? children.map(getChildren) : []
-    return item
-  }
-
-  return items.reduce((acc, x) => {
-    if (!x.parent) {
-      acc.push(getChildren(x))
-      return acc
-    }
-    return acc
-  }, [])
-}
 
 export default combineEpics(...epics)
