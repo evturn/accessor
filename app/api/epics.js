@@ -38,11 +38,15 @@ const epics = [
     return action$.ofType(Types.ASSEMBLE_DATA)
       .pluck('payload', 'data')
       .switchMap(x => Observe$.of(x)
-        .map(mapDataToList)
+        .map(x => ({ _data: x, _items: withDependents(withChildren(x))}))
+        .map(x => ({ _data: x._data, _items: getChildrenRecurse(x._items)}))
         .map(x => ({
-          _items: getChildrenRecurse(x).map(getDependentsRecurse),
-          branches: getParentRecurse(x),
-          byId: getById(x),
+          _data: x._data,
+          _items: x._items,
+          byId: x._data.reduce((acc, item) => {
+            acc[item.id] = item
+            return acc
+          }, {}),
         }))
       )
       .map(Actions.assembled)
@@ -69,7 +73,7 @@ const epics = [
       .map(Actions.updateSuccess)
   },
 
-  function createRecord(action$) {
+  function createRecord(action$, store) {
     return action$.ofType(Types.CREATE_RECORD)
       .pluck('payload', 'data')
       .map(x => ({data: x, ref: API.rootRef()}))
@@ -101,11 +105,35 @@ const epics = [
 
 ]
 
-function mapDataToList(x) {
-  return Object.keys(x).reduce((acc, key) => {
-    acc.push({ ...x[key], id: key})
+function withChildren(items) {
+  return items.reduce((acc, x) => {
+    x.children = items
+      .filter(y => y.parent === x.id)
+      .map(x => x.id)
+    acc.push(x)
     return acc
   }, [])
+}
+
+function withDependents(items) {
+  function getChildId(id, acc) {
+    const item = items.filter(x => x.id === id)[0]
+    if (item && item.children) {
+      item.children.map(x => {
+        acc.push(x)
+        getChildId(x, acc)
+      })
+    }
+    acc.push(id)
+    return acc
+  }
+
+  return items.map(x => {
+    return {
+      ...x,
+      dependents: getChildId(x.id, [])
+    }
+  })
 }
 
 function getChildrenRecurse(items) {
@@ -123,43 +151,6 @@ function getChildrenRecurse(items) {
     }
     return acc
   }, [])
-}
-
-function getDependentsRecurse(item) {
-
-  function getChildId(item, acc) {
-    if (item.children.length) {
-      item.children.map(x => getChildId(x, acc))
-    }
-    acc.push(item.id)
-    return acc
-  }
-
-  item.dependents = getChildId(item, [])
-  return item
-}
-
-function getParentRecurse(items) {
-
-  function getParent(acc, item) {
-    if (item.parent) {
-      const parent = items.filter(x => x.id === item.parent)[0]
-      acc.push(parent)
-      getParent(acc, parent)
-    }
-    return acc
-  }
-  return items.reduce((acc, x) => {
-    acc[x.id] = getParent([x], x)
-    return acc
-  }, {})
-}
-
-function getById(items) {
-  return items.reduce((acc, item) => {
-    acc[item.id] = item
-    return acc
-  }, {})
 }
 
 export default combineEpics(...epics)

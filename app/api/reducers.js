@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { API } from 'api'
 import * as Types from 'api/constants'
 
 const initialData = { items: [], initialized: false }
