@@ -35,7 +35,7 @@ export const API = {
       .child(firebase.auth().currentUser.uid)
       .on('value', x => {
         const byId = x.val()
-        const _items = populateChildrenRecurse(withDependents(withChildren(convertMapToList(byId))))
+        const _items = populateChildrenRecurse(withChildren(convertMapToList(byId)))
         observer.next({ _items, byId })
       })
   },
@@ -86,37 +86,26 @@ function withChildren(items) {
     x.children = items
       .filter(y => y.parent === x.id)
       .map(x => x.id)
-    acc.push(x)
-    return acc
+    return acc.concat(x)
   }, [])
-}
+  .reduce((acc, x) => acc.concat({...x, dependents: getChildIds([], x.id)}), [])
 
-function withDependents(items) {
-  function getChildId(id, acc) {
+  function getChildIds(acc, id) {
     items
       .filter(x => x.id === id)
       .filter(x => x.children)
-      .map(x => x.children.map(y => getChildId(y, acc)))
-    acc.push(id)
-    return acc
+      .map(x => x.children)
+      .reduce(getChildIds, acc)
+    return acc.concat(id)
   }
-
-  return items.map(x => ({...x, dependents: getChildId(x.id, [])}))
 }
 
 function populateChildrenRecurse(items) {
+  return items.reduce((acc, x) => !x.parent ? acc.concat(getChildren(x)) : acc, [])
 
   function getChildren(item) {
     const children = items.filter(x => x.parent === item.id)
     item.children = children.length ? children.map(getChildren) : []
     return item
   }
-
-  return items.reduce((acc, x) => {
-    if (!x.parent) {
-      acc.push(getChildren(x))
-      return acc
-    }
-    return acc
-  }, [])
 }
