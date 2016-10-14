@@ -93,17 +93,15 @@ function withChildren(items) {
 
 function withDependents(items) {
   function getChildId(id, acc) {
-    const item = items.filter(x => x.id === id)[0]
-    if (item && item.children) {
-      item.children.map(x => getChildId(x, acc.concat([x])))
-    }
+    items
+      .filter(x => x.id === id)
+      .filter(x => x.children)
+      .map(x => x.children.map(y => getChildId(y, acc)))
     acc.push(id)
     return acc
   }
 
-  return items.map(x => {
-    return {...x, dependents: getChildId(x.id, [])}
-  })
+  return items.map(x => ({...x, dependents: getChildId(x.id, [])}))
 }
 
 function populateChildrenRecurse(items) {
