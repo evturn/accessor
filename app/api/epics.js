@@ -73,11 +73,7 @@ const epics = [
   function updateItem(action$) {
     return action$.ofType(Types.UPDATE_ITEM)
       .pluck('payload', 'item')
-      .switchMap(item => Observe$.of(item)
-        .map(x => x.children.length ? x.children.map(x => x.id) : x.children)
-        .map(children => ({...item, children}))
-      )
-      .map(item => API.ref(`records/${API.currentUser().id}/${item.id}`).update(item))
+      .map(API.update)
       .map(Actions.updateSuccess)
   },
 
@@ -95,7 +91,5 @@ const epics = [
   },
 
 ]
-
-
 
 export default combineEpics(...epics)

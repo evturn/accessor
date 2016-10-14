@@ -40,6 +40,13 @@ export const API = {
       })
   },
 
+  update(item) {
+    return firebase.database()
+      .ref(`records`)
+      .child(`${firebase.auth().currentUser.uid}/${item.id}`)
+      .update({...item, children: item.children.map(x => x.id)})
+  },
+
   currentUser() {
     const user = firebase.auth().currentUser
     return !!user
