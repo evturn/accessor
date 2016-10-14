@@ -5,42 +5,42 @@ import Input from 'components/Input'
 import { updateItem, deleteData } from 'api/actions'
 import css from './style.css'
 
-const RecordView = ({ updateItem, deleteData, ...props }) => {
+const RecordView = ({ updateItem, deleteData, item }) => {
   return (
     <div className={css.view}>
-      <RecordNav {...props} onDelete={deleteData} />
+      <RecordNav {...item} onDelete={deleteData} />
       <div className={css.body}>
-        <RecordTitle {...props} onSubmit={updateItem} />
-        <ChildRecords items={props.children} onSubmit={updateItem} />
+        <RecordTitle {...item} onSubmit={updateItem} />
+        <ChildRecords items={item.children} onSubmit={updateItem} />
       </div>
     </div>
   )
 }
 
-const RecordNav = ({ onDelete, ...props }) => {
+const RecordNav = ({ onDelete, ...item }) => {
   return (
     <div className={css.bar}>
       <div className={css.left}>
         <Link
           className={css.delete}
-          to={props.back}
-          onClick={_ => onDelete(props.dependents)} />
+          to={item.back}
+          onClick={_ => onDelete(item.dependents)} />
       </div>
       <div className={css.header} />
       <div className={css.right}>
         <Link
           className={css.back}
-          to={props.back}>Back</Link>
+          to={item.back}>Back</Link>
       </div>
     </div>
   )
 }
 
-const RecordTitle = ({ onSubmit, ...props }) => (
+const RecordTitle = ({ onSubmit, ...item }) => (
   <Input
     className={css.title}
-    value={props.title}
-    onSubmit={val => onSubmit({...props, title: val})} />
+    value={item.title}
+    onSubmit={val => onSubmit({...item, title: val})} />
 )
 
 const ChildRecords = ({ onSubmit, items }) => {
@@ -62,6 +62,14 @@ const ChildRecords = ({ onSubmit, items }) => {
 }
 
 export default connect(
-  null,
+  (state, ownProps) => {
+    const { byId, items } = state.data
+    const { id } = ownProps.params
+    const item = byId[id]
+    const children = item.children.length ? item.children.map(x => byId[x]) : item.children
+    return {
+      item: {...item, children}
+    }
+  },
   { updateItem, deleteData }
 )(RecordView)

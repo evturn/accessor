@@ -30,7 +30,6 @@ const epics = [
     return action$.ofType(Types.LOAD_USER)
       .map(API.rootRef)
       .switchMapTo(Observe$.create(API.onValue))
-      .map(x => x.val())
       .map(Actions.assembleData)
   },
 
@@ -86,7 +85,11 @@ const epics = [
   function updateItem(action$) {
     return action$.ofType(Types.UPDATE_ITEM)
       .pluck('payload', 'item')
-      .map(x => API.rootRef().child(x.id).update(x))
+      .switchMap(item => Observe$.of(item)
+        .map(x => x.children.length ? x.children.map(x => x.id) : x.children)
+        .map(children => ({...item, children}))
+      )
+      .map(item => API.ref(`records/${API.currentUser().id}/${item.index}`).update(item))
       .map(Actions.updateSuccess)
   },
 

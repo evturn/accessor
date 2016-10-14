@@ -33,7 +33,15 @@ export const API = {
     const key = firebase.auth().currentUser.uid
     firebase.database()
       .ref(`records/${key}`)
-      .on('value', x => observer.next(x))
+      .on('value', data => {
+        const list = data.val()
+        const items = Object.keys(list).reduce((acc, x, i) => {
+            const item = list[x]
+            acc.push({...item, index: i})
+            return acc
+        }, [])
+        observer.next(items)
+      })
   },
 
   currentUser() {
