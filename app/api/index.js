@@ -42,18 +42,15 @@ export const API = {
       .ref(`records`)
       .child(firebase.auth().currentUser.uid)
       .on('value', x => {
-        const unwrapped = x.val()
-        const a = convertHashMapToList(unwrapped)
-        const b = a.map(x => addChildrenProp(a, x))
-        const c = b.map(x => addNodesProp(b, x))
-
+        const data = assembleData(x)
         observer.next({
-          subtrees: getSubTrees(c),
+          subtrees: getSubTrees(data),
           lookup: {
-            byId: createIdLookup(c),
-            children: createChildLookup(c),
-            nodes: createNodesLookup(c)
-        } })
+            byId: createIdLookup(data),
+            children: createChildLookup(data),
+            nodes: createNodesLookup(data)
+          }
+        })
       })
   },
 
@@ -64,7 +61,6 @@ export const API = {
       .once('value')
       .then(x => observer.next(x))
   },
-
 
   providerSignIn(provider) {
     const services = {
@@ -77,6 +73,13 @@ export const API = {
   providerSignOut() {
     return firebase.auth().signOut()
   }
+}
+
+function assembleData(snapshot) {
+  const unwrapped = snapshot.val()
+  const a = convertHashMapToList(unwrapped)
+  const b = a.map(x => addChildrenProp(a, x))
+  return b.map(x => addNodesProp(b, x))
 }
 
 function convertHashMapToList(hashmap) {
@@ -118,8 +121,10 @@ function createNodesLookup(list) {
 }
 
 function createChildLookup(list) {
-  return list.map((acc, x) => {
-    acc[x.id] = list.filter(y => y.parent === x.id)
+  return list.reduce((acc, x) => {
+    acc[x.id] = list
+      .filter(y => y.parent === x.id)
+      .map(x => x.id)
     return acc
   }, {})
 }

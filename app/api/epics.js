@@ -28,7 +28,6 @@ const epics = [
 
   function loadUser(action$) {
     return action$.ofType(Types.LOAD_USER)
-      .map(API.rootRef)
       .switchMapTo(Observe$.create(API.onValue))
       .map(Actions.assembleData)
   },
