@@ -40,6 +40,12 @@ export const API = {
       })
   },
 
+  create(item) {
+    const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
+    const id = ref.push().key
+    return ref.update({[id]: {...item, id, url: `/records/${id}`}})
+  },
+
   update(item) {
     return firebase.database()
       .ref(`records`)

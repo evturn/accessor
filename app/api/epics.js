@@ -63,11 +63,8 @@ const epics = [
   function createRecord(action$, store) {
     return action$.ofType(Types.CREATE_RECORD)
       .pluck('payload', 'data')
-      .map(x => ({data: x, ref: API.rootRef()}))
-      .switchMap(({ data, ref }) => Observe$.of(ref.push().key)
-        .map(key => ref.update({[key]: {...data, id: key, url: `/records/${key}`}}))
-        .map(Actions.createSuccess)
-      )
+      .map(API.create)
+      .map(Actions.createSuccess)
   },
 
   function updateItem(action$) {
