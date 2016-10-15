@@ -81,10 +81,12 @@ export const createSuccess = _ => ({
   type: Types.CREATE_SUCCESS
 })
 
-export const deleteData = ids => ({
-  type: Types.DELETE_DATA,
-  payload: { ids }
-})
+export const deleteNode = id => {
+  return {
+    type: Types.DELETE_NODE,
+    payload: { id }
+  }
+}
 
 export const deleteSuccess = _ => ({
   type: Types.DELETE_SUCCESS

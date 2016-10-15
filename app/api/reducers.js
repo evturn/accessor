@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import { API } from 'api'
 import * as Types from 'api/constants'
 
-const initialData = { items: [], initialized: false }
+const initialData = { subtrees: [], initialized: false }
 const dataReducer = (state=initialData, action) => {
   switch (action.type) {
 
@@ -12,7 +12,8 @@ const dataReducer = (state=initialData, action) => {
 
       return Object.assign({}, state, {
         ...dataState,
-        items: !state.initialized ? dataState._items : state.items,
+        _data: dataState,
+        subtrees: !state.initialized ? dataState.subtrees : state.subtrees,
         initialized: true,
       })
     }
@@ -21,7 +22,7 @@ const dataReducer = (state=initialData, action) => {
     case Types.UPDATE_SUCCESS:
     case Types.DELETE_SUCCESS:
       return Object.assign({}, state, {
-        items: state._items
+        ...state._data
       })
 
     case Types.UNAUTHORIZE:

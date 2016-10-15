@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { deleteData, openModal } from 'api/actions'
+import { deleteNode, openModal } from 'api/actions'
 import css from './style.css'
 
-export const Records = ({ items, deleteData, user, loading }) => {
+export const Records = ({ items, deleteNode, user, loading }) => {
   return (
     <div className={css.records}>
       {loading
@@ -18,7 +18,7 @@ export const Records = ({ items, deleteData, user, loading }) => {
                     {x.title}
                   </div>
                 </Link>
-                <div className={css.remove} onClick={_ => deleteData(x.dependents)} />
+                <div className={css.remove} onClick={_ => deleteNode(x.id)} />
               </li>
             )}
           </ul>
@@ -29,8 +29,8 @@ export const Records = ({ items, deleteData, user, loading }) => {
 
 export default connect(
   state => ({
-    items: state.data.items,
+    items: state.data.subtrees,
     loading: state.auth.loading,
   }),
-  { deleteData }
+  { deleteNode }
 )(Records)

@@ -28,7 +28,7 @@ export class CreateRecordModal extends Component {
         title: value,
         parent: parent,
         back: parent ? `/records/${parent}` : '/',
-        dependents: [],
+        nodes: [],
         children: [],
       })
       this.props.closeModal()

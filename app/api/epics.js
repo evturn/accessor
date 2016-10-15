@@ -67,17 +67,19 @@ const epics = [
       .map(Actions.createSuccess)
   },
 
-  function updateItem(action$) {
+  function updateItem(action$, store) {
     return action$.ofType(Types.UPDATE_ITEM)
       .pluck('payload', 'item')
+      .map(x => ({...x, children: store.getState().data.lookup.children[x.id] || []}))
       .map(API.update)
       .map(Actions.updateSuccess)
   },
 
-  function deleteData(action$) {
-    return action$.ofType(Types.DELETE_DATA)
-      .pluck('payload', 'ids')
-      .mergeMap(ids => ids.map(API.remove))
+  function deleteData(action$, store) {
+    return action$.ofType(Types.DELETE_NODE)
+      .pluck('payload', 'id')
+      .map(x => [x, ...store.getState().data.lookup.nodes[x]])
+      .map(API.remove)
       .map(Actions.deleteSuccess)
   },
 

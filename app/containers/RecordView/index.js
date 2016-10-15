@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Input from 'components/Input'
-import { updateItem, deleteData } from 'api/actions'
+import { updateItem, deleteNode } from 'api/actions'
 import css from './style.css'
 
-const RecordView = ({ updateItem, deleteData, item }) => {
+const RecordView = ({ updateItem, deleteNode, item }) => {
   return (
     <div className={css.view}>
-      <RecordNav {...item} onDelete={deleteData} />
+      <RecordNav {...item} onDelete={_ => deleteNode(item.id)} />
       <div className={css.body}>
         <RecordTitle {...item} onSubmit={updateItem} />
         <ChildRecords items={item.children} onSubmit={updateItem} />
@@ -21,10 +21,9 @@ const RecordNav = ({ onDelete, ...item }) => {
   return (
     <div className={css.bar}>
       <div className={css.left}>
-        <Link
+        <div
           className={css.delete}
-          to={item.back}
-          onClick={_ => onDelete(item.dependents)} />
+          onClick={onDelete} />
       </div>
       <div className={css.header} />
       <div className={css.right}>
@@ -44,7 +43,7 @@ const RecordTitle = ({ onSubmit, ...item }) => (
 )
 
 const ChildRecords = ({ onSubmit, items }) => {
-  if (!items.length) { return null }
+  if (!items) { return null }
   return (
     <div className={css.items}>
       <div className={css.records} />
@@ -63,13 +62,16 @@ const ChildRecords = ({ onSubmit, items }) => {
 
 export default connect(
   (state, ownProps) => {
-    const { byId, items } = state.data
+    const { lookup } = state.data
     const { id } = ownProps.params
-    const item = byId[id]
-    const children = item.children.length ? item.children.map(x => byId[x]) : item.children
+    const item = lookup.byId[id]
     return {
-      item: {...item, children}
+      item: {
+        ...item,
+        children: item.children.map(x => lookup.byId[x]),
+        nodes: lookup.nodes[id],
+      }
     }
   },
-  { updateItem, deleteData }
+  { updateItem, deleteNode }
 )(RecordView)
