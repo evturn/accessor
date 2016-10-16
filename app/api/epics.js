@@ -76,7 +76,8 @@ const epics = [
 
   function deleteData(action$, store) {
     return action$.ofType(Types.DELETE_NODE)
-      .pluck('payload', 'branchIds')
+      .pluck('payload', 'item', 'branchIds')
+      .delay(100)
       .map(API.remove)
       .map(Actions.deleteSuccess)
   },

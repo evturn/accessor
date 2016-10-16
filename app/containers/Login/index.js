@@ -6,9 +6,9 @@ import Button from 'components/Button'
 import { githubAuth, twitterAuth } from 'api/actions'
 import css from './style.css'
 
-export const Login = ({ githubAuth, twitterAuth, loading, redirect }) => {
-  if (redirect) {
-    return <Redirect to="/" />
+export const Login = ({ githubAuth, twitterAuth, loading, isAuthenticated, redirect }) => {
+  if (isAuthenticated) {
+    return <Redirect to={redirect} />
   }
 
   return (
@@ -26,7 +26,7 @@ export const Login = ({ githubAuth, twitterAuth, loading, redirect }) => {
 
 Login.propTypes = {
   loading: PropTypes.bool,
-  redirect: PropTypes.bool,
+  redirect: PropTypes.string,
   githubAuth: PropTypes.func.isRequired,
   twitterAuth: PropTypes.func.isRequired,
 }
@@ -34,6 +34,7 @@ Login.propTypes = {
 export default connect(
   state => ({
     loading: state.auth.loading,
+    isAuthenticated: state.auth.isAuthenticated,
     redirect: state.auth.redirect,
   }),
   { githubAuth, twitterAuth }

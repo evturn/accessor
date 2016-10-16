@@ -5,10 +5,10 @@ import Input from 'components/Input'
 import { updateItem, deleteNode } from 'api/actions'
 import css from './style.css'
 
-const RecordView = ({ updateItem, deleteNode, item }) => {
+const RecordView = ({ updateItem, deleteNode, redirect, item }) => {
   return (
     <div className={css.view}>
-      <RecordNav {...item} onDelete={_ => deleteNode(item.branchIds)} />
+      <RecordNav {...item} onDelete={_ => deleteNode(item)} />
       <div className={css.body}>
         <RecordTitle {...item} onSubmit={updateItem} />
         <ChildRecords items={item.children} onSubmit={updateItem} />
@@ -65,6 +65,7 @@ export default connect(
     const { hashmap } = state.data
     const { id } = ownProps.params
     return {
+      redirect: state.auth.redirect,
       item: hashmap[id].unwrap()
     }
   },

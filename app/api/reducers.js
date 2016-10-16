@@ -58,7 +58,7 @@ const uiReducer = (state=initialUI, action) => {
   }
 }
 
-const initialAuth = { loading: false, isAuthenticated: null, redirect: false }
+const initialAuth = { loading: false, isAuthenticated: null, redirect: '/login' }
 const authReducer = (state=initialAuth, action) => {
   switch (action.type) {
 
@@ -70,7 +70,22 @@ const authReducer = (state=initialAuth, action) => {
     case Types.INIT_AUTH:
       return Object.assign({}, state, {
         isAuthenticated: action.payload.user,
-        redirect: action.payload.user,
+        redirect: !!action.payload.user ? '/' : '/login',
+      })
+
+    case Types.LOAD_USER:
+      return Object.assign({}, state, {
+        redirect: false,
+      })
+
+    case Types.DELETE_NODE:
+      return Object.assign({}, state, {
+        redirect: action.payload.item.back,
+      })
+
+    case Types.DELETE_SUCCESS:
+      return Object.assign({}, state, {
+        redirect: false,
       })
 
     case Types.PROVIDER_SIGN_IN:
@@ -82,14 +97,14 @@ const authReducer = (state=initialAuth, action) => {
       return Object.assign({}, state, {
         loading: false,
         isAuthenticated: true,
-        redirect: true,
+        redirect: '/',
       })
 
     case Types.UNAUTHORIZE:
       return Object.assign({}, state, {
         loading: false,
         isAuthenticated: false,
-        redirect: false,
+        redirect: '/login',
       })
 
     default:

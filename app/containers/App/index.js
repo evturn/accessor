@@ -22,19 +22,21 @@ export class App extends Component {
         <MatchWhenAuthorized
           pattern="/"
           component={Home}
+          redirect={this.props.redirect}
           isAuthenticated={this.props.isAuthenticated} />
       </div>
     )
   }
 }
 
-const MatchWhenAuthorized = ({ component: C, isAuthenticated, ...rest }) => (
-  <Match {...rest} render={props => isAuthenticated ? <C {...props} /> : <Redirect to="/login" />} />
+const MatchWhenAuthorized = ({ component: C, isAuthenticated, redirect, ...rest }) => (
+  <Match {...rest} render={props => isAuthenticated ? <C {...props} /> : <Redirect to={redirect} />} />
 )
 
 export default connect(
   state => ({
     ...state,
+    redirect: state.auth.redirect,
     isAuthenticated: state.auth.isAuthenticated
   }),
   { init }
