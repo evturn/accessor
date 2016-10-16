@@ -62,15 +62,10 @@ const ChildRecords = ({ onSubmit, items }) => {
 
 export default connect(
   (state, ownProps) => {
-    const { lookup } = state.data
+    const { hashmap } = state.data
     const { id } = ownProps.params
-    const item = lookup.byId[id]
     return {
-      item: {
-        ...item,
-        children: item.children.map(x => lookup.byId[x]),
-        nodes: lookup.nodes[id],
-      }
+      item: hashmap[id].unwrap()
     }
   },
   { updateItem, deleteNode }

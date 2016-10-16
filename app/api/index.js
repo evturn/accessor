@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
+import assemble from './assemble'
 
 export const firebaseApp = firebase.initializeApp({
   apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
@@ -41,17 +42,7 @@ export const API = {
     firebase.database()
       .ref(`records`)
       .child(firebase.auth().currentUser.uid)
-      .on('value', x => {
-        const data = assembleData(x)
-        observer.next({
-          subtrees: getSubTrees(data),
-          lookup: {
-            byId: createIdLookup(data),
-            children: createChildLookup(data),
-            nodes: createNodesLookup(data)
-          }
-        })
-      })
+      .on('value', x => observer.next(assemble(x.val())))
   },
 
   onceValue(observer) {

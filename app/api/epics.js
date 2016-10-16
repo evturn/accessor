@@ -69,7 +69,7 @@ const epics = [
   function updateItem(action$, store) {
     return action$.ofType(Types.UPDATE_ITEM)
       .pluck('payload', 'item')
-      .map(x => ({...x, children: store.getState().data.lookup.children[x.id] || []}))
+      .map(({children, ...x}) => ({...x, ...store.getState().data.hashmap[x.id].unwrap()}))
       .map(API.update)
       .map(Actions.updateSuccess)
   },
@@ -77,7 +77,7 @@ const epics = [
   function deleteData(action$, store) {
     return action$.ofType(Types.DELETE_NODE)
       .pluck('payload', 'id')
-      .map(x => [x, ...store.getState().data.lookup.nodes[x]])
+      .map(x => store.getState().data.hashmap[x].getBranchIds())
       .map(API.remove)
       .map(Actions.deleteSuccess)
   },

@@ -29,7 +29,7 @@ export const Records = ({ items, deleteNode, user, loading }) => {
 
 export default connect(
   state => ({
-    items: state.data.subtrees,
+    items: state.data.subtrees.map(x => x.unwrap()),
     loading: state.auth.loading,
   }),
   { deleteNode }
