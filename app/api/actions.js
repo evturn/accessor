@@ -81,10 +81,10 @@ export const createSuccess = _ => ({
   type: Types.CREATE_SUCCESS
 })
 
-export const deleteNode = id => {
+export const deleteNode = branchIds => {
   return {
     type: Types.DELETE_NODE,
-    payload: { id }
+    payload: { branchIds }
   }
 }
 

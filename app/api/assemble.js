@@ -9,7 +9,7 @@ class Tree {
     }
     this.id = props.id
     this.parent = props.parent
-    this.getBranchIds = ::this.getBranchIds
+    this.branchIds = props.branchIds
     this.addChild = ::this.addChild
     this.traverseDF = ::this.traverseDF
     this.unwrap = ::this.unwrap
@@ -40,18 +40,10 @@ class Tree {
     recurse(this)
   }
 
-  getBranchIds() {
-    this.nodeIds = []
-    if (this.children) {
-      this.traverseDF(x => this.nodeIds.push(x.value.id))
-    }
-    return this.nodeIds.concat(this.id)
-  }
-
   unwrap() {
     return {
       ...this.value,
-      branch: this.getBranchIds(),
+      branchIds: this.branchIds,
       children: this.children ? this.children.map(x => x.unwrap()) : [],
     }
   }
@@ -59,7 +51,9 @@ class Tree {
 
 function assembleData(data) {
   const list = Object.keys(data).reduce(convertMapToList(data), [])
-  const nodes = list.map(x => getOwnChildren(list, x))
+  const nodes = list
+    .map(x => getOwnBranchIds(list, x))
+    .map(x => getOwnChildren(list, x))
   const subtrees = nodes.filter(x => !x.parent)
   const hashmap = nodes.reduce(mapById, {})
   return {
@@ -72,6 +66,18 @@ function assembleData(data) {
 
 function convertMapToList(data) {
   return (acc, x) => acc.concat(data[x])
+}
+
+function getOwnBranchIds(list, item) {
+  const finder = (id, arr) => {
+    arr.push(id)
+    const found = list.filter(x => x.parent === id)
+    if (found.length) {
+      found.map(x => finder(x.id, arr))
+    }
+    return arr
+  }
+  return {...item, branchIds: finder(item.id, [])}
 }
 
 function getOwnChildren(list, item) {
@@ -88,3 +94,4 @@ function mapById(acc, x) {
 }
 
 export default assembleData
+

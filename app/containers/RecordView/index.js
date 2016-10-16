@@ -8,7 +8,7 @@ import css from './style.css'
 const RecordView = ({ updateItem, deleteNode, item }) => {
   return (
     <div className={css.view}>
-      <RecordNav {...item} onDelete={_ => deleteNode(item.id)} />
+      <RecordNav {...item} onDelete={_ => deleteNode(item.branchIds)} />
       <div className={css.body}>
         <RecordTitle {...item} onSubmit={updateItem} />
         <ChildRecords items={item.children} onSubmit={updateItem} />

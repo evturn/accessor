@@ -34,6 +34,7 @@ export const API = {
   },
 
   remove(nodes) {
+    console.log(nodes)
     const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
     return nodes.map(x => ref.child(x).remove())
   },
@@ -64,69 +65,4 @@ export const API = {
   providerSignOut() {
     return firebase.auth().signOut()
   }
-}
-
-function assembleData(snapshot) {
-  const unwrapped = snapshot.val()
-  const a = convertHashMapToList(unwrapped)
-  const b = a.map(x => addChildrenProp(a, x))
-  return b.map(x => addNodesProp(b, x))
-}
-
-function convertHashMapToList(hashmap) {
-  return Object.keys(hashmap).reduce((acc, x) => acc.concat(hashmap[x]), [])
-}
-
-function addChildrenProp(list, item) {
-  return {...item, children: getOwnChildIds(list, item)}
-}
-
-function addNodesProp(list, item) {
-  return {...item, nodes: getOwnChildIdsRecurse(list, item)}
-}
-
-function getOwnChildIds(list, item) {
-  return list
-    .filter(y => y.parent === item.id)
-    .map(x => x.id)
-}
-
-function getOwnChildIdsRecurse(listC, item) {
-  return recurse(item.id, [])
-
-  function recurse(id, acc) {
-    const [ item ] = listC.filter(x => x.id === id)
-    if (item.children.length) {
-      item.children.map(x => acc.push(x))
-      item.children.map(x => recurse(x, acc))
-    }
-    return acc
-  }
-}
-
-function createNodesLookup(list) {
-  return list.reduce((acc, x) => {
-    acc[x.id] = x.nodes
-    return acc
-  }, {})
-}
-
-function createChildLookup(list) {
-  return list.reduce((acc, x) => {
-    acc[x.id] = list
-      .filter(y => y.parent === x.id)
-      .map(x => x.id)
-    return acc
-  }, {})
-}
-
-function createIdLookup(list) {
-  return list.reduce((acc, x) => {
-    acc[x.id] = x
-    return acc
-  }, {})
-}
-
-function getSubTrees(list) {
-  return list.filter(x => !x.parent)
 }

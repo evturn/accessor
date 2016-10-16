@@ -18,7 +18,7 @@ export const Records = ({ items, deleteNode, user, loading }) => {
                     {x.title}
                   </div>
                 </Link>
-                <div className={css.remove} onClick={_ => deleteNode(x.id)} />
+                <div className={css.remove} onClick={_ => deleteNode(x.branchIds)} />
               </li>
             )}
           </ul>
