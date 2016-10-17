@@ -3609,7 +3609,7 @@ lodash@^3.10.0, lodash@~3.10.0, lodash@~3.10.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
-lodash@^4.1.0, lodash@^4.11.2, lodash@^4.13.1, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1, lodash@^4.6.1, lodash@^4.7.0, lodash@^4.8.0, "lodash@4.6.1 || ^4.16.1":
+lodash@^4.1.0, lodash@^4.11.2, lodash@^4.12.0, lodash@^4.13.1, lodash@^4.2.0, lodash@^4.2.1, lodash@^4.3.0, lodash@^4.5.1, lodash@^4.6.1, lodash@^4.7.0, lodash@^4.8.0, "lodash@4.6.1 || ^4.16.1":
   version "4.16.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.4.tgz#01ce306b9bad1319f2a5528674f88297aeb70127"
 
@@ -4919,6 +4919,13 @@ react-router@^4.0.0-alpha.4:
     query-string "4.2.3"
     react-broadcast "^0.1.1"
     react-history "^0.14.0"
+
+react-sortable-hoc:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/react-sortable-hoc/-/react-sortable-hoc-0.0.10.tgz#7e66d2aab407d27d2fca24b947f57938d3a6b7e8"
+  dependencies:
+    invariant "^2.2.1"
+    lodash "^4.12.0"
 
 react-transform-catch-errors@^1.0.2:
   version "1.0.2"
