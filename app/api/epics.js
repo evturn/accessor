@@ -88,6 +88,15 @@ const epics = [
       .map(Actions.unmountModal)
   },
 
+  function sortEnd(action$, store) {
+    return action$.ofType(Types.SORT_END)
+      .pluck('payload', 'data')
+      .map(x => x.map(({children, branchIds, ...y}) => y))
+      .do(x => x.map(x => console.log(x.title, x.index)))
+      .mergeMap(API.updateGroup)
+      .map(Actions.updateSuccess)
+  },
+
 ]
 
 export default combineEpics(...epics)

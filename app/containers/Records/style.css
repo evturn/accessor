@@ -41,11 +41,6 @@
   content: "✕";
 }
 
-.drag {
-  composes: tap;
-  right: 15px;
-}
-
 @media (min-width: 1025px) {
   .remove {
     display: none;

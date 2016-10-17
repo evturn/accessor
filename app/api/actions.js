@@ -105,6 +105,10 @@ export const updateSuccess = data => ({
 ////////////////
 // UI
 ////////////////
+export const sortEnd = data => ({
+  type: Types.SORT_END,
+  payload: { data }
+})
 export const launchModal = _ => ({
   type: Types.LAUNCH_MODAL
 })

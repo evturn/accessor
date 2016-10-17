@@ -33,6 +33,11 @@ export const API = {
       .update({[item.id]: item})
   },
 
+  updateGroup(items) {
+    const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
+    return items.map(x => ref.update({[x.id]: x}))
+  },
+
   remove(nodes) {
     console.log(nodes)
     const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)

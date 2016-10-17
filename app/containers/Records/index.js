@@ -3,29 +3,30 @@ import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import LoadingIndicator from 'components/LoadingIndicator'
 import { SortableContainer, SortableElement, SortableHandle, arrayMove } from 'react-sortable-hoc'
-import { deleteNode, openModal } from 'api/actions'
+import { deleteNode, sortEnd } from 'api/actions'
 import css from './style.css'
 
 export class Records extends Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      items: []
-    }
+    this.state = {items: []}
     this.onSortEnd = ::this.onSortEnd
   }
 
-  componentWillReceiveProps() {
-    const { items } = this.state
-    this.setState({ items })
+  componentWillMount() {
+    this.setState({items: this.props.items})
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({items: nextProps.items})
   }
 
   onSortEnd({ oldIndex, newIndex }) {
-    const { items } = this.state
-    this.setState({
-      items: arrayMove(items, oldIndex, newIndex)
-    })
+    const { items } = this.props
+    const sorted = arrayMove(items, oldIndex, newIndex)
+    this.props.sortEnd(sorted.map((x, i) => ({...x, index: i})))
+    this.setState({items: sorted})
   }
 
   render() {
@@ -35,6 +36,7 @@ export class Records extends Component {
           ? <LoadingIndicator />
           : <SortableList
             items={this.state.items}
+            useDragHandle={true}
             onSortEnd={this.onSortEnd}
             deleteNode={this.props.deleteNode}
             helperClass={css.lift} />
@@ -49,7 +51,7 @@ const DragHandle = SortableHandle(_ => <span>::</span>)
 const SortableItem = (
   SortableElement(({ deleteNode, ...x }) =>
     <li className={css.li}>
-      <div className={css.remove} onClick={_ => x.deleteNode(x)} />
+      <div className={css.remove} onClick={_ => deleteNode(x)} />
       <Link className={css.link} to={x.url}>
         <div className={css.record}>
           {x.title}
@@ -63,12 +65,12 @@ const SortableItem = (
 const SortableList = (
   SortableContainer(({ items, deleteNode }) =>
     <ul className={css.ul}>
-      {items.map((x, i) =>
+      {items.map(x =>
         <SortableItem
           {...x}
           deleteNode={deleteNode}
-          key={`item-${i}`}
-          index={i} />
+          key={x.index}
+          index={x.index} />
       )}
     </ul>
   )
@@ -76,8 +78,8 @@ const SortableList = (
 
 export default connect(
   state => ({
-    items: state.data.subtrees.map(x => x.unwrap()),
+    items: state.data.subtrees.map(x => x.unwrap()).map((x, i) => ({...x, index: i})),
     loading: state.auth.loading,
   }),
-  { deleteNode }
+  { deleteNode, sortEnd }
 )(Records)
