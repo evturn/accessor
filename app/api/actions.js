@@ -105,6 +105,10 @@ export const updateSuccess = data => ({
 ////////////////
 // UI
 ////////////////
+export const navigate = history => ({
+  type: Types.NAVIGATE,
+  payload: { ...history }
+})
 export const sortEnd = data => ({
   type: Types.SORT_END,
   payload: { data }

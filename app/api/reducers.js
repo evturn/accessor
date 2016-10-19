@@ -33,7 +33,7 @@ const dataReducer = (state=initialData, action) => {
   }
 }
 
-const initialUI = { modal: false, unmounted: true }
+const initialUI = {modal: false, unmounted: true }
 const uiReducer = (state=initialUI, action) => {
   switch(action.type) {
 
@@ -112,8 +112,25 @@ const authReducer = (state=initialAuth, action) => {
   }
 }
 
+const initialRouting = []
+const routingReducer = (state=initialRouting, action) => {
+  switch (action.type) {
+
+    case Types.NAVIGATE:
+      if (action.payload.action === 'PUSH') {
+        state.push(action.payload.location)
+      } else if (action.payload.action === 'POP') {
+        state.pop()
+      }
+
+    default:
+      return state
+  }
+}
+
 export default combineReducers({
   data: dataReducer,
   ui: uiReducer,
   auth: authReducer,
+  router: routingReducer,
 })

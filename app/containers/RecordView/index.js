@@ -1,35 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Link from 'react-router/Link'
 import Input from 'components/Input'
 import { updateItem, deleteNode } from 'api/actions'
 import css from './style.css'
 
-const RecordView = ({ updateItem, deleteNode, redirect, item }) => {
-  return (
-    <div className={css.view}>
-      <RecordNav {...item} onDelete={_ => deleteNode(item)} />
-      <div className={css.body}>
-        <RecordTitle {...item} onSubmit={updateItem} />
-        <ChildRecords items={item.children} onSubmit={updateItem} />
+class RecordView extends Component {
+  render() {
+    const { item, deleteNode, updateItem } = this.props
+    const { history } = this.context
+    return (
+      <div className={css.view}>
+        <RecordNav
+          {...item}
+          history={history}
+          onDelete={_ => deleteNode(item)} />
+        <div className={css.body}>
+          <RecordTitle {...item} onSubmit={updateItem} />
+          <ChildRecords items={item.children} onSubmit={updateItem} />
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
 }
 
-const RecordNav = ({ onDelete, ...item }) => {
+const RecordNav = ({ onDelete, history, ...item }) => {
   return (
     <div className={css.bar}>
       <div className={css.left}>
-        <div
-          className={css.delete}
-          onClick={onDelete} />
+        <div className={css.delete} onClick={onDelete} />
       </div>
       <div className={css.header} />
       <div className={css.right}>
-        <Link
-          className={css.back}
-          to={item.back}>Back</Link>
+        <div className={css.back} onClick={history.goBack} />
       </div>
     </div>
   )
@@ -60,12 +63,15 @@ const ChildRecords = ({ onSubmit, items }) => {
   )
 }
 
+RecordView.contextTypes = {
+  history: PropTypes.object,
+}
+
 export default connect(
   (state, ownProps) => {
     const { hashmap } = state.data
     const { id } = ownProps.params
     return {
-      redirect: state.auth.redirect,
       item: hashmap[id].unwrap()
     }
   },

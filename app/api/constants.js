@@ -25,6 +25,8 @@ export const CREATE_SUCCESS    = 'CREATE_SUCCESS'
 export const DELETE_NODE       = 'DELETE_NODE'
 export const DELETE_SUCCESS    = 'DELETE_SUCCESS'
 
+
+export const NAVIGATE          = 'NAVIGATE'
 export const LAUNCH_MODAL      = 'LAUNCH_MODAL'
 export const CLOSE_MODAL       = 'CLOSE_MODAL'
 export const UNMOUNT_MODAL     = 'UNMOUNT_MODAL'

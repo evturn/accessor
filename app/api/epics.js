@@ -69,7 +69,7 @@ const epics = [
   function updateItem(action$, store) {
     return action$.ofType(Types.UPDATE_ITEM)
       .pluck('payload', 'item')
-      .map(({children, ...x}) => ({...x, ...store.getState().data.hashmap[x.id].unwrap()}))
+      .map(({children, branchIds, ...x}) => ({...x, ...store.getState().data.hashmap[x.id].unwrap()}))
       .map(API.update)
       .map(Actions.updateSuccess)
   },
@@ -86,15 +86,6 @@ const epics = [
     return action$.ofType(Types.CLOSE_MODAL)
       .delay(400)
       .map(Actions.unmountModal)
-  },
-
-  function sortEnd(action$, store) {
-    return action$.ofType(Types.SORT_END)
-      .pluck('payload', 'data')
-      .map(x => x.map(({children, branchIds, ...y}) => y))
-      .do(x => x.map(x => console.log(x.title, x.index)))
-      .mergeMap(API.updateGroup)
-      .map(Actions.updateSuccess)
   },
 
 ]

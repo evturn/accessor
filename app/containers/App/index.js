@@ -1,5 +1,6 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import History from 'react-history/MemoryHistory'
 import Match from 'react-router/Match'
 import Redirect from 'react-router/Redirect'
 import Home from 'containers/Home'

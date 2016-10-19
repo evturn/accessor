@@ -85,6 +85,10 @@
   composes: bar-btn;
 }
 
+.back:after {
+  content: "Back";
+}
+
 .header {
   text-align: center;
   margin: 0;

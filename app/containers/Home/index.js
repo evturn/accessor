@@ -1,29 +1,28 @@
-import React from 'react'
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Match from 'react-router/Match'
 import Redirect from 'react-router/Redirect'
 import Records from 'containers/Records'
-import RecordView from 'containers/RecordView'
 import MenuBar from 'containers/MenuBar'
 import css from './style.css'
 
-const Home = ({ redirect }) => {
-  if (redirect) {
-    return <Redirect to={redirect} />
+class Home extends Component {
+  render() {
+    const { redirect } = this.props
+
+    if (redirect) {
+      return <Redirect to={redirect} />
+    }
+
+    return (
+      <div className={css.root}>
+        <Match
+          pattern="/"
+          component={Records} />
+        <MenuBar />
+      </div>
+    )
   }
-  return (
-    <div className={css.root}>
-      <Match
-        exactly
-        pattern="/"
-        component={Records} />
-      <Match
-        exactly
-        pattern="/records/:id"
-        component={RecordView} />
-      <MenuBar />
-    </div>
-  )
 }
 
 export default connect(
