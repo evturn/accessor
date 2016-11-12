@@ -1,9 +1,6 @@
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/database'
-import assemble from './assemble'
+import firebase from 'firebase'
 
-export const firebaseApp = firebase.initializeApp({
+firebase.initializeApp({
   apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
   authDomain: 'accessor-io.firebaseapp.com',
   databaseURL: 'https://accessor-io.firebaseio.com',
@@ -11,63 +8,37 @@ export const firebaseApp = firebase.initializeApp({
   messagingSenderId: "149184924674",
 })
 
-export const API = {
-  init(observer) {
-    const unsubscribe = firebase.auth().onAuthStateChanged(
-      x => {
-        unsubscribe()
-        observer.next(!!x)
-      },
-      e => observer.error(e)
-    )
-  },
+export const initApp = observer => {
+  return firebase.auth()
+    .onAuthStateChanged(observer)
+}
 
-  create(item) {
-    const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
-    const id = ref.push().key
-    return ref.update({[id]: {...item, id, url: `/records/${id}`}})
-  },
+export const signOut = _ => {
+  return firebase.auth().signOut()
+}
 
-  update(item) {
-    return firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
-      .update({[item.id]: item})
-  },
-
-  updateGroup(items) {
-    const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
-    return items.map(x => ref.update({[x.id]: x}))
-  },
-
-  remove(nodes) {
-    console.log(nodes)
-    const ref = firebase.database().ref(`records/${firebase.auth().currentUser.uid}`)
-    return nodes.map(x => ref.child(x).remove())
-  },
-
-  onValue(observer) {
-    firebase.database()
-      .ref(`records`)
-      .child(firebase.auth().currentUser.uid)
-      .on('value', x => observer.next(assemble(x.val())))
-  },
-
-  onceValue(observer) {
-    firebase.database()
-      .ref(`records`)
-      .child(firebase.auth().currentUser.uid)
-      .once('value')
-      .then(x => observer.next(x))
-  },
-
-  providerSignIn(provider) {
-    const services = {
-      twitter: new firebase.auth.TwitterAuthProvider(),
-      github: new firebase.auth.GithubAuthProvider(),
-    }
-    return firebase.auth().signInWithPopup(services[provider])
-  },
-
-  providerSignOut() {
-    return firebase.auth().signOut()
+export const signIn = provider => {
+  const services = {
+    twitter: new firebase.auth.TwitterAuthProvider(),
+    github: new firebase.auth.GithubAuthProvider(),
   }
+  firebase.auth()
+    .signInWithPopup(services[provider])
+}
+
+export const fetchData = observer => {
+  return firebase
+    .database()
+    .ref(`records`)
+    .child(firebase.auth().currentUser.uid)
+    .once('value')
+    .then(x => x.val())
+    .then(convertMapToList)
+    .then(x => observer.next(x))
+    .catch(e => observer.error(e))
+}
+
+function convertMapToList(data) {
+  return Object.keys(data)
+    .reduce((acc, x) => acc.concat(data[x]), [])
 }

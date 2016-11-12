@@ -1,46 +1,70 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import History from 'react-history/MemoryHistory'
 import Match from 'react-router/Match'
-import Redirect from 'react-router/Redirect'
-import Home from 'containers/Home'
 import Header from 'containers/Header'
+import Home from 'containers/Home'
 import Login from 'containers/Login'
-import { init } from 'api/actions'
+import LoadingIndicator from 'components/LoadingIndicator'
+import * as API from 'api'
+import * as Actions from 'api/actions'
 
 export class App extends Component {
+  constructor(props) {
+    super(props)
+    this.initAuth = ::this.initAuth
+    this.updateRouteState = ::this.updateRouteState
+  }
+
   componentWillMount() {
-    this.props.init()
+    this.initAuth()
+  }
+
+  componentDidMount() {
+    this.updateRouteState(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.pathname !== this.props.pathname) {
+      this.updateRouteState(nextProps)
+    }
+  }
+
+  initAuth() {
+    const { initAuthState, loginError } = this.props
+    API.initApp(
+      user => initAuthState({ user }),
+      e    => loginError({error: e.message})
+    )
+  }
+
+  updateRouteState(props) {
+    const { pathname, locationChange } = props
+    locationChange({ route: pathname })
   }
 
   render() {
+    const { user, initialized, loading } = this.props
     return (
       <div>
         <Header />
-        <Match
-          pattern="/login"
-          component={Login} />
-        <MatchWhenAuthorized
-          pattern="/"
-          component={Home}
-          redirect={this.props.redirect}
-          isAuthenticated={this.props.isAuthenticated} />
+        {loading ? <LoadingIndicator /> : null}
+        {initialized
+          ? user
+            ? <Match pattern="/" component={Home} />
+            : <Match pattern="/" component={Login} />
+          : null
+        }
       </div>
     )
   }
 }
 
-const MatchWhenAuthorized = ({ component: C, isAuthenticated, redirect, ...rest }) => (
-  <Match {...rest} render={props =>
-    isAuthenticated ? <C {...props} /> : <Redirect to={redirect} />
-  } />
-)
-
 export default connect(
   state => ({
-    ...state,
-    redirect: state.auth.redirect,
-    isAuthenticated: state.auth.isAuthenticated
+    route: state.route,
+    user: state.auth.user,
+    loading: state.loading,
+    initialized: state.auth.initialized,
   }),
-  { init }
+  Actions
 )(App)

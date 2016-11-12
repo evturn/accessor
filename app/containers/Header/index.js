@@ -1,15 +1,15 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import classNames from 'classnames/bind'
-import { logout } from 'api/actions'
+import * as Actions from 'api/actions'
 import css from './style.css'
 
-export const Header = ({ c, isAuthenticated, logout }) => {
+export const Header = ({ c, user, signOut }) => {
   return (
     <div className={c('header')}>
-      <div className={c('title', { shrink: isAuthenticated })} />
-      {isAuthenticated
-        ? <div className={c('logout')} onClick={logout} />
+      <div className={c('title', { shrink: user})} />
+      {user
+        ? <div className={c('logout')} onClick={signOut} />
         : null
       }
     </div>
@@ -19,7 +19,7 @@ export const Header = ({ c, isAuthenticated, logout }) => {
 export default connect(
   state => ({
     c: classNames.bind(css),
-    isAuthenticated: !!state.auth.isAuthenticated,
+    user: !!state.auth.user,
   }),
-  { logout }
+  Actions
 )(Header)

@@ -3,7 +3,7 @@ import { Provider } from 'react-redux'
 import Router from 'react-router/BrowserRouter'
 import Match from 'react-router/Match'
 import App from 'containers/App'
-import configureStore from '../../store'
+import configureStore from 'api/store'
 import 'styles'
 import 'sanitize.css/sanitize.css'
 

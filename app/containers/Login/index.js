@@ -1,41 +1,39 @@
-import React, { PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Redirect from 'react-router/Redirect'
-import LoadingIndicator from 'components/LoadingIndicator'
 import Button from 'components/Button'
-import { githubAuth, twitterAuth } from 'api/actions'
+import * as Actions from 'api/actions'
 import css from './style.css'
 
-export const Login = ({ githubAuth, twitterAuth, loading, isAuthenticated, redirect }) => {
-  if (isAuthenticated) {
-    return <Redirect to={redirect} />
+export class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.githubSignIn = ::this.githubSignIn
+    this.twitterSignIn = ::this.twitterSignIn
   }
 
-  return (
-    <div className={css.root}>
-      {loading
-        ? <LoadingIndicator />
-        : <div className={css.providers}>
-            <Button onClick={githubAuth}>Github</Button>
-            <Button onClick={twitterAuth}>Twitter</Button>
-          </div>
-      }
-    </div>
-  )
-}
+  githubSignIn() {
+    this.props.authenticating('github')
+  }
 
-Login.propTypes = {
-  loading: PropTypes.bool,
-  redirect: PropTypes.string,
-  githubAuth: PropTypes.func.isRequired,
-  twitterAuth: PropTypes.func.isRequired,
+  twitterSignIn() {
+    this.props.authenticating('twitter')
+  }
+
+  render() {
+    return (
+      <div className={css.root}>
+        <div className={css.providers}>
+          <Button onClick={this.githubSignIn}>Github</Button>
+          <Button onClick={this.twitterSignIn}>Twitter</Button>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default connect(
   state => ({
-    loading: state.auth.loading,
-    isAuthenticated: state.auth.isAuthenticated,
-    redirect: state.auth.redirect,
+    ...state
   }),
-  { githubAuth, twitterAuth }
+  Actions
 )(Login)

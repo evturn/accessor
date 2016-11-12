@@ -1,56 +1,55 @@
 import { combineReducers } from 'redux'
-import { API } from 'api'
-import * as Types from 'api/constants'
 
-const initialData = { subtrees: [], initialized: false }
-const dataReducer = (state=initialData, action) => {
+const dataReducer = (state=false, action) => {
+  switch (action.type) {
+    default:
+      return state
+  }
+}
+const loadingReducer = (state=false, action) => {
   switch (action.type) {
 
-    case Types.ASSEMBLED: {
-      const { data } = action.payload
-      const dataState = !!data ? data : initialData
+    case 'AUTHENTICATING':
+      return true
 
+    case 'LOGIN_SUCCESS':
+    case 'LOGIN_ERROR':
+      return false
+
+    default:
+      return state
+  }
+}
+
+const authReducer = (state={user: false, initialized: false, error: ''}, action) => {
+  switch (action.type) {
+
+    case 'AUTHENTICATING':
       return Object.assign({}, state, {
-        ...dataState,
-        _data: dataState,
-        subtrees: !state.initialized ? dataState.subtrees : state.subtrees,
+        error: '',
+      })
+
+    case 'INIT_AUTH_STATE':
+      return Object.assign({}, state, {
+        user: action.payload.user,
         initialized: true,
       })
-    }
 
-    case Types.CREATE_SUCCESS:
-    case Types.UPDATE_SUCCESS:
-    case Types.DELETE_SUCCESS:
+    case 'LOGIN_SUCCESS':
       return Object.assign({}, state, {
-        ...state._data
+        user: action.payload.user,
+        login: state.login,
       })
 
-    case Types.UNAUTHORIZE:
-      return initialData
-
-    default:
-      return state
-  }
-}
-
-const initialUI = {modal: false, unmounted: true }
-const uiReducer = (state=initialUI, action) => {
-  switch(action.type) {
-
-    case Types.UNMOUNT_MODAL:
+    case 'LOGIN_ERROR':
       return Object.assign({}, state, {
-        unmounted: true,
+        error: action.payload.error,
+        initialized: true,
       })
 
-    case Types.LAUNCH_MODAL:
+    case 'SIGNOUT':
       return Object.assign({}, state, {
-        modal: true,
-        unmounted: false,
-      })
-
-    case Types.CLOSE_MODAL:
-      return Object.assign({}, state, {
-        modal: false,
+        user: false,
       })
 
     default:
@@ -58,53 +57,12 @@ const uiReducer = (state=initialUI, action) => {
   }
 }
 
-const initialAuth = { loading: false, isAuthenticated: null, redirect: '/login' }
-const authReducer = (state=initialAuth, action) => {
+const routeReducer = (state={route: ''}, action) => {
   switch (action.type) {
 
-    case Types.INIT:
+    case 'LOCATION_CHANGE':
       return Object.assign({}, state, {
-        loading: true,
-      })
-
-    case Types.INIT_AUTH:
-      return Object.assign({}, state, {
-        isAuthenticated: action.payload.user,
-        redirect: !!action.payload.user ? '/' : '/login',
-      })
-
-    case Types.LOAD_USER:
-      return Object.assign({}, state, {
-        redirect: false,
-      })
-
-    case Types.DELETE_NODE:
-      return Object.assign({}, state, {
-        redirect: action.payload.item.back,
-      })
-
-    case Types.DELETE_SUCCESS:
-      return Object.assign({}, state, {
-        redirect: false,
-      })
-
-    case Types.PROVIDER_SIGN_IN:
-      return Object.assign({}, state, {
-        loading: true,
-      })
-
-    case Types.AUTHORIZE:
-      return Object.assign({}, state, {
-        loading: false,
-        isAuthenticated: true,
-        redirect: '/',
-      })
-
-    case Types.UNAUTHORIZE:
-      return Object.assign({}, state, {
-        loading: false,
-        isAuthenticated: false,
-        redirect: '/login',
+        ...action.payload
       })
 
     default:
@@ -112,17 +70,14 @@ const authReducer = (state=initialAuth, action) => {
   }
 }
 
-const initialRouting = []
-const routingReducer = (state=initialRouting, action) => {
+const uiReducer = (state=false, action) => {
   switch (action.type) {
-
-    case Types.NAVIGATE:
-      if (action.payload.action === 'PUSH') {
-        state.push(action.payload.location)
-      } else if (action.payload.action === 'POP') {
-        state.pop()
-      }
-
+    default:
+      return state
+  }
+}
+const routingReducer = (state=false, action) => {
+  switch (action.type) {
     default:
       return state
   }
@@ -132,5 +87,6 @@ export default combineReducers({
   data: dataReducer,
   ui: uiReducer,
   auth: authReducer,
-  router: routingReducer,
+  routing: routingReducer,
+  loading: loadingReducer,
 })
