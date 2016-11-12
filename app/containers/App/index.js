@@ -31,7 +31,9 @@ export class App extends Component {
 }
 
 const MatchWhenAuthorized = ({ component: C, isAuthenticated, redirect, ...rest }) => (
-  <Match {...rest} render={props => isAuthenticated ? <C {...props} /> : <Redirect to={redirect} />} />
+  <Match {...rest} render={props =>
+    isAuthenticated ? <C {...props} /> : <Redirect to={redirect} />
+  } />
 )
 
 export default connect(
