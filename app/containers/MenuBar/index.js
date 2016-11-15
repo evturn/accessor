@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Match from 'react-router/Match'
 import Link from 'react-router/Link'
-import CreateRecordModal from 'containers/CreateRecordModal'
+import Modal from 'containers/Modal'
 import { launchModal } from 'api/actions'
 import css from './style.css'
 
@@ -22,7 +22,7 @@ const MenuBar = ({ launchModal, unmounted }) => {
       return (
         <div className={params ? css.view : css.main}>
           <Menu onClick={launchModal} />
-          {!unmounted ? <CreateRecordModal parent={params ? params.id : false} /> : null}
+          {!unmounted ? <Modal parent={params ? params.id : false} /> : null}
         </div>
       )
     }} />

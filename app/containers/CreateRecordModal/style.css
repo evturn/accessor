@@ -1,7 +1,0 @@
-.input {
-  composes: input from 'styles';
-}
-
-.label {
-  composes: label-title from 'styles';
-}

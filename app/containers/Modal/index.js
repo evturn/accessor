@@ -1,17 +1,14 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import Modal from 'components/Modal'
+import classNames from 'classnames/bind'
 import Input from 'components/Input'
-import { createRecord, closeModal } from 'api/actions'
+import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class CreateRecordModal extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      parent: props.parent,
-    }
+    this.state = {parent: props.parent}
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,23 +33,28 @@ export class CreateRecordModal extends Component {
   }
 
   render() {
+    const { cx, open, closeModal } = this.props
     return (
-      <Modal
-        open={this.props.open}
-        onClose={this.props.closeModal}>
-        <Input
-          className={css.input}
-          isModal={true}
-          onSubmit={::this.createRecord} />
-        <div className={css.label} />
-      </Modal>
+      <div className={cx({show: open, hide: !open})}>
+        <div className={css.bar}>
+          <div className={css.close} onClick={closeModal} />
+        </div>
+        <div className={css.body}>
+          <Input
+            className={css.input}
+            isModal={true}
+            onSubmit={::this.createRecord} />
+          <div className={css.label} />
+        </div>
+      </div>
     )
   }
 }
 
 export default connect(
   state => ({
-    open: state.ui.modal
+    open: state.ui.modal,
+    cx: classNames.bind(css),
   }),
-  { createRecord, closeModal }
+  Actions
 )(CreateRecordModal)

@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Button from 'components/Button'
+import GoogleLogo from './GoogleLogo'
+import TwitterLogo from './TwitterLogo'
+import GithubLogo from './GithubLogo'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -22,9 +25,17 @@ export class Login extends Component {
   render() {
     return (
       <div className={css.root}>
-        <div className={css.providers}>
-          <Button onClick={this.githubSignIn}>Github</Button>
-          <Button onClick={this.twitterSignIn}>Twitter</Button>
+        <div className={css.header}>Sign In</div>
+        <div className={css.card}>
+          <button className={css.btn} onClick={this.twitterSignIn}>
+            <GoogleLogo />
+          </button>
+          <button className={css.btn} onClick={this.githubSignIn}>
+            <GithubLogo />
+          </button>
+          <button className={css.btn} onClick={this.twitterSignIn}>
+            <TwitterLogo />
+          </button>
         </div>
       </div>
     )
