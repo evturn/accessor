@@ -2,14 +2,14 @@ import React from 'react'
 
 export const GithubLogo = props => {
   return (
-    <svg x="0px" y="0px" width="53px" height="53px" viewBox="0 0 48 48">
-      <circle fill="#000000" cx="24" cy="24" r="17"></circle>
+    <svg x="0px" y="0px" width="50px" height="50px" viewBox="0 0 48 48">
+      <circle fill="#06abfc" cx="24" cy="24" r="17"></circle>
       <g>
         <path fill="#ffffff" d="M21,41v-5.5c0-0.276,0.224-0.5,0.5-0.5s0.5,0.224,0.5,0.5V41h2v-6.5c0-0.276,0.224-0.5,0.5-0.5   s0.5,0.224,0.5,0.5V41h2v-5.5c0-0.276,0.224-0.5,0.5-0.5s0.5,0.224,0.5,0.5V41h1.758C29.914,40.725,30,40.373,30,39.921v-3.942    c0-2.161-1.91-5.231-4.251-5.231H23.25c-2.34,0-4.25,3.071-4.25,5.231v3.942c0,0.452,0.086,0.804,0.241,1.079H21z"></path>
-        <path fill="none" stroke="#000000" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M34.618,26.197c0,0,1.914-0.328,3.044-0.308c1.143,0.011,2.438,0.363,2.438,0.363"></path>
-        <path fill="none" stroke="#000000" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M34.136,26.814c0,0,2.186-0.203,3.087-0.175c1.252,0.032,2.592,0.417,2.592,0.417"></path>
-        <path fill="none" stroke="#000000" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M14.564,26.089c0,0-2.708-0.245-3.554-0.245c-0.848,0-2.452,0.245-3.224,0.466"></path>
-        <path fill="none" stroke="#000000" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M15.179,26.934c0,0-2.839-0.263-4.131-0.108c-1.545,0.183-2.894,0.992-2.894,0.992"></path>
+        <path fill="none" stroke="#06abfc" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M34.618,26.197c0,0,1.914-0.328,3.044-0.308c1.143,0.011,2.438,0.363,2.438,0.363"></path>
+        <path fill="none" stroke="#06abfc" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M34.136,26.814c0,0,2.186-0.203,3.087-0.175c1.252,0.032,2.592,0.417,2.592,0.417"></path>
+        <path fill="none" stroke="#06abfc" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M14.564,26.089c0,0-2.708-0.245-3.554-0.245c-0.848,0-2.452,0.245-3.224,0.466"></path>
+        <path fill="none" stroke="#06abfc" strokeWidth="0.25" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" d="M15.179,26.934c0,0-2.839-0.263-4.131-0.108c-1.545,0.183-2.894,0.992-2.894,0.992"></path>
         <path fill="#ffffff" d="M14.174,23.46c0-4.416,4.619-8.46,10.326-8.46c5.697,0,10.326,4.042,10.326,8.46   c0,4.419-3.313,7.54-10.326,7.54C17.488,31,14.174,27.879,14.174,23.46z"></path>
         <path fill="#ffffff" d="M28.586,16.311c0,0,1.677-2.312,4.77-2.312c1.232,1.231,0.385,4.76-0.018,5.819L28.586,16.311z"></path>
         <path fill="#ffffff" d="M20.403,16.312c0,0-1.677-2.312-4.758-2.312c-1.231,1.233-0.396,4.76,0.006,5.819L20.403,16.312z"></path>
