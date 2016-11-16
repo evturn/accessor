@@ -8,15 +8,17 @@
   margin: 0 auto;
   width: 100%;
   z-index: 1;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
 }
 
 .title {
-  text-align: center;
-  margin: 0;
-  font-style: italic;
-  font-weight: 300;
+  padding: 10px;
   color: #fff;
+  text-align: center;
+  font-style: italic;
   font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -1.5px;
 }
 
 .title:after {

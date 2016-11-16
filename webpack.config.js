@@ -74,6 +74,7 @@ const configureWebpack = opts => ({
     cssnext({ browsers: ['last 2 versions', 'IE > 10'] }),
     postcssReporter({ clearMessages: true }),
   ],
+
   devtool: opts.devtool,
   target: 'web',
   stats: false,
@@ -81,11 +82,50 @@ const configureWebpack = opts => ({
 })
 
 const devBuild = _ => configureWebpack({
+  entry: [
+    'webpack-hot-middleware/client',
+    path.join(CWD, 'app/index.js')
+  ],
+
+  babelQuery: {
+    presets: [ 'react-hmre' ]
+  },
+
+  output: {
+    filename: '[name].js',
+    chunkFilename: '[name].chunky.mclover.js',
+  },
+
+  cssLoaders: [
+    `style-loader`,
+    `!css-loader`,
+    `?localIdentName=[local]--[path]-[hash:base64:5]`,
+    `&modules&importLoaders=1`,
+    `&sourceMap`,
+    `!postcss-loader`,
+  ].join(''),
+
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin(),
+    new WriteFilePlugin({ log: false }),
+    new ExtractTextPlugin('[name].[contenthash].css'),
+    new HtmlWebpackPlugin({
+      template: 'app/index.html',
+      appMountId: 'app',
+      favicon: 'app/favicon.ico',
+      inject: true,
+    }),
+    new webpack.DefinePlugin({ __DEV__: true })
+  ],
+})
+
+const prodBuild = _ => configureWebpack({
   entry: [ path.join(CWD, 'app/index.js') ],
 
   output: {
     filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].[chunkhash].chunk.js',
+    chunkFilename: '[name].[chunkhash].chunky.mclover.js'
   },
 
   cssLoaders: ExtractTextPlugin.extract(
@@ -101,63 +141,19 @@ const devBuild = _ => configureWebpack({
       async: true,
     }),
     new webpack.optimize.OccurrenceOrderPlugin(true),
+    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
-    new HtmlWebpackPlugin({
-      template: 'app/index.html',
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
-    }),
-    new ExtractTextPlugin('[name].[contenthash].css'),
-    new webpack.DefinePlugin({
-      __DEV__: false,
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
-  ],
-})
-
-const prodBuild = _ => configureWebpack({
-  entry: [ path.join(CWD, 'app/index.js') ],
-
-  output: {
-    filename: '[name].js',
-    chunkFilename: '[name].chunk.js',
-  },
-
-  babelQuery: {
-    presets: ['react-hmre'],
-  },
-
-  cssLoaders: ExtractTextPlugin.extract(
-    'style-loader',
-    'css-loader?modules&importLoaders=1!postcss-loader'
-  ),
-
-  plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin(),
-    new WriteFilePlugin({ log: false }),
     new HtmlWebpackPlugin({
       template: 'app/index.html',
       title: 'Accessor - I heard you like records',
       filename: 'index.html',
       appMountId: 'app',
       favicon: 'app/favicon.ico',
-      inject: true
+      inject: true,
     }),
     new ExtractTextPlugin('[name].[contenthash].css'),
     new webpack.DefinePlugin({
-      __DEV__: true,
+      __DEV__: false,
       'process.env.NODE_ENV': JSON.stringify('production')
     })
   ]
