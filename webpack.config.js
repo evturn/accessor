@@ -15,7 +15,6 @@ const configureWebpack = opts => ({
 
   output: Object.assign({
     path: path.resolve(CWD, 'build'),
-    publicPath: '/',
   }, opts.output),
 
   module: {
@@ -127,11 +126,8 @@ const devBuild = _ => configureWebpack({
   ],
 })
 
-const prodBuild = _ => createWebpackConfig({
-  entry: [
-    'webpack-hot-middleware/client',
-    path.join(CWD, 'app/index.js'),
-  ],
+const prodBuild = _ => configureWebpack({
+  entry: [ path.join(CWD, 'app/index.js') ],
 
   output: {
     filename: '[name].js',
@@ -142,21 +138,29 @@ const prodBuild = _ => createWebpackConfig({
     presets: ['react-hmre'],
   },
 
-  cssLoaders: 'style-loader!css-loader?localIdentName=[local]__[path][name]__[hash:base64:5]&modules&importLoaders=1&sourceMap!postcss-loader',
+  cssLoaders: ExtractTextPlugin.extract(
+    'style-loader',
+    'css-loader?modules&importLoaders=1!postcss-loader'
+  ),
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
     new WriteFilePlugin({ log: false }),
-    new ExtractTextPlugin('[name].[contenthash].css'),
     new HtmlWebpackPlugin({
       template: 'app/index.html',
-      inject: true,
+      title: 'Accessor - I heard you like records',
+      filename: 'index.html',
+      appMountId: 'app',
+      favicon: 'app/favicon.ico',
+      inject: true
     }),
-    new webpack.DefinePlugin({ __DEV__: true })
-  ],
-
-  devtool: 'inline-source-map',
+    new ExtractTextPlugin('[name].[contenthash].css'),
+    new webpack.DefinePlugin({
+      __DEV__: true,
+      'process.env.NODE_ENV': JSON.stringify('production')
+    })
+  ]
 })
 
 module.exports = process.env.NODE_ENV === 'development'
