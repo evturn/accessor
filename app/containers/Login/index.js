@@ -10,16 +10,11 @@ import css from './style.css'
 export class Login extends Component {
   constructor(props) {
     super(props)
-    this.githubSignIn = ::this.githubSignIn
-    this.twitterSignIn = ::this.twitterSignIn
+    this.providerSignIn = ::this.providerSignIn
   }
 
-  githubSignIn() {
-    this.props.authenticating('github')
-  }
-
-  twitterSignIn() {
-    this.props.authenticating('twitter')
+  providerSignIn(service) {
+    return _ => this.props.signInWithProvider(service)
   }
 
   render() {
@@ -27,13 +22,13 @@ export class Login extends Component {
       <div className={css.root}>
         <div className={css.header}>Sign In</div>
         <div className={css.card}>
-          <button className={css.btn} onClick={this.twitterSignIn}>
+          <button className={css.btn} onClick={this.providerSignIn('google')}>
             <GoogleLogo />
           </button>
-          <button className={css.btn} onClick={this.githubSignIn}>
+          <button className={css.btn} onClick={this.providerSignIn('github')}>
             <GithubLogo />
           </button>
-          <button className={css.btn} onClick={this.twitterSignIn}>
+          <button className={css.btn} onClick={this.providerSignIn('twitter')}>
             <TwitterLogo />
           </button>
         </div>

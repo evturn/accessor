@@ -8,8 +8,8 @@ export const initAuthState = payload => {
   return {type: 'INIT_AUTH_STATE', payload}
 }
 
-export const authenticating = provider => {
-  API.signIn(provider)
+export const signInWithProvider = service => {
+  API.signInWithProvider(service)
   return {type: 'AUTHENTICATING'}
 }
 

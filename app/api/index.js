@@ -1,29 +1,16 @@
 import firebase from 'firebase'
-
-firebase.initializeApp({
-  apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
-  authDomain: 'accessor-io.firebaseapp.com',
-  databaseURL: 'https://accessor-io.firebaseio.com',
-  storageBucket: "accessor-io.appspot.com",
-  messagingSenderId: "149184924674",
-})
+import * as Auth from 'api/auth'
 
 export const initApp = observer => {
-  return firebase.auth()
-    .onAuthStateChanged(observer)
+  Auth.onAuthStateChanged(observer)
+}
+
+export const signInWithProvider = service => {
+  Auth.signInWithPopup(service)
 }
 
 export const signOut = _ => {
-  return firebase.auth().signOut()
-}
-
-export const signIn = provider => {
-  const services = {
-    twitter: new firebase.auth.TwitterAuthProvider(),
-    github: new firebase.auth.GithubAuthProvider(),
-  }
-  firebase.auth()
-    .signInWithPopup(services[provider])
+  Auth.signOut()
 }
 
 export const fetchData = observer => {
