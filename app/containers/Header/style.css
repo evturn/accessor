@@ -1,4 +1,4 @@
-.header {
+.root {
   position: fixed;
   background-color: #06abfc;
   color: #fff;
@@ -39,8 +39,4 @@
   padding: 5px 20px;
   font-size: 26px;
   text-align: center;
-}
-
-.logout:after {
-  content: "☉";
 }
