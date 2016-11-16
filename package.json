@@ -7,7 +7,7 @@
     "check": "npm-check -u",
     "clean": "rimraf ./build",
     "prebuild": "npm run clean",
-    "build": "NODE_ENV=production webpack --config config/webpack/webpack.prod.babel.js --color -p",
+    "build": "NODE_ENV=production webpack --config webpack.config.js --color -p",
     "login": "firebase login",
     "init": "firebase init",
     "deploy": "firebase deploy"
