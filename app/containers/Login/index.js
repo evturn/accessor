@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import Button from 'components/Button'
 import GoogleLogo from './GoogleLogo'
 import TwitterLogo from './TwitterLogo'
 import GithubLogo from './GithubLogo'

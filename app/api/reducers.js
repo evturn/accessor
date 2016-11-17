@@ -12,8 +12,7 @@ const loadingReducer = (state=false, action) => {
     case 'AUTHENTICATING':
       return true
 
-    case 'LOGIN_SUCCESS':
-    case 'LOGIN_ERROR':
+    case 'INIT_AUTH_STATE':
       return false
 
     default:

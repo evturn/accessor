@@ -1,4 +1,4 @@
-.root {
+.nav {
   position: fixed;
   background-color: #06abfc;
   color: #fff;
@@ -21,10 +21,6 @@
   letter-spacing: -1.5px;
 }
 
-.title:after {
-  content: "Accessor";
-}
-
 .shrink {
   font-size: 16px;
   line-height: 50px;
@@ -32,11 +28,61 @@
   animation-duration: 0.5s;
 }
 
-.logout {
+.settings {
   position: absolute;
-  right: 0;
-  top: 0;
-  padding: 5px 20px;
+  right: 15px;
+  top: 15px;
   font-size: 26px;
   text-align: center;
+  cursor: pointer;
+}
+
+.menu {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -100%;
+  width: 100%;
+  z-index: 101;
+  background-color: #fff;
+  transition: all 0.4s ease-in-out;
+}
+
+.open .menu {
+  bottom: 0;
+}
+
+.li {
+  height: 70px;
+  text-align: center;
+  line-height: 70px;
+  border-top: 1px solid rgba(6,171,252, 0.2);
+  color: #06abfc;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+}
+
+.open .menu {
+  right: 0;
+}
+
+.curtain {
+  transition-delay: 0.2s;
+  transition: linear 0.3s ease-in-out;
+}
+
+.open .curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  opacity: 0.2;
+  background: -moz-linear-gradient(45deg, #06abfc 0%, #06e9fc 100%);
+  background: -webkit-linear-gradient(45deg, #06abfc 0%, #06e9fc 100%);
+  background: linear-gradient(45deg, #06abfc 0%, #06e9fc 100%);
 }
