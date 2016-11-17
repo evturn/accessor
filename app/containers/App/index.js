@@ -4,7 +4,6 @@ import Match from 'react-router/Match'
 import Header from 'containers/Header'
 import Home from 'containers/Home'
 import Login from 'containers/Login'
-import LoadingIndicator from 'components/LoadingIndicator'
 import * as API from 'api'
 import * as Actions from 'api/actions'
 
@@ -43,11 +42,10 @@ export class App extends Component {
   }
 
   render() {
-    const { user, initialized, loading } = this.props
+    const { user, initialized } = this.props
     return (
       <div>
         <Header />
-        {loading ? <LoadingIndicator /> : null}
         {initialized
           ? user
             ? <Match pattern="/" component={Home} />
@@ -63,7 +61,6 @@ export default connect(
   state => ({
     route: state.route,
     user: state.auth.user,
-    loading: state.loading,
     initialized: state.auth.initialized,
   }),
   Actions
