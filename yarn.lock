@@ -272,7 +272,7 @@ babel-code-frame@^6.11.0, babel-code-frame@^6.16.0:
     esutils "^2.0.2"
     js-tokens "^2.0.0"
 
-babel-core@^6.17.0, babel-core@^6.18.0:
+babel-core, babel-core@^6.18.0:
   version "6.18.2"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.18.2.tgz#d8bb14dd6986fa4f3566a26ceda3964fa0e04e5b"
   dependencies:
@@ -2294,7 +2294,7 @@ faye-websocket@0.9.3:
   dependencies:
     websocket-driver ">=0.5.1"
 
-fbjs@^0.8.4:
+fbjs@^0.8.1, fbjs@^0.8.4:
   version "0.8.6"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.6.tgz#7eb67d6986b2d5007a9b6e92e0e7cb6f75cad290"
   dependencies:
@@ -2365,6 +2365,16 @@ find-up@^1.0.0:
     path-exists "^2.0.0"
     pinkie-promise "^2.0.0"
 
+firebase:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-3.6.1.tgz#bcd7fe28f9eb75c8ecbefba9b4763b0800995229"
+  dependencies:
+    dom-storage "2.0.2"
+    faye-websocket "0.9.3"
+    jsonwebtoken "5.7.0"
+    rsvp "3.2.1"
+    xmlhttprequest "1.8.0"
+
 firebase-tools@^3.0.8:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-3.1.0.tgz#5a2b94b53cef532d070eb66f7fc557e776c9a762"
@@ -2407,16 +2417,6 @@ firebase-tools@^3.0.8:
     user-home "^2.0.0"
     uuid "^2.0.1"
     winston "^1.0.1"
-
-firebase@^3.5.2:
-  version "3.6.1"
-  resolved "https://registry.yarnpkg.com/firebase/-/firebase-3.6.1.tgz#bcd7fe28f9eb75c8ecbefba9b4763b0800995229"
-  dependencies:
-    dom-storage "2.0.2"
-    faye-websocket "0.9.3"
-    jsonwebtoken "5.7.0"
-    rsvp "3.2.1"
-    xmlhttprequest "1.8.0"
 
 firebase@2.x.x:
   version "2.4.2"
@@ -4815,9 +4815,13 @@ react-deep-force-update@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-1.0.1.tgz#f911b5be1d2a6fe387507dd6e9a767aa2924b4c7"
 
-react-dom@^15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.3.2.tgz#c46b0aa5380d7b838e7a59c4a7beff2ed315531f"
+react-dom@15.4.0:
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.0.tgz#6a97a69000966570db48c746bc4b7b0ca50d1534"
+  dependencies:
+    fbjs "^0.8.1"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
 
 react-proxy@^1.1.7:
   version "1.1.8"
@@ -4855,9 +4859,9 @@ react-transform-hmr@^1.0.3:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react@^15.3.2:
-  version "15.3.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.3.2.tgz#a7bccd2fee8af126b0317e222c28d1d54528d09e"
+react@15.4.0:
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.0.tgz#736c1c7c542e8088127106e1f450b010f86d172b"
   dependencies:
     fbjs "^0.8.4"
     loose-envify "^1.1.0"
