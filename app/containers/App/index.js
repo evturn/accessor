@@ -4,40 +4,26 @@ import Match from 'react-router/Match'
 import Header from 'containers/Header'
 import Home from 'containers/Home'
 import Login from 'containers/Login'
-import * as API from 'api'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class App extends Component {
   constructor(props) {
     super(props)
-    this.initAuth = ::this.initAuth
-    this.updateRouteState = ::this.updateRouteState
-  }
-
-  componentWillMount() {
-    this.initAuth()
+    this.updateRoute = ::this.updateRoute
   }
 
   componentDidMount() {
-    this.updateRouteState(this.props)
+    this.updateRoute(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pathname !== this.props.pathname) {
-      this.updateRouteState(nextProps)
+      this.updateRoute(nextProps)
     }
   }
 
-  initAuth() {
-    const { initAuthState, loginError } = this.props
-    API.initApp(
-      user => initAuthState({ user }),
-      e    => loginError({error: e.message})
-    )
-  }
-
-  updateRouteState(props) {
+  updateRoute(props) {
     const { pathname, locationChange } = props
     locationChange({ route: pathname })
   }

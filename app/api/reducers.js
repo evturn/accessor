@@ -1,55 +1,49 @@
 import { combineReducers } from 'redux'
 
-const dataReducer = (state=false, action) => {
+const authReducer = (state={}, action) => {
   switch (action.type) {
+
+    case 'AUTHENTICATING':
+      return {
+        ...state,
+        service: action.payload.service,
+        user: false,
+        initialized: false,
+        error: '',
+      }
+
+    case 'LINK_PROVIDERS':
+      return {
+        ...state
+      }
+
+    case 'AUTH_CHANGE':
+      return {
+        ...state,
+        user: action.payload.user,
+        initialized: true,
+      }
+
+    case 'AUTH_ERROR':
+      return {
+        ...state,
+        error: action.payload.error,
+        initialized: true,
+      }
+
     default:
       return state
   }
 }
+
 const loadingReducer = (state=false, action) => {
   switch (action.type) {
 
     case 'AUTHENTICATING':
       return true
 
-    case 'INIT_AUTH_STATE':
+    case 'AUTH_CHANGE':
       return false
-
-    default:
-      return state
-  }
-}
-
-const authReducer = (state={user: false, initialized: false, error: ''}, action) => {
-  switch (action.type) {
-
-    case 'AUTHENTICATING':
-      return Object.assign({}, state, {
-        error: '',
-      })
-
-    case 'INIT_AUTH_STATE':
-      return Object.assign({}, state, {
-        user: action.payload.user,
-        initialized: true,
-      })
-
-    case 'LOGIN_SUCCESS':
-      return Object.assign({}, state, {
-        user: action.payload.user,
-        login: state.login,
-      })
-
-    case 'LOGIN_ERROR':
-      return Object.assign({}, state, {
-        error: action.payload.error,
-        initialized: true,
-      })
-
-    case 'SIGNOUT':
-      return Object.assign({}, state, {
-        user: false,
-      })
 
     default:
       return state
@@ -60,9 +54,10 @@ const routeReducer = (state={route: ''}, action) => {
   switch (action.type) {
 
     case 'LOCATION_CHANGE':
-      return Object.assign({}, state, {
+      return {
+        ...state,
         ...action.payload
-      })
+      }
 
     default:
       return state
@@ -73,9 +68,10 @@ const uiReducer = (state={open: false}, action) => {
   switch (action.type) {
 
     case 'STYLE_UPDATE':
-      return Object.assign({}, state, {
+      return {
+        ...state,
         ...action.payload
-      })
+      }
 
     default:
       return state
@@ -89,9 +85,8 @@ const routingReducer = (state=false, action) => {
 }
 
 export default combineReducers({
-  data: dataReducer,
-  ui: uiReducer,
   auth: authReducer,
-  routing: routingReducer,
+  ui: uiReducer,
   loading: loadingReducer,
+  routing: routingReducer,
 })
