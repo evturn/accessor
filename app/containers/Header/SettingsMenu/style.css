@@ -1,0 +1,25 @@
+.root {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: -100%;
+  width: 100%;
+  z-index: 101;
+  background-color: #fff;
+  transition: all 0.4s ease-in-out;
+}
+
+.root.open {
+  bottom: 0;
+}
+
+.li {
+  height: 70px;
+  text-align: center;
+  line-height: 70px;
+  border-top: 1px solid rgba(6,171,252, 0.2);
+  color: #06abfc;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-weight: 300;
+  font-size: 18px;
+}

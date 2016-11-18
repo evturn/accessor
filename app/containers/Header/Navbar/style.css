@@ -1,0 +1,31 @@
+.root {
+  position: fixed;
+  background-color: #06abfc;
+  color: #fff;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 1;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+}
+
+.title {
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  font-style: italic;
+  font-size: 32px;
+  font-weight: 400;
+  letter-spacing: -1.5px;
+}
+
+.gear {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 26px;
+  text-align: center;
+  cursor: pointer;
+}

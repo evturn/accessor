@@ -6,6 +6,7 @@ import Home from 'containers/Home'
 import Login from 'containers/Login'
 import * as API from 'api'
 import * as Actions from 'api/actions'
+import css from './style.css'
 
 export class App extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export class App extends Component {
   render() {
     const { user, initialized } = this.props
     return (
-      <div>
+      <div className={css.root}>
         <Header />
         {initialized
           ? user

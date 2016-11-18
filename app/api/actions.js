@@ -33,3 +33,7 @@ export const fetchSuccess = payload => {
 export const fetchError = payload => {
   return {type: 'FETCH_ERROR', payload}
 }
+
+export const styleUpdate = payload => {
+  return {type: 'STYLE_UPDATE', payload}
+}

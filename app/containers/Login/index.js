@@ -25,13 +25,19 @@ export class Login extends Component {
         {loading
           ? <LoadingIndicator />
           : <div>
-              <button className={css.btn} onClick={this.providerSignIn('google')}>
+              <button
+                className={css.btn}
+                onClick={this.providerSignIn('google')}>
                 <GoogleLogo />
               </button>
-              <button className={css.btn} onClick={this.providerSignIn('github')}>
+              <button
+                className={css.btn}
+                onClick={this.providerSignIn('github')}>
                 <GithubLogo />
               </button>
-              <button className={css.btn} onClick={this.providerSignIn('twitter')}>
+              <button
+                className={css.btn}
+                onClick={this.providerSignIn('twitter')}>
                 <TwitterLogo />
               </button>
             </div>

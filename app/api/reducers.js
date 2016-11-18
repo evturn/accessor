@@ -69,8 +69,14 @@ const routeReducer = (state={route: ''}, action) => {
   }
 }
 
-const uiReducer = (state=false, action) => {
+const uiReducer = (state={open: false}, action) => {
   switch (action.type) {
+
+    case 'STYLE_UPDATE':
+      return Object.assign({}, state, {
+        ...action.payload
+      })
+
     default:
       return state
   }
