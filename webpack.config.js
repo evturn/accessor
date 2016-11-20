@@ -11,11 +11,21 @@ const CWD = process.cwd()
 const configureWebpack = opts => ({
   entry: opts.entry,
 
-  plugins: opts.plugins,
-
   output: Object.assign({
     path: path.resolve(CWD, 'build'),
   }, opts.output),
+
+  plugins: [
+    ...opts.plugins,
+    new HtmlWebpackPlugin({
+      template: 'app/index.html',
+      title: 'Accessor - I heard you like records',
+      filename: 'index.html',
+      appMountId: 'app',
+      favicon: 'app/favicon.ico',
+      inject: true,
+    }),
+  ],
 
   module: {
     loaders: [{
@@ -38,7 +48,13 @@ const configureWebpack = opts => ({
       test: /\.(jpg|png|gif)$/,
       loaders: [
         'file-loader',
-        'image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}',
+        [
+          'image-webpack?{',
+          'progressive:true,',
+          'optimizationLevel: 7,',
+          'interlaced: false,',
+          'pngquant:{quality: "65-90", speed: 4}}'
+        ].join(''),
       ],
     }, {
       test: /\.html$/,
@@ -62,10 +78,10 @@ const configureWebpack = opts => ({
     alias: {
       containers: path.join(CWD, 'app', 'containers'),
       components: path.join(CWD, 'app', 'components'),
-      actions: path.join(CWD, 'app', 'actions.js'),
-      constants: path.join(CWD, 'app', 'constants.js'),
-      api: path.join(CWD, 'app', 'api'),
-      styles: path.join(CWD, 'app', 'containers', 'Root', 'style.css'),
+      actions:    path.join(CWD, 'app', 'actions.js'),
+      constants:  path.join(CWD, 'app', 'constants.js'),
+      api:        path.join(CWD, 'app', 'api'),
+      styles:     path.join(CWD, 'app', 'containers', 'Root', 'style.css'),
     },
   },
 
@@ -87,14 +103,16 @@ const devBuild = _ => configureWebpack({
     path.join(CWD, 'app/index.js')
   ],
 
-  babelQuery: {
-    presets: [ 'react-hmre' ]
-  },
-
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunky.mclover.js',
   },
+
+  babelQuery: {
+    presets: [ 'react-hmre' ]
+  },
+
+  devtool: 'inline-source-map',
 
   cssLoaders: [
     `style-loader`,
@@ -108,20 +126,24 @@ const devBuild = _ => configureWebpack({
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin(),
-    new WriteFilePlugin({ log: false }),
+    new WriteFilePlugin({log: false}),
     new ExtractTextPlugin('[name].[contenthash].css'),
-    new HtmlWebpackPlugin({
-      template: 'app/index.html',
-      appMountId: 'app',
-      favicon: 'app/favicon.ico',
-      inject: true,
-    }),
-    new webpack.DefinePlugin({ __DEV__: true })
+    new webpack.DefinePlugin({__DEV__: true})
   ],
 })
 
 const prodBuild = _ => configureWebpack({
-  entry: [ path.join(CWD, 'app/index.js') ],
+  entry: {
+    main: path.join(CWD, 'app/index.js'),
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router',
+      'react-redux',
+      'redux',
+      'firebase'
+    ],
+  },
 
   output: {
     filename: '[name].[chunkhash].js',
@@ -130,27 +152,14 @@ const prodBuild = _ => configureWebpack({
 
   cssLoaders: ExtractTextPlugin.extract(
     'style-loader',
-    'css-loader?modules&importLoaders=1!postcss-loader'
+    [`css-loader`, `?modules&importLoaders=1`, `!postcss-loader`].join('')
   ),
 
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      children: true,
-      minChunks: 2,
-      async: true,
-    }),
+    new webpack.optimize.CommonsChunkPlugin({names: ['vendor', 'manifest']}),
     new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin({ compress: { warnings: false } }),
-    new HtmlWebpackPlugin({
-      template: 'app/index.html',
-      title: 'Accessor - I heard you like records',
-      filename: 'index.html',
-      appMountId: 'app',
-      favicon: 'app/favicon.ico',
-      inject: true,
-    }),
+    new webpack.optimize.UglifyJsPlugin({compress: {warnings: false}}),
     new ExtractTextPlugin('[name].[contenthash].css'),
     new webpack.DefinePlugin({
       __DEV__: false,
