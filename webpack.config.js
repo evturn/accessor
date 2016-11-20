@@ -22,7 +22,7 @@ const configureWebpack = opts => ({
       title: 'Accessor - I heard you like records',
       filename: 'index.html',
       appMountId: 'app',
-      favicon: 'app/favicon.ico',
+      favicon: 'app/favicon.png',
       inject: true,
     }),
   ],

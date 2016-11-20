@@ -17,16 +17,35 @@ const providers = {
   github: new firebase.auth.GithubAuthProvider(),
 }
 
+const selectErrorHandler = e => {
+  switch (e.code) {
+    case 'auth/account-exists-with-different-credential':
+      return fetchProvidersForEmail
+
+  }
+}
+
 export const onAuthStateChanged = observer => {
   return firebase
     .auth()
     .onAuthStateChanged(observer)
 }
 
+export const fetchProvidersForEmail = email => {
+
+}
+
 export const signInWithPopup = service => {
-  firebase
+  return firebase
     .auth()
     .signInWithPopup(providers[service])
+}
+
+export const signInWithCredential = credential => {
+  return firebase
+    .auth()
+    .signInWithCredential(credential)
+    .then(x => console.log('sign in with credential', x))
 }
 
 export const linkWithPopup = provider => {
@@ -52,12 +71,7 @@ export const getRedirectResult = _ => {
     })
 }
 
-export const signInWithCredential = credential => {
-  return firebase
-    .auth()
-    .signInWithCredential(credential)
-    .then(x => console.log('sign in with credential', x))
-}
+
 
 export const signOut = _ => {
   return firebase

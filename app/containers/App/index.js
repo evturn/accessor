@@ -33,11 +33,12 @@ export class App extends Component {
   }
 
   signOut(router) {
-    return _ =>
+    return _ => {
       firebaseAuth().signOut()
       this.props.authChange({authed: false})
       this.styleUpdate()
       router.transitionTo('/')
+    }
   }
 
   styleUpdate() {
