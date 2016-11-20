@@ -1,0 +1,70 @@
+.root {
+  display: flex;
+  position: absolute;
+  flex-direction: column;
+  margin: 0 auto;
+  top: 200px;
+  right: 15px;
+  left: 15px;
+  max-width: 400px;
+  height: 200px;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  z-index: 1;
+  background: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+.header {
+  display: flex;
+  padding: 16px;
+  perspective-origin: 165px 56px;
+  transform-origin: 149px 48px;
+  margin: 0;
+  color: #fff;
+  align-items: flex-end;
+  font-size: 24px;
+  font-weight: 300;
+  overflow: hidden;
+  background-color: #06abfc;
+}
+
+.card {
+  text-align: center;
+  padding: 16px;
+  width: 100%;
+  margin: 15px auto 0;
+}
+
+.btn {
+  display: inline-block;
+  position: relative;
+  background-color: #06abfc;
+  color: #fff;
+  height: 60px;
+  width: 70px;
+  margin: 0 10px;
+  cursor: pointer;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-weight: 500;
+  text-align: center;
+  border-radius: 2px;
+  outline: none;
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1),background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 1px 0 rgba(0,0,0,0.14),0 0px 0px -1px rgba(0,0,0,0.2),0 0px 1px 0 rgba(0,0,0,0.12);
+  vertical-align: middle;
+}
+
+.error {
+  position: absolute;
+  bottom: -90px;
+  right: 35px;
+  left: 35px;
+  color: #039be6;
+  font-size: 14px;
+  line-height: 16px;
+  font-family: 'HelveticaNeue', 'Helvetica', sans-serif;
+  font-weight: 200;
+}

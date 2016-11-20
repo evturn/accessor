@@ -58,11 +58,11 @@ export class App extends Component {
                 toggleMenu={this.styleUpdate}
                 authed={authed} />
               <MatchWhenAuthed
-                pattern="/"
+                pattern='/'
                 component={Dashboard}
                 authed={authed} />
               <MatchWhenUnauthed
-                pattern="/"
+                pattern='/'
                 component={Login}
                 authed={authed} />
               <Miss render={_ => <h3>The fuck are you going?</h3>} />

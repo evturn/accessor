@@ -42,13 +42,6 @@ export const link = credential => {
     .link(credential)
 }
 
-export const signInWithCredential = credential => {
-  return firebase
-    .auth()
-    .signInWithCredential(credential)
-    .then(x => console.log('sign in with credential', x))
-}
-
 export const linkWithPopup = provider => {
   return firebase
     .auth()
@@ -59,6 +52,13 @@ export const linkWithPopup = provider => {
         console.log('link with popup', x.user)
       }
     })
+}
+
+export const signInWithCredential = credential => {
+  return firebase
+    .auth()
+    .signInWithCredential(credential)
+    .then(x => console.log('sign in with credential', x))
 }
 
 export const signOut = _ => {

@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Card from 'components/Card'
-import GoogleLogo from 'components/Icons/GoogleLogo'
-import TwitterLogo from 'components/Icons/TwitterLogo'
-import GithubLogo from 'components/Icons/GithubLogo'
+import AuthButton from 'components/Buttons/AuthButton'
 import { signInWithPopup, promptUserWithService, link } from 'api/auth'
 import { authError } from 'api/actions'
 import css from './style.css'
@@ -32,21 +30,15 @@ export class Login extends Component {
     return (
       <Card header="Sign In">
         <div>
-          <button
-            className={css.btn}
-            onClick={this.signInWithPopup('google')}>
-            <GoogleLogo />
-          </button>
-          <button
-            className={css.btn}
-            onClick={this.signInWithPopup('github')}>
-            <GithubLogo />
-          </button>
-          <button
-            className={css.btn}
-            onClick={this.signInWithPopup('twitter')}>
-            <TwitterLogo />
-          </button>
+          <AuthButton
+            service='google'
+            onClick={this.signInWithPopup('google')} />
+          <AuthButton
+            service='twitter'
+            onClick={this.signInWithPopup('twitter')} />
+          <AuthButton
+            service='github'
+            onClick={this.signInWithPopup('github')} />
           <div className={css.error}>{message}</div>
         </div>
       </Card>
