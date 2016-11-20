@@ -6,7 +6,7 @@ import Miss from 'react-router/Miss'
 import MatchWhenAuthed from 'containers/MatchWhenAuthed'
 import MatchWhenUnauthed from 'containers/MatchWhenUnauthed'
 import Header from 'containers/Header'
-import Home from 'containers/Home'
+import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
 import { firebaseAuth } from 'api/auth'
@@ -33,10 +33,11 @@ export class App extends Component {
   }
 
   signOut(router) {
-    firebaseAuth().signOut()
-    this.props.authChange({authed: false})
-    this.styleUpdate()
-    router.transitionTo('/')
+    return _ =>
+      firebaseAuth().signOut()
+      this.props.authChange({authed: false})
+      this.styleUpdate()
+      router.transitionTo('/')
   }
 
   styleUpdate() {
@@ -52,12 +53,12 @@ export class App extends Component {
             <div className={css.root}>
               <Header
                 open={open}
-                signOut={router => this.signOut(router)}
+                signOut={this.signOut(router)}
                 toggleMenu={this.styleUpdate}
                 authed={authed} />
               <MatchWhenAuthed
                 pattern="/"
-                component={Home}
+                component={Dashboard}
                 authed={authed} />
               <MatchWhenUnauthed
                 pattern="/"

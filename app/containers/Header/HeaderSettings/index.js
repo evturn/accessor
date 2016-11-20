@@ -2,7 +2,7 @@ import React from 'react'
 import ExitIcon from 'components/Icons/ExitIcon'
 import css from './style.css'
 
-export const SettingsMenu = ({ open, signOut, toggleMenu }) => {
+export const HeaderSettings = ({ open, signOut, toggleMenu }) => {
   return (
     <div className={`${css.root} ${open ? css.open : ''}`}>
       <ul className={css.ul}>
@@ -20,4 +20,4 @@ export const SettingsMenu = ({ open, signOut, toggleMenu }) => {
   )
 }
 
-export default SettingsMenu
+export default HeaderSettings

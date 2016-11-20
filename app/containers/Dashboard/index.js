@@ -1,8 +1,7 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import css from './style.css'
 
-export const Home = props => {
+export const Dashboard = props => {
   return (
     <div className={css.root}>
       <div>Sup dog.</div>
@@ -10,4 +9,4 @@ export const Home = props => {
   )
 }
 
-export default Home
+export default Dashboard

@@ -3,7 +3,7 @@ import AccessorLogo from 'components/Icons/AccessorLogo'
 import GearIcon from 'components/Icons/GearIcon'
 import css from './style.css'
 
-export const Navbar = ({ authed, toggleMenu }) => {
+export const HeaderNavbar = ({ authed, toggleMenu }) => {
   return (
     <div className={css.root}>
       <div className={css.title}>
@@ -18,4 +18,4 @@ export const Navbar = ({ authed, toggleMenu }) => {
   )
 }
 
-export default Navbar
+export default HeaderNavbar
