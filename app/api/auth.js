@@ -8,6 +8,9 @@ firebase.initializeApp({
   messagingSenderId: "149184924674",
 })
 
+export const ref = firebase.database().ref()
+export const firebaseAuth = firebase.auth
+
 const providers = {
   google: new firebase.auth.GoogleAuthProvider(),
   twitter: new firebase.auth.TwitterAuthProvider(),

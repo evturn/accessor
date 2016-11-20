@@ -1,27 +1,21 @@
 import React from 'react'
-import { connect } from 'react-redux'
 import AccessorLogo from 'components/Icons/AccessorLogo'
 import GearIcon from 'components/Icons/GearIcon'
 import css from './style.css'
 
-export const Navbar = ({ user, toggleMenu }) => {
+export const Navbar = ({ authed, toggleMenu }) => {
   return (
     <div className={css.root}>
       <div className={css.title}>
         <AccessorLogo />
       </div>
-      {user
+      {authed
         ? <div className={css.gear} onClick={toggleMenu}>
             <GearIcon />
           </div>
-        : null
-      }
+        : null}
     </div>
   )
 }
 
-export default connect(
-  state => ({
-    ...state
-  })
-)(Navbar)
+export default Navbar

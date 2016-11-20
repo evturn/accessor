@@ -1,54 +1,80 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
+import Router from 'react-router/BrowserRouter'
 import Match from 'react-router/Match'
+import Miss from 'react-router/Miss'
+import MatchWhenAuthed from 'containers/MatchWhenAuthed'
+import MatchWhenUnauthed from 'containers/MatchWhenUnauthed'
 import Header from 'containers/Header'
 import Home from 'containers/Home'
 import Login from 'containers/Login'
+import LoadingIndicator from 'components/LoadingIndicator'
+import { firebaseAuth } from 'api/auth'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class App extends Component {
   constructor(props) {
     super(props)
-    this.updateRoute = ::this.updateRoute
+    this.signOut = ::this.signOut
+    this.styleUpdate = ::this.styleUpdate
   }
 
   componentDidMount() {
-    this.updateRoute(this.props)
+    this.removeListener = firebaseAuth()
+      .onAuthStateChanged(user => user
+        ? this.props.authChange({loading: false, authed: true})
+        : this.props.authChange({loading: false})
+      )
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.pathname !== this.props.pathname) {
-      this.updateRoute(nextProps)
-    }
+  componentWillUnmount() {
+    this.removeListener()
   }
 
-  updateRoute(props) {
-    const { pathname, locationChange } = props
-    locationChange({ route: pathname })
+  signOut(router) {
+    firebaseAuth().signOut()
+    this.props.authChange({authed: false})
+    this.styleUpdate()
+    router.transitionTo('/')
+  }
+
+  styleUpdate() {
+    this.props.styleUpdate({open: !this.props.open})
   }
 
   render() {
-    const { user, initialized } = this.props
-    return (
-      <div className={css.root}>
-        <Header />
-        {initialized
-          ? user
-            ? <Match pattern="/" component={Home} />
-            : <Match pattern="/" component={Login} />
-          : null
-        }
-      </div>
-    )
+    const { authed, loading, open } = this.props
+    return loading === true
+      ? <LoadingIndicator />
+      : <Router>
+          {({ router }) =>
+            <div className={css.root}>
+              <Header
+                open={open}
+                signOut={router => this.signOut(router)}
+                toggleMenu={this.styleUpdate}
+                authed={authed} />
+              <MatchWhenAuthed
+                pattern="/"
+                component={Home}
+                authed={authed} />
+              <MatchWhenUnauthed
+                pattern="/"
+                component={Login}
+                authed={authed} />
+              <Miss render={_ => <h3>The fuck are you going?</h3>} />
+            </div>
+          }
+        </Router>
   }
 }
 
 export default connect(
   state => ({
-    route: state.route,
-    user: state.auth.user,
-    initialized: state.auth.initialized,
+    authed: state.authed,
+    loading: state.loading,
+    open: state.open,
   }),
   Actions
 )(App)

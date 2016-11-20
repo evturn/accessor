@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import css from './style.css'
 
-export const Home = ({ user }) => {
+export const Home = props => {
   return (
     <div className={css.root}>
       <div>Sup dog.</div>
@@ -10,8 +10,4 @@ export const Home = ({ user }) => {
   )
 }
 
-export default connect(
-  state => ({
-    user: state.auth.user
-  })
-)(Home)
+export default Home
