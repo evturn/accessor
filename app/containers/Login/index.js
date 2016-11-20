@@ -4,7 +4,7 @@ import Card from 'components/Card'
 import GoogleLogo from 'components/Icons/GoogleLogo'
 import TwitterLogo from 'components/Icons/TwitterLogo'
 import GithubLogo from 'components/Icons/GithubLogo'
-import { signInWithPopup } from 'api/auth'
+import { signInWithPopup, promptUserWithService, link } from 'api/auth'
 import { authError } from 'api/actions'
 import css from './style.css'
 
@@ -15,12 +15,20 @@ export class Login extends Component {
   }
 
   signInWithPopup(service) {
-    return _ => signInWithPopup(service)
-      .catch(error => this.props.authError({ error }))
+    return _ => {
+      const { error, authError } = this.props
+      return error && error.credential
+        ? signInWithPopup(service)
+            .then(_ => link(error.credential))
+            .catch(error => authError({ error }))
+        : signInWithPopup(service)
+            .catch(promptUserWithService)
+            .then(error => authError({ error }))
+    }
   }
 
   render() {
-    const { error } = this.props
+    const { message } = this.props.error
     return (
       <Card header="Sign In">
         <div>
@@ -39,7 +47,7 @@ export class Login extends Component {
             onClick={this.signInWithPopup('twitter')}>
             <TwitterLogo />
           </button>
-          <div className={css.error}>{error}</div>
+          <div className={css.error}>{message}</div>
         </div>
       </Card>
     )
@@ -48,7 +56,7 @@ export class Login extends Component {
 
 export default connect(
   state => ({
-    error: state.error.message
+    error: state.error
   }),
   { authError }
 )(Login)

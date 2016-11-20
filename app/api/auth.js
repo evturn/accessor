@@ -17,28 +17,29 @@ const providers = {
   github: new firebase.auth.GithubAuthProvider(),
 }
 
-const selectErrorHandler = e => {
-  switch (e.code) {
-    case 'auth/account-exists-with-different-credential':
-      return fetchProvidersForEmail
-
-  }
-}
-
 export const onAuthStateChanged = observer => {
   return firebase
     .auth()
     .onAuthStateChanged(observer)
 }
 
-export const fetchProvidersForEmail = email => {
-
-}
-
 export const signInWithPopup = service => {
   return firebase
     .auth()
     .signInWithPopup(providers[service])
+}
+
+export const fetchProvidersForEmail = email => {
+  return firebase
+    .auth()
+    .fetchProvidersForEmail(email)
+}
+
+export const link = credential => {
+  return firebase
+    .auth()
+    .currentUser
+    .link(credential)
 }
 
 export const signInWithCredential = credential => {
@@ -60,21 +61,32 @@ export const linkWithPopup = provider => {
     })
 }
 
-export const getRedirectResult = _ => {
-  return firebase
-    .auth()
-    .getRedirectResult()
-    .then(x => {
-      if (x.credential) {
-        console.log('get redirect result', x.user)
-      }
-    })
-}
-
-
-
 export const signOut = _ => {
   return firebase
     .auth()
     .signOut()
+}
+
+const createProviderError = provider => {
+  const service = provider.length ? provider[0] : ''
+  const msg = x => [
+    `This email is already linked with ${x}.`,
+    `Please use ${x} to log in so you can use both.`
+  ].join('\n')
+  switch (service) {
+    case 'google.com':
+      return msg(`Google`)
+    case 'twitter.com':
+      return msg(`Twitter`)
+    case 'github.com':
+      return msg(`Github`)
+    default:
+      return `Network Error! Actually I don't know what happened.`
+  }
+}
+
+export const promptUserWithService = e => {
+  return fetchProvidersForEmail(e.email)
+    .then(createProviderError)
+    .then(message => ({ ...e, message }))
 }
