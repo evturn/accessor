@@ -4,7 +4,6 @@ import Card from 'components/Card'
 import AuthButton from 'components/Buttons/AuthButton'
 import { signInWithPopup, promptUserWithService, link } from 'api/auth'
 import { authError } from 'api/actions'
-import css from './style.css'
 
 export class Login extends Component {
   constructor(props) {
@@ -28,19 +27,18 @@ export class Login extends Component {
   render() {
     const { message } = this.props.error
     return (
-      <Card header="Sign In">
-        <div>
-          <AuthButton
-            service='google'
-            onClick={this.signInWithPopup('google')} />
-          <AuthButton
-            service='twitter'
-            onClick={this.signInWithPopup('twitter')} />
-          <AuthButton
-            service='github'
-            onClick={this.signInWithPopup('github')} />
-          <div className={css.error}>{message}</div>
-        </div>
+      <Card
+        header="Sign In"
+        message={message}>
+        <AuthButton
+          service='google'
+          onClick={this.signInWithPopup('google')} />
+        <AuthButton
+          service='twitter'
+          onClick={this.signInWithPopup('twitter')} />
+        <AuthButton
+          service='github'
+          onClick={this.signInWithPopup('github')} />
       </Card>
     )
   }
