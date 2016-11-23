@@ -1,0 +1,94 @@
+.root {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  height: 60px;
+  width: 100%;
+  background-color: transparent;
+  color: #fff;
+}
+
+.wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.options {
+  position: absolute;
+  bottom: 80px;
+  background-color: transparent;
+  transition: all 0.1s ease-in-out;
+}
+
+.options.on {
+  right: 15px;
+}
+
+.options.off {
+  right: -60px;
+}
+
+.ul {
+  position: relative;
+  padding-left: 0;
+}
+
+.li {
+  background-color: #06abfc;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 7.5px;
+  box-shadow: 0 0 4px rgba(0,0,0,.14),0 4px 8px rgba(0,0,0,.28);
+}
+
+.li:active {
+  box-shadow: 0 0 6px rgba(0,0,0,.16),0 6px 12px rgba(0,0,0,.32);
+}
+
+.icon {
+  width: 35px;
+  height: 35px;
+  transition: all 0.4s cubic-bezier(.4,0,.2,1);
+  transform: scale(1) rotate(360deg);
+}
+
+.on .icon {
+  transform: scale(1) rotate(0deg);
+}
+
+.off .icon {
+  transform: scale(1) rotate(360deg);
+}
+
+.note {
+  composes: li;
+  background-color: #FED312FF;
+}
+
+.attach {
+  composes: li;
+  background-color: #E55324FF;
+}
+
+.link {
+  composes: li;
+  background-color: #792B81FF;
+}
+
+.widgets {
+  composes: li;
+  background-color: #FC5D8CFF;
+}
+
+.add {
+  composes: li;
+  display: block;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  background-color: #06abfc;
+}
