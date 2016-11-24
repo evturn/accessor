@@ -8,19 +8,13 @@ firebase.initializeApp({
   messagingSenderId: "149184924674",
 })
 
-export const ref = firebase.database().ref()
+export const firebaseRef = firebase.database().ref()
 export const firebaseAuth = firebase.auth
 
 const providers = {
   google: new firebase.auth.GoogleAuthProvider(),
   twitter: new firebase.auth.TwitterAuthProvider(),
   github: new firebase.auth.GithubAuthProvider(),
-}
-
-export const onAuthStateChanged = observer => {
-  return firebase
-    .auth()
-    .onAuthStateChanged(observer)
 }
 
 export const signInWithPopup = service => {
@@ -59,12 +53,6 @@ export const signInWithCredential = credential => {
     .auth()
     .signInWithCredential(credential)
     .then(x => console.log('sign in with credential', x))
-}
-
-export const signOut = _ => {
-  return firebase
-    .auth()
-    .signOut()
 }
 
 const createProviderError = provider => {

@@ -9,7 +9,7 @@ import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth } from 'api/auth'
+import { firebaseAuth, firebaseRef } from 'api/auth'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -17,19 +17,36 @@ export class App extends Component {
   constructor(props) {
     super(props)
     this.signOut = ::this.signOut
+    this.createUser = ::this.createUser
     this.styleUpdate = ::this.styleUpdate
+    this.loadUser = ::this.loadUser
   }
 
   componentDidMount() {
     this.removeListener = firebaseAuth()
       .onAuthStateChanged(user => user
-        ? this.props.authChange({loading: false, authed: true})
+        ? this.loadUser(user)
         : this.props.authChange({loading: false})
       )
   }
 
   componentWillUnmount() {
     this.removeListener()
+  }
+
+  loadUser(user) {
+    this.props.authChange({loading: false, authed: true})
+    firebaseRef
+      .child(`users/${user.uid}`)
+      .once('value')
+      .then(x => x.val())
+      .then(x => !!x || this.createUser(user))
+  }
+
+  createUser(user) {
+    const { displayName, email, photoURL, uid } = user
+    firebaseRef
+      .update({[`users/${uid}`]: { displayName, email, photoURL, uid }})
   }
 
   signOut(router) {
