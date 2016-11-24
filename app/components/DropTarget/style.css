@@ -1,8 +1,15 @@
 .root {
   position: relative;
-  height: 200px;
+  min-height: 200px;
   width: 400px;
   border: 1px solid #ff00dd;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: #eee;
+  color: #000;
+  padding: 15px;
 }
 
 .target {

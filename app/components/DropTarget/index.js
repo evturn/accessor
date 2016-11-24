@@ -5,7 +5,7 @@ import css from './style.css'
 export class DropTarget extends Component {
   constructor(props) {
     super(props)
-    this.state = {dragging: false}
+    this.state = {dragging: false, files: []}
     this.onDrop = ::this.onDrop
     this.onDragOver = ::this.onDragOver
     this.onDragEnter = ::this.onDragEnter
@@ -47,15 +47,18 @@ export class DropTarget extends Component {
 
   onDrop(e) {
     e.preventDefault()
-    this.setState({dragging: false})
-      console.log('Files', e.dataTransfer.files)
+    this.setState({
+      dragging: false,
+      files: Array.from(e.dataTransfer.files),
+    })
   }
 
   render() {
-    const { dragging } = this.state
+    const { dragging, files } = this.state
     return (
       <div className={css.root}>
         {this.props.children}
+        {files.map((x, i) => <div key={i} className={css.header}>{x.name}</div>)}
         <div
           ref={x => this.target = x}
           className={`${dragging ? css.show : css.hide}`}>

@@ -20,12 +20,17 @@ export class DashboardOptions extends Component {
 
   render() {
     const { open } = this.state
+    const { selectAttach } = this.props
     return (
       <div className={css.root}>
         <div className={css.wrap}>
           <div className={`${css.options} ${open ? css.on : css.off}`}>
             <ul className={css.ul}>
-              <li className={css.attach}><AttachFileIcon className={css.icon} /></li>
+              <li
+                onClick={selectAttach}
+                className={css.attach}>
+                <AttachFileIcon className={css.icon} />
+              </li>
               <li className={css.note}><NoteIcon className={css.icon} /></li>
               <li className={css.link}><LinkIcon className={css.icon} /></li>
               <li className={css.widgets}><WidgetsIcon className={css.icon} /></li>
