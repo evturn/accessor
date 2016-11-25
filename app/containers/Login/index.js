@@ -46,7 +46,7 @@ export class Login extends Component {
 
 export default connect(
   state => ({
-    error: state.error
+    error: state.auth.error
   }),
   { authError }
 )(Login)

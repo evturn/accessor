@@ -17,3 +17,7 @@ export const styleUpdate = payload => {
 export const locationChange = payload => {
   return {type: 'LOCATION_CHANGE', payload}
 }
+
+export const selectDashboardOption = option => {
+  return {type: 'SELECT_DASHBOARD_OPTION', payload: { option }}
+}

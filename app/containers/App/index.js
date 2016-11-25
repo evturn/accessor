@@ -91,9 +91,9 @@ export class App extends Component {
 
 export default connect(
   state => ({
-    authed: state.authed,
-    loading: state.loading,
-    open: state.open,
+    authed: state.auth.authed,
+    loading: state.auth.loading,
+    open: state.auth.open,
   }),
   Actions
 )(App)
