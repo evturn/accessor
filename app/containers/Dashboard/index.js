@@ -18,13 +18,15 @@ export class Dashboard extends Component {
     const { option } = this.props
     return (
       <div className={css.root}>
-        {option
-          ? option === 'write'
+        {!option
+          ? null
+          : option === 'write'
             ? <Write />
             : option === 'upload'
               ? <Upload />
-              : null
-          : null}
+              : option === 'link'
+                ? <URL />
+                : null}
         <Match pattern='/settings/account' component={LinkAccounts} />
         <DashboardOptions />
       </div>
@@ -44,6 +46,12 @@ const Write = props => {
   return (
     <textarea rows="3">
     </textarea>
+  )
+}
+
+const URL = props => {
+  return (
+    <input type="text" />
   )
 }
 

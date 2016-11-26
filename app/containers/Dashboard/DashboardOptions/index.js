@@ -45,7 +45,11 @@ export class DashboardOptions extends Component {
                 className={css.note}>
                 <NoteIcon className={css.icon} />
               </li>
-              <li className={css.link}><LinkIcon className={css.icon} /></li>
+              <li
+                onClick={this.selectOption('link')}
+                className={css.link}>
+                <LinkIcon className={css.icon} />
+              </li>
               <li className={css.widgets}><WidgetsIcon className={css.icon} /></li>
             </ul>
           </div>
