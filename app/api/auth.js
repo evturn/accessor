@@ -10,6 +10,7 @@ firebase.initializeApp({
 
 export const firebaseRef = firebase.database().ref()
 export const firebaseAuth = firebase.auth
+export const firebaseStorage = firebase.storage
 
 const providers = {
   google: new firebase.auth.GoogleAuthProvider(),
