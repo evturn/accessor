@@ -77,7 +77,6 @@ export class DropTarget extends Component {
 
   render() {
     const { dragging, files, uploads } = this.state
-    console.log(uploads)
     return (
       <div className={css.root}>
         {this.props.children}

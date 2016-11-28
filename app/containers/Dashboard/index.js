@@ -10,7 +10,7 @@ import css from './style.css'
 
 export class Dashboard extends Component {
   render() {
-    const { option } = this.props
+    const { option, data } = this.props
     return (
       <div className={css.root}>
         {!option
@@ -22,6 +22,13 @@ export class Dashboard extends Component {
               : option === 'link'
                 ? <QuickURL />
                 : null}
+        <div>
+          {data.map((x, i) =>
+            <div className={css.item} key={i}>
+              {x.map((y, i) => <div className={css.img} key={i} style={{backgroundImage: `url(${y.url})`}} />)}
+            </div>
+          )}
+        </div>
         <Match pattern='/settings/account' component={LinkAccounts} />
         <DashboardOptions />
       </div>
@@ -31,6 +38,7 @@ export class Dashboard extends Component {
 
 export default connect(
   state => ({
-    option: state.ui.option
+    option: state.ui.option,
+    data: state.user.data || [],
   })
 )(Dashboard)

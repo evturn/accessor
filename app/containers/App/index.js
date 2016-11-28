@@ -9,7 +9,7 @@ import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, firebaseDatabase } from 'api/auth'
+import { firebaseAuth, firebaseDatabase, flattenUserRecords } from 'api/auth'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -41,7 +41,7 @@ export class App extends Component {
       .child(`users/${user.uid}`)
       .once('value')
       .then(x => x.val())
-      .then(x => !!x ? this.createUser(user) : this.initUser(x))
+      .then(x => !!x ? this.initUser(x) : this.createUser(user) )
   }
 
   createUser(user) {
@@ -54,8 +54,14 @@ export class App extends Component {
 
   initUser(user) {
     const { initUser, authChange } = this.props
-    initUser(user)
+
     authChange({loading: false, authed: true})
+
+    firebaseDatabase()
+      .ref(`users/${user.uid}/records`)
+      .on('value', x => {
+        initUser({ ...user, data: flattenUserRecords(x.val()) })
+      })
   }
 
   signOut(router) {

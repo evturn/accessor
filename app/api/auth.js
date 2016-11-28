@@ -74,8 +74,16 @@ const createProviderError = provider => {
   }
 }
 
+const flatten = map => {
+  return Object.keys(map).reduce((acc, x) => [map[x]].concat(acc), [])
+}
+
 export const promptUserWithService = e => {
   return fetchProvidersForEmail(e.email)
     .then(createProviderError)
     .then(message => ({ ...e, message }))
+}
+
+export const flattenUserRecords = records => {
+  return flatten(records).map(flatten)
 }
