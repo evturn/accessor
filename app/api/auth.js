@@ -8,8 +8,8 @@ firebase.initializeApp({
   messagingSenderId: "149184924674",
 })
 
-export const firebaseRef = firebase.database().ref()
 export const firebaseAuth = firebase.auth
+export const firebaseDatabase = firebase.database
 export const firebaseStorage = firebase.storage
 
 const providers = {

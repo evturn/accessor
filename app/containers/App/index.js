@@ -9,7 +9,7 @@ import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, firebaseRef } from 'api/auth'
+import { firebaseAuth, firebaseDatabase } from 'api/auth'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -36,7 +36,8 @@ export class App extends Component {
 
   loadUser(user) {
     this.props.authChange({loading: false, authed: true})
-    firebaseRef
+    firebaseDatabase()
+      .ref()
       .child(`users/${user.uid}`)
       .once('value')
       .then(x => x.val())
@@ -45,7 +46,8 @@ export class App extends Component {
 
   createUser(user) {
     const { displayName, email, photoURL, uid } = user
-    firebaseRef
+    firebaseDatabase()
+      .ref()
       .update({[`users/${uid}`]: { displayName, email, photoURL, uid }})
   }
 

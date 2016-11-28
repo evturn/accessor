@@ -63,7 +63,6 @@ export class DropTarget extends Component {
 
   readFile(file) {
     const reader = new FileReader()
-    console.log(file)
     reader.addEventListener('load', _ => {
       this.setState({
         uploads: this.state.uploads.concat({
@@ -71,9 +70,7 @@ export class DropTarget extends Component {
           src: reader.result,
         })
       })
-    firebaseStorage()
-      .ref(`/user/${firebaseAuth().currentUser.uid}/${file.name}`)
-      .put(file)
+    this.props.onUpload(file)
     }, false)
     if (file) { reader.readAsDataURL(file) }
   }
