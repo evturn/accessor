@@ -21,6 +21,16 @@ const authReducr = (state={authed: false, loading: true, open: false, error: {}}
   }
 }
 
+const userReducer = (state={}, action) => {
+
+  switch (action.type) {
+    case 'INIT_USER':
+      return {...action.payload}
+    default:
+      return state
+  }
+}
+
 const uiReducer = (state={option: false}, action) => {
   switch (action.type) {
 
@@ -40,4 +50,5 @@ const uiReducer = (state={option: false}, action) => {
 export default combineReducers({
   auth: authReducr,
   ui: uiReducer,
+  user: userReducer,
 })

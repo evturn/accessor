@@ -20,6 +20,7 @@ export class App extends Component {
     this.createUser = ::this.createUser
     this.styleUpdate = ::this.styleUpdate
     this.loadUser = ::this.loadUser
+    this.initUser = ::this.initUser
   }
 
   componentDidMount() {
@@ -35,13 +36,12 @@ export class App extends Component {
   }
 
   loadUser(user) {
-    this.props.authChange({loading: false, authed: true})
     firebaseDatabase()
       .ref()
       .child(`users/${user.uid}`)
       .once('value')
       .then(x => x.val())
-      .then(x => !!x || this.createUser(user))
+      .then(x => !!x ? this.createUser(user) : this.initUser(x))
   }
 
   createUser(user) {
@@ -49,6 +49,13 @@ export class App extends Component {
     firebaseDatabase()
       .ref()
       .update({[`users/${uid}`]: { displayName, email, photoURL, uid }})
+      .then(_ => this.initUser({ displayName, email, photoURL, uid }))
+  }
+
+  initUser(user) {
+    const { initUser, authChange } = this.props
+    initUser(user)
+    authChange({loading: false, authed: true})
   }
 
   signOut(router) {
@@ -96,6 +103,7 @@ export default connect(
     authed: state.auth.authed,
     loading: state.auth.loading,
     open: state.auth.open,
+    user: state.user,
   }),
   Actions
 )(App)

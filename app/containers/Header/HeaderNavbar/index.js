@@ -10,7 +10,7 @@ export const HeaderNavbar = ({ authed, toggleMenu }) => {
         <AccessorLogo />
       </div>
       {authed
-        ? <div className={css.gear} onClick={toggleMenu}>
+        ? <div className={css.settings} onClick={toggleMenu}>
             <GearIcon />
           </div>
         : null}
