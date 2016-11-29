@@ -16,16 +16,16 @@ export class QuickUpload extends Component {
     const userId = firebaseAuth().currentUser.uid
     const storageRef = firebaseStorage().ref(`users/${userId}`)
     const recordsRef = firebaseDatabase().ref(`records/${userId}`)
-    const recordId = recordsRef.push().key
-    this.setState({ storageRef, recordsRef, recordId })
+    this.setState({ storageRef, recordsRef })
   }
 
   linkStorageToDatabase({ downloadURL, metadata }) {
-    const { recordId, recordsRef } = this.state
+    const { pushKey } = this.props
+    const { recordsRef } = this.state
     if (!!downloadURL) {
       const { contentType, timeCreated, name } = metadata
       recordsRef
-        .child(recordId)
+        .child(pushKey)
         .push({ url: downloadURL, contentType, timeCreated, name })
     }
   }
@@ -36,8 +36,9 @@ export class QuickUpload extends Component {
     const task = ref.put(file)
 
     task.on(firebaseStorage.TaskEvent.STATE_CHANGED, {
-      next: x => this.linkStorageToDatabase(x),
-      error: e => console.log(e)
+      next: x => console.log((x.bytesTransferred / x.totalBytes) * 100),
+      error: e => console.log(e),
+      complete: _ => this.linkStorageToDatabase(task.snapshot)
     })
   }
 

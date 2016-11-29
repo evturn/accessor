@@ -2,85 +2,79 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Match from 'react-router/Match'
 import LinkAccounts from 'containers/LinkAccounts'
-import QuickText from './QuickText'
-import QuickUpload from './QuickUpload'
-import QuickURL from './QuickURL'
+import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
 import { firebaseDatabase, firebaseAuth } from 'api/auth'
 import DashboardOptions from './DashboardOptions'
+import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props)
-    this.state = {records: [], active: false}
+    this.state = {records: [], active: false, pushKey: ''}
     this.updateData = ::this.updateData
     this.handleClick = ::this.handleClick
-    this.flatten = ::this.flatten
     this.flattenSnapshot = ::this.flattenSnapshot
-    this.navigateToList = ::this.navigateToList
+    this.setValueToActive = ::this.setValueToActive
+    this.clearActiveState = ::this.clearActiveState
   }
 
   componentDidMount() {
-    const recordsRef = firebaseDatabase()
-      .ref(`records/${firebaseAuth().currentUser.uid}`)
-    this.setState({ recordsRef })
+    const userId = firebaseAuth().currentUser.uid
+    const recordsRef = firebaseDatabase().ref(`records/${userId}`)
+    this.setState({recordsRef, pushKey: recordsRef.push().key})
+
     recordsRef
       .orderByKey()
-      .on('child_added', this.updateData)
+      .on('value', this.updateData)
   }
 
   updateData(snap) {
-    const { records } = this.state
-    const flattened = this.flattenSnapshot(snap)
-    this.setState({records: records.concat(flattened)})
+    this.setState({records: this.flattenSnapshot(snap.val())})
   }
 
   handleClick(id) {
+    this.state.records
+      .filter(x => x.id === id)
+      .map(this.setValueToActive)
+  }
+
+  setValueToActive(val) {
     const { recordsRef } = this.state
-    recordsRef
-      .child(id)
-      .once('value')
-      .then(this.flattenSnapshot)
-      .then(active => this.setState({ active }))
+    this.setState({ active: val, pushKey: val.id })
   }
 
-  flattenSnapshot(snap) {
-    return {
-      id: snap.key,
-      data: this.flatten(snap.val())
-    }
+  flattenSnapshot(val) {
+    return Object.keys(val).map(x => ({
+      id: x,
+      data: Object.keys(val[x]).map(y => ({
+        id: y,
+        ...val[x][y]
+      }))
+    }))
   }
 
-  flatten(val) {
-    return Object.keys(val)
-      .reduce((acc, x) => [{id: x, ...val[x]}].concat(acc), [])
-  }
-
-  navigateToList() {
-    this.setState({active: false})
+  clearActiveState() {
+    const { selectDashboardOption } = this.props
+    const { recordsRef } = this.state
+    selectDashboardOption(false)
+    this.setState({active: false, pushKey: recordsRef.push().key})
   }
 
   render() {
     const { option } = this.props
-    const { records, active } = this.state
+    const { records, active, pushKey } = this.state
     return (
       <div className={css.root}>
         {active
           ? <div
-              onClick={this.navigateToList}
+              onClick={this.clearActiveState}
               className={css.back}>Back</div>
-              : null}
-        {!option
-          ? null
-          : option === 'write'
-            ? <QuickText />
-            : option === 'upload'
-              ? <QuickUpload />
-              : option === 'link'
-                ? <QuickURL />
-                : null}
+          : null}
+
+        <DashboardAction option={option} pushKey={pushKey} />
         {active
           ? <DashboardGrid {...active} />
           : <DashboardList records={records} onClick={this.handleClick} />}
@@ -94,5 +88,6 @@ export class Dashboard extends Component {
 export default connect(
   state => ({
     option: state.ui.option
-  })
+  }),
+  Actions
 )(Dashboard)
