@@ -9,7 +9,7 @@ import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, firebaseDatabase, flattenUserRecords } from 'api/auth'
+import { firebaseAuth, firebaseDatabase } from 'api/auth'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -20,7 +20,6 @@ export class App extends Component {
     this.createUser = ::this.createUser
     this.styleUpdate = ::this.styleUpdate
     this.loadUser = ::this.loadUser
-    this.initUser = ::this.initUser
   }
 
   componentDidMount() {
@@ -36,32 +35,23 @@ export class App extends Component {
   }
 
   loadUser(user) {
+    const { initUser, authChange } = this.props
+    authChange({loading: false, authed: true})
     firebaseDatabase()
       .ref()
       .child(`users/${user.uid}`)
       .once('value')
       .then(x => x.val())
-      .then(x => !!x ? this.initUser(x) : this.createUser(user) )
+      .then(x => !!x ? x : this.createUser(user))
+      .then(initUser)
   }
 
   createUser(user) {
     const { displayName, email, photoURL, uid } = user
-    firebaseDatabase()
+    return firebaseDatabase()
       .ref()
       .update({[`users/${uid}`]: { displayName, email, photoURL, uid }})
-      .then(_ => this.initUser({ displayName, email, photoURL, uid }))
-  }
-
-  initUser(user) {
-    const { initUser, authChange } = this.props
-
-    authChange({loading: false, authed: true})
-
-    firebaseDatabase()
-      .ref(`users/${user.uid}/records`)
-      .on('value', x => {
-        initUser({ ...user, data: flattenUserRecords(x.val()) })
-      })
+      .then(_ => ({ displayName, email, photoURL, uid }))
   }
 
   signOut(router) {

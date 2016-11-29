@@ -1,0 +1,18 @@
+.root {
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-size: 150%;
+  background-position-y: 50%;
+  background-position-x: 50%;
+}
