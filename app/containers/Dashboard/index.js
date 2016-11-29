@@ -47,13 +47,12 @@ export class Dashboard extends Component {
   }
 
   flattenSnapshot(val) {
-    return Object.keys(val).map(x => ({
-      id: x,
-      data: Object.keys(val[x]).map(y => ({
-        id: y,
-        ...val[x][y]
+    return Object.keys(val)
+      .map(x => ({
+        id: x,
+        data: Object.keys(val[x])
+          .map(y => ({id: y, ...val[x][y]}))
       }))
-    }))
   }
 
   clearActiveState() {

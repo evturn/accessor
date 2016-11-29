@@ -9,7 +9,7 @@ import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, firebaseDatabase } from 'api/auth'
+import { firebaseAuth, firebaseDatabase } from 'api'
 import * as Actions from 'api/actions'
 import css from './style.css'
 

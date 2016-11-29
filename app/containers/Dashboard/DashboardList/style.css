@@ -1,10 +1,13 @@
 .root {
-  display: flex;
-  height: 100%;
-  box-sizing: border-box;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  position: relative;
+  z-index: 0;
+  background-color: #f3f3f3;
+  border: 1px solid #efefef;
+  overflow: auto;
+  width: 400px;
+  height: 100vh;
+  border-radius: 3px;
+  outline: none;
 }
 
 .item {
@@ -12,10 +15,19 @@
   position: relative;
   align-items: center;
   width: 100%;
-  height: 60px;
-  padding: 10px 0;
+  height: 59px;
+  padding: 0 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #efefef;
+  padding: 5px 15px;
   overflow: hidden;
   cursor: pointer;
+  box-sizing: border-box;
+  transition-duration: 300ms;
+  transform: translate3d(0px, 59px, 0px);
+}
+
+.item:hover {
   box-shadow: 0 5px 5px -5px rgba(0,0,0,0.2), 0 -5px 5px -5px rgba(0,0,0,0.2);
   background-color: rgba(255,255,255,0.8);
 }
@@ -24,6 +36,8 @@
   display: inline-block;
   width: 50px;
   height: 50px;
+  margin-right: 5px;
+  border-radius: 5px;
   background-repeat: no-repeat;
   background-size: 150%;
   background-position-y: 50%;

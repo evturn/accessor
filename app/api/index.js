@@ -1,31 +1,17 @@
 import firebase from 'firebase'
-import * as Auth from 'api/auth'
 
-export const initApp = observer => {
-  Auth.onAuthStateChanged(observer)
-}
+firebase.initializeApp({
+  apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
+  authDomain: 'accessor-io.firebaseapp.com',
+  databaseURL: 'https://accessor-io.firebaseio.com',
+  storageBucket: "accessor-io.appspot.com",
+  messagingSenderId: "149184924674",
+})
 
-export const signInWithProvider = service => {
-  Auth.signInWithPopup(service)
-}
+export const firebaseAuth = firebase.auth
+export const firebaseDatabase = firebase.database
+export const firebaseStorage = firebase.storage
 
-export const signOut = _ => {
-  Auth.signOut()
-}
-
-export const fetchData = observer => {
-  return firebase
-    .database()
-    .ref(`records`)
-    .child(firebase.auth().currentUser.uid)
-    .once('value')
-    .then(x => x.val())
-    .then(convertMapToList)
-    .then(x => observer.next(x))
-    .catch(e => observer.error(e))
-}
-
-function convertMapToList(data) {
-  return Object.keys(data)
-    .reduce((acc, x) => acc.concat(data[x]), [])
-}
+export const currentUser = firebase.auth().currentUser
+export const userRef = firebase.database().ref(`users/${currentUser.uid}`)
+export const recordsRef = firebase.database().ref(`records/${currentUser.uid}`)

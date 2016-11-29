@@ -1,17 +1,5 @@
 import firebase from 'firebase'
 
-firebase.initializeApp({
-  apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
-  authDomain: 'accessor-io.firebaseapp.com',
-  databaseURL: 'https://accessor-io.firebaseio.com',
-  storageBucket: "accessor-io.appspot.com",
-  messagingSenderId: "149184924674",
-})
-
-export const firebaseAuth = firebase.auth
-export const firebaseDatabase = firebase.database
-export const firebaseStorage = firebase.storage
-
 const providers = {
   google: new firebase.auth.GoogleAuthProvider(),
   twitter: new firebase.auth.TwitterAuthProvider(),
@@ -37,45 +25,30 @@ export const link = credential => {
     .link(credential)
 }
 
-export const linkWithPopup = provider => {
-  return firebase
-    .auth()
-    .currentUser
-    .linkWithPopup(provider)
-    .then(x => {
-      if (x.credential) {
-        console.log('link with popup', x.user)
-      }
-    })
+export const promptUserWithService = e => {
+  return fetchProvidersForEmail(e.email)
+    .then(throwProviderError)
+    .then(message => ({ ...e, message }))
 }
 
-export const signInWithCredential = credential => {
-  return firebase
-    .auth()
-    .signInWithCredential(credential)
-    .then(x => console.log('sign in with credential', x))
-}
-
-const createProviderError = provider => {
+function throwProviderError(provider) {
   const service = provider.length ? provider[0] : ''
-  const msg = x => [
-    `This email is already linked with ${x}.`,
-    `Please use ${x} to log in so you can use both.`
-  ].join('\n')
+
   switch (service) {
     case 'google.com':
-      return msg(`Google`)
+      return providerError(`Google`)
     case 'twitter.com':
-      return msg(`Twitter`)
+      return providerError(`Twitter`)
     case 'github.com':
-      return msg(`Github`)
+      return providerError(`Github`)
     default:
       return `Network Error! Actually I don't know what happened.`
   }
 }
 
-export const promptUserWithService = e => {
-  return fetchProvidersForEmail(e.email)
-    .then(createProviderError)
-    .then(message => ({ ...e, message }))
+function providerError(service) {
+  return [
+    `This email is already linked with ${service}.`,
+    `Please use ${service} to log in so you can use both.`
+  ].join('\n')
 }
