@@ -5,8 +5,8 @@ import LinkAccounts from 'containers/LinkAccounts'
 import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
-import { firebaseDatabase, firebaseAuth } from 'api'
 import DashboardOptions from './DashboardOptions'
+import * as Database from 'api/database'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -16,51 +16,40 @@ export class Dashboard extends Component {
     this.state = {records: [], active: false, pushKey: ''}
     this.updateData = ::this.updateData
     this.handleClick = ::this.handleClick
-    this.flattenSnapshot = ::this.flattenSnapshot
-    this.setValueToActive = ::this.setValueToActive
+    this.createPushKey = :: this.createPushKey
     this.clearActiveState = ::this.clearActiveState
+    this.setSelectedToActive = ::this.setSelectedToActive
   }
 
   componentDidMount() {
-    const userId = firebaseAuth().currentUser.uid
-    const recordsRef = firebaseDatabase().ref(`records/${userId}`)
-    this.setState({recordsRef, pushKey: recordsRef.push().key})
-
-    recordsRef
+    this.setState({pushKey: this.createPushKey()})
+    Database.recordsRef()
       .orderByKey()
       .on('value', this.updateData)
   }
 
+  createPushKey() {
+    return Database.recordsRef().push().key
+  }
+
   updateData(snap) {
     const val = snap.val()
-    this.setState({records: !!val ? this.flattenSnapshot(val) : []})
+    this.setState({records: !!val ? Database.recordsRefToList(val) : []})
   }
 
   handleClick(id) {
     this.state.records
       .filter(x => x.id === id)
-      .map(this.setValueToActive)
+      .map(this.setSelectedToActive)
   }
 
-  setValueToActive(val) {
-    const { recordsRef } = this.state
-    this.setState({ active: val, pushKey: val.id })
-  }
-
-  flattenSnapshot(val) {
-    return Object.keys(val)
-      .map(x => ({
-        id: x,
-        data: Object.keys(val[x])
-          .map(y => ({id: y, ...val[x][y]}))
-      }))
+  setSelectedToActive(val) {
+    this.setState({active: val, pushKey: val.id})
   }
 
   clearActiveState() {
-    const { selectDashboardOption } = this.props
-    const { recordsRef } = this.state
-    selectDashboardOption(false)
-    this.setState({active: false, pushKey: recordsRef.push().key})
+    this.props.selectDashboardOption(false)
+    this.setState({active: false, pushKey: this.createPushKey()})
   }
 
   render() {

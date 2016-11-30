@@ -12,10 +12,4 @@ export const firebaseAuth = firebase.auth
 export const firebaseDatabase = firebase.database
 export const firebaseStorage = firebase.storage
 
-export const currentUser = _ => firebase.auth().currentUser
-
-export const userRef = _ => firebase.database()
-  .ref(`users/${firebaseAuth().currentUser.uid}`)
-
-export const recordsRef = _ => firebase.database()
-  .ref(`records/${firebaseAuth().currentUser.uid}`)
+export { currentUser, userRef, recordsRef, storageRef } from './database'
