@@ -59,3 +59,10 @@ export const linkWithPopup = service => {
     .currentUser
     .linkWithPopup(providers[service])
 }
+
+export const signInWithCredential = credential => {
+  return firebase
+    .auth()
+    .currentUser
+    .signInWithCredential(credential)
+}

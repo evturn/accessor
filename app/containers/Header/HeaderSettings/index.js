@@ -8,7 +8,7 @@ export const HeaderSettings = ({ open, signOut, toggleMenu }) => {
     <div className={`${css.root} ${open ? css.open : ''}`}>
       <ul className={css.ul}>
         <li className={css.li} onClick={toggleMenu}>
-          <Link to='/dashboard/settings'>Link accounts</Link>
+          <Link to='/settings'>Link accounts</Link>
         </li>
         <li className={css.li} onClick={signOut}>
           <ExitIcon />

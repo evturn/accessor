@@ -1,24 +1,29 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import Match from 'react-router/Match'
-import LinkAccounts from 'containers/LinkAccounts'
 import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
 import DashboardOptions from './DashboardOptions'
 import * as Database from 'api/database'
-import * as Actions from 'api/actions'
 import css from './style.css'
 
 export class Dashboard extends Component {
   constructor(props) {
     super(props)
-    this.state = {records: [], active: false, pushKey: ''}
+    this.resetUI = ::this.resetUI
     this.updateData = ::this.updateData
-    this.handleClick = ::this.handleClick
+    this.selectGroup = ::this.selectGroup
+    this.selectOption = ::this.selectOption
+    this.toggleOptions = ::this.toggleOptions
     this.createPushKey = :: this.createPushKey
-    this.clearActiveState = ::this.clearActiveState
-    this.setSelectedToActive = ::this.setSelectedToActive
+  }
+
+  state = {
+    records: [],
+    active: false,
+    menuVisible: false,
+    option: '',
+    pushKey: ''
   }
 
   componentDidMount() {
@@ -37,50 +42,57 @@ export class Dashboard extends Component {
     this.setState({records: !!val ? Database.recordsRefToList(val) : []})
   }
 
-  handleClick(id) {
+  selectGroup(id) {
     this.state.records
       .filter(x => x.id === id)
-      .map(this.setSelectedToActive)
+      .map(x => this.setState({active: x, pushKey: x.id}))
   }
 
-  setSelectedToActive(val) {
-    this.setState({active: val, pushKey: val.id})
+  resetUI() {
+    this.setState({
+      option: '',
+      menuVisible: false,
+      active: false,
+      pushKey: this.createPushKey()
+    })
   }
 
-  clearActiveState() {
-    this.props.selectDashboardOption(false)
-    this.setState({active: false, pushKey: this.createPushKey()})
+  toggleOptions() {
+    this.setState({menuVisible: !this.state.menuVisible})
+  }
+
+  selectOption(option) {
+    return _ => this.setState({option, menuVisible: false})
   }
 
   render() {
-    const { option } = this.props
-    const { records, active, pushKey } = this.state
+    const { option, records, active, pushKey, menuVisible } = this.state
     return (
       <div className={css.root}>
-        <Match pattern='/dashboard/settings' component={LinkAccounts} />
-        <Match pattern='/dashboard' exactly render={props =>
-          <div>
-            {active
-              ? <div
-                  onClick={this.clearActiveState}
-                  className={css.back}>Back</div>
-              : null}
+        {active
+          ? <div
+              onClick={this.resetUI}
+              className={css.back}>Back</div>
+          : null}
 
-            <DashboardAction option={option} pushKey={pushKey} />
-            {active
-              ? <DashboardGrid {...active} />
-              : <DashboardList records={records} onClick={this.handleClick} />}
-            <DashboardOptions />
-          </div>
-        } />
+        <DashboardAction
+          option={option}
+          pushKey={pushKey}
+          resetUI={this.resetUI} />
+
+        {active
+          ? <DashboardGrid {...active} />
+          : <DashboardList
+              records={records}
+              onClick={this.selectGroup} />}
+
+        <DashboardOptions
+          selectOption={this.selectOption}
+          toggleOptions={this.toggleOptions}
+          menuVisible={menuVisible} />
       </div>
     )
   }
 }
 
-export default connect(
-  state => ({
-    option: state.ui.option
-  }),
-  Actions
-)(Dashboard)
+export default Dashboard

@@ -1,4 +1,6 @@
 import firebase from 'firebase'
+import * as Auth from './auth'
+import * as Database from './database'
 
 firebase.initializeApp({
   apiKey: 'AIzaSyBZ8bmsRvWKN8QcV4Al6cVux_b7BmCAoUg',
@@ -11,5 +13,4 @@ firebase.initializeApp({
 export const firebaseAuth = firebase.auth
 export const firebaseDatabase = firebase.database
 export const firebaseStorage = firebase.storage
-
-export { currentUser, userRef, recordsRef, storageRef } from './database'
+export { Database, Auth }

@@ -6,10 +6,10 @@ import Miss from 'react-router/Miss'
 import MatchWhenAuthed from './MatchWhenAuthed'
 import MatchWhenUnauthed from './MatchWhenUnauthed'
 import Header from 'containers/Header'
-import Dashboard from 'containers/Dashboard'
+import Home from 'containers/Home'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, userRef } from 'api'
+import { firebaseAuth, Database } from 'api'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -40,7 +40,7 @@ export class App extends Component {
   }
 
   loadUser(user) {
-    return userRef()
+    return Database.userRef()
       .once('value')
       .then(x => x.val())
       .then(x => !!x ? x : this.createUser(user))
@@ -48,7 +48,7 @@ export class App extends Component {
   }
 
   createUser({ displayName, email, photoURL, uid }) {
-    return userRef()
+    return Database.userRef()
       .update({ displayName, email, photoURL, uid })
       .then(_ => ({ displayName, email, photoURL, uid }))
   }
@@ -80,7 +80,7 @@ export class App extends Component {
                 authed={authed} />
               <MatchWhenAuthed
                 pattern='/'
-                component={Dashboard}
+                component={Home}
                 authed={authed} />
               <MatchWhenUnauthed
                 pattern='/'
