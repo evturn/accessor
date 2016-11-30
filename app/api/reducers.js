@@ -1,20 +1,20 @@
 import { combineReducers } from 'redux'
 
-const authReducr = (state={user: {}, authed: false, loading: true, open: false, error: {}}, action) => {
+const initialState = {
+  user: {},
+  authed: false,
+  loading: true,
+  open: false,
+  error: {}
+}
+
+const authReducr = (state=initialState, action) => {
   switch (action.type) {
 
     case 'STYLE_UPDATE':
     case 'AUTH_CHANGE':
-      return {
-        ...state,
-        ...action.payload
-      }
-
     case 'AUTH_ERROR':
-      return {
-        ...state,
-        ...action.payload,
-      }
+      return {...state, ...action.payload}
 
     default:
       return state
@@ -30,7 +30,6 @@ const uiReducer = (state={option: false}, action) => {
           ? false
           : action.payload.option
       }
-
 
       default:
         return state

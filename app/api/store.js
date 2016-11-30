@@ -9,14 +9,10 @@ export default function configureStore() {
     middleware.push(logger())
   }
 
-  const enhancers = []
-
-  const store = createStore(
+  return createStore(
     rootReducer,
     applyMiddleware(...middleware)
   )
-
-  return store
 }
 
 function thunkmasterFlex() {

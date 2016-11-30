@@ -21,7 +21,3 @@ export const locationChange = payload => {
 export const selectDashboardOption = option => {
   return {type: 'SELECT_DASHBOARD_OPTION', payload: { option }}
 }
-
-export const initUser = payload => {
-  return {type: 'INIT_USER', payload}
-}

@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Match from 'react-router/Match'
 import Dashboard from 'containers/Dashboard'
+import Settings from 'containers/Settings'
 import BackButton from 'components/Buttons/BackButton'
 import * as Database from 'api/database'
-import Settings from 'containers/Settings'
 import css from './style.css'
 
 export class Home extends Component {

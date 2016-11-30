@@ -1,8 +1,7 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Router from 'react-router/BrowserRouter'
 import Match from 'react-router/Match'
-import Miss from 'react-router/Miss'
 import MatchWhenAuthed from './MatchWhenAuthed'
 import MatchWhenUnauthed from './MatchWhenUnauthed'
 import Header from 'containers/Header'
@@ -86,9 +85,7 @@ export class App extends Component {
                 pattern='/'
                 component={Login}
                 authed={authed} />
-              <Miss render={_ => <h3>The fuck are you going?</h3>} />
-            </div>
-          }
+            </div>}
         </Router>
   }
 }

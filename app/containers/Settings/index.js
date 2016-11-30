@@ -36,7 +36,6 @@ export class Settings extends Component {
 
   render() {
     const { user, error } = this.props
-
     return (
       <div className={css.root}>
         <div className={css.details}>
@@ -45,18 +44,10 @@ export class Settings extends Component {
             style={{backgroundImage: `url(${user.photoURL})`}}/>
           <div className={css.name}>{user.displayName}</div>
         </div>
-        <Card
-          header="Connect accounts"
-          message={error.message}>
-          <AuthButton
-            service='google'
-            onClick={this.linkAccount('google')} />
-          <AuthButton
-            service='twitter'
-            onClick={this.linkAccount('twitter')} />
-          <AuthButton
-            service='github'
-            onClick={this.linkAccount('github')} />
+        <Card header='Connect accounts' message={error.message}>
+          <AuthButton service='google' onClick={this.linkAccount('google')} />
+          <AuthButton service='twitter' onClick={this.linkAccount('twitter')} />
+          <AuthButton service='github' onClick={this.linkAccount('github')} />
         </Card>
       </div>
     )

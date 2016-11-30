@@ -38,7 +38,7 @@ export class Login extends Component {
   render() {
     const { message } = this.props.error
     return (
-      <Card header="Sign In" message={message}>
+      <Card header='Sign In' message={message}>
         <AuthButton service='google' onClick={this.login('google')} />
         <AuthButton service='twitter' onClick={this.login('twitter')} />
         <AuthButton service='github' onClick={this.login('github')} />

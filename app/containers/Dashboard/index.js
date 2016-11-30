@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
-import Match from 'react-router/Match'
 import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
 import DashboardOptions from './DashboardOptions'
-import BackButton from 'components/Buttons/BackButton'
-import * as Database from 'api/database'
 import css from './style.css'
 
 export class Dashboard extends Component {
-
   render() {
-    const { selectGroup, selectOption, toggleOptions, option, records, active, pushKey, menuVisible } = this.props
+    const {
+      selectGroup, selectOption, toggleOptions,
+      option, records, active, pushKey, menuVisible
+    } = this.props
     return (
       <div className={css.root}>
         <DashboardAction
