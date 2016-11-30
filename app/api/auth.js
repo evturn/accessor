@@ -52,3 +52,10 @@ function providerError(service) {
     `Please use ${service} to log in so you can use both.`
   ].join('\n')
 }
+
+export const linkWithPopup = service => {
+  return firebase
+    .auth()
+    .currentUser
+    .linkWithPopup(providers[service])
+}

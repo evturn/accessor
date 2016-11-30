@@ -57,18 +57,22 @@ export class Dashboard extends Component {
     const { records, active, pushKey } = this.state
     return (
       <div className={css.root}>
-        {active
-          ? <div
-              onClick={this.clearActiveState}
-              className={css.back}>Back</div>
-          : null}
+        <Match pattern='/dashboard/settings' component={LinkAccounts} />
+        <Match pattern='/dashboard' exactly render={props =>
+          <div>
+            {active
+              ? <div
+                  onClick={this.clearActiveState}
+                  className={css.back}>Back</div>
+              : null}
 
-        <DashboardAction option={option} pushKey={pushKey} />
-        {active
-          ? <DashboardGrid {...active} />
-          : <DashboardList records={records} onClick={this.handleClick} />}
-        <Match pattern='/settings/account' component={LinkAccounts} />
-        <DashboardOptions />
+            <DashboardAction option={option} pushKey={pushKey} />
+            {active
+              ? <DashboardGrid {...active} />
+              : <DashboardList records={records} onClick={this.handleClick} />}
+            <DashboardOptions />
+          </div>
+        } />
       </div>
     )
   }

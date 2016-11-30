@@ -2,10 +2,19 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Card from 'components/Card'
 import AuthButton from 'components/Buttons/AuthButton'
-import { signInWithPopup, promptUserWithService, link } from 'api/auth'
+import * as Auth from 'api/auth'
 import css from './style.css'
 
 export class LinkAccounts extends Component {
+  constructor(props) {
+    super(props)
+    this.linkProviderAccount = ::this.linkProviderAccount
+  }
+
+  linkProviderAccount(service) {
+    return _ => Auth.linkWithPopup(service)
+  }
+
   render() {
     const { user, error } = this.props
 
@@ -17,13 +26,13 @@ export class LinkAccounts extends Component {
           message={error.message}>
           <AuthButton
             service='google'
-            onClick={_ => console.log('google')} />
+            onClick={this.linkProviderAccount('google')} />
           <AuthButton
             service='twitter'
-            onClick={_ => console.log('twitter')} />
+            onClick={this.linkProviderAccount('twitter')} />
           <AuthButton
             service='github'
-            onClick={_ => console.log('github')} />
+            onClick={this.linkProviderAccount('github')} />
         </Card>
       </div>
     )
