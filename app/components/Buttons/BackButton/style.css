@@ -1,0 +1,10 @@
+.root {
+  min-height: 1px;
+}
+
+.btn {
+  margin: 10px 15px 0;
+  color: #06abfc;
+  width: 45px;
+  height: 55px;
+}

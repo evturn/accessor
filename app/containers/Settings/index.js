@@ -39,7 +39,12 @@ export class Settings extends Component {
 
     return (
       <div className={css.root}>
-        <div className={css.av} style={{backgroundImage: `url(${user.photoURL})`}}/>
+        <div className={css.details}>
+          <div
+            className={css.av}
+            style={{backgroundImage: `url(${user.photoURL})`}}/>
+          <div className={css.name}>{user.displayName}</div>
+        </div>
         <Card
           header="Connect accounts"
           message={error.message}>

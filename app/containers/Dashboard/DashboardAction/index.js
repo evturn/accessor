@@ -3,7 +3,7 @@ import QuickText from './QuickText'
 import QuickUpload from './QuickUpload'
 import QuickURL from './QuickURL'
 
-export const DashboardAction = ({ option, pushKey, resetUI:onClose }) => {
+export const DashboardAction = ({ option, pushKey }) => {
   switch (option) {
     case 'write':
       return <QuickText pushKey={pushKey} />

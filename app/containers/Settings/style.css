@@ -1,14 +1,32 @@
 .root {
-  position: absolute;
+  position: relative;
   width: 100%;
-  top: 0;
+}
+
+.details {
+  padding: 15px;
+}
+
+.details:after {
+  display: block;
+  content: '';
+  clear: both;
 }
 
 .av {
   display: block;
+  float: left;
   height: 50px;
   width: 50px;
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 7px;
+}
+
+.name {
+  display: inline-block;
+  float: right;
+  text-align: left;
+  width: calc(100% - 70px);
+  font-size: 20px;
 }
