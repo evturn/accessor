@@ -1,18 +1,33 @@
 .root {
-  display: flex;
+  display: block;
+  position: relative;
   height: 100%;
-  box-sizing: border-box;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  width: 100%;
+  padding: 15px;
+  margin: 0 auto;
 }
 
 .item {
   display: inline-block;
-  width: 100px;
+  position: relative;
+  width: 25%;
   height: 100px;
+}
+
+.bg {
+  position: absolute;
+  height: 85%;
+  width: 85%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  padding: 40px 40px;
   background-repeat: no-repeat;
   background-size: 150%;
   background-position-y: 50%;
   background-position-x: 50%;
+  margin: 0 auto;
 }

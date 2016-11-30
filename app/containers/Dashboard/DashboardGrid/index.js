@@ -10,8 +10,11 @@ export class DashboardGrid extends Component {
         {data.map(x =>
           <div
             className={css.item}
-            key={x.id}
-            style={{backgroundImage: `url(${x.url})`}} />
+            key={x.id}>
+            <div
+              className={css.bg}
+              style={{backgroundImage: `url(${x.url})`}} />
+          </div>
         )}
       </div>
     )

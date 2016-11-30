@@ -4,6 +4,7 @@ import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
 import DashboardOptions from './DashboardOptions'
+import ArrowBackIcon from 'components/Icons/ArrowBack'
 import * as Database from 'api/database'
 import css from './style.css'
 
@@ -70,9 +71,9 @@ export class Dashboard extends Component {
     return (
       <div className={css.root}>
         {active
-          ? <div
-              onClick={this.resetUI}
-              className={css.back}>Back</div>
+          ? <div onClick={this.resetUI}>
+              <ArrowBackIcon className={css.back} />
+            </div>
           : null}
 
         <DashboardAction
