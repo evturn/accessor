@@ -3,13 +3,13 @@ import { connect } from 'react-redux'
 import Router from 'react-router/BrowserRouter'
 import Match from 'react-router/Match'
 import Miss from 'react-router/Miss'
-import MatchWhenAuthed from 'containers/MatchWhenAuthed'
-import MatchWhenUnauthed from 'containers/MatchWhenUnauthed'
+import MatchWhenAuthed from './MatchWhenAuthed'
+import MatchWhenUnauthed from './MatchWhenUnauthed'
 import Header from 'containers/Header'
 import Dashboard from 'containers/Dashboard'
 import Login from 'containers/Login'
 import LoadingIndicator from 'components/LoadingIndicator'
-import { firebaseAuth, firebaseDatabase } from 'api'
+import { firebaseAuth, userRef } from 'api'
 import * as Actions from 'api/actions'
 import css from './style.css'
 
@@ -20,13 +20,14 @@ export class App extends Component {
     this.createUser = ::this.createUser
     this.styleUpdate = ::this.styleUpdate
     this.loadUser = ::this.loadUser
+    this.authStateChange = ::this.authStateChange
   }
 
   componentDidMount() {
     this.removeListener = firebaseAuth()
-      .onAuthStateChanged(user => user
-        ? this.loadUser(user)
-        : this.props.authChange({loading: false})
+      .onAuthStateChanged(x => x
+        ? this.loadUser(x)
+        : this.authStateChange({authed: false})
       )
   }
 
@@ -34,30 +35,28 @@ export class App extends Component {
     this.removeListener()
   }
 
+  authStateChange(data) {
+    this.props.authChange({loading: false, ...data})
+  }
+
   loadUser(user) {
-    const { initUser, authChange } = this.props
-    authChange({loading: false, authed: true})
-    firebaseDatabase()
-      .ref()
-      .child(`users/${user.uid}`)
+    return userRef()
       .once('value')
       .then(x => x.val())
       .then(x => !!x ? x : this.createUser(user))
-      .then(initUser)
+      .then(user => this.authStateChange({authed: true, user}))
   }
 
-  createUser(user) {
-    const { displayName, email, photoURL, uid } = user
-    return firebaseDatabase()
-      .ref()
-      .update({[`users/${uid}`]: { displayName, email, photoURL, uid }})
+  createUser({ displayName, email, photoURL, uid }) {
+    return userRef()
+      .update({ displayName, email, photoURL, uid })
       .then(_ => ({ displayName, email, photoURL, uid }))
   }
 
   signOut(router) {
     return _ => {
       firebaseAuth().signOut()
-      this.props.authChange({authed: false})
+      this.props.authChange({authed: false, user: {}})
       this.styleUpdate()
       router.transitionTo('/')
     }
@@ -99,7 +98,7 @@ export default connect(
     authed: state.auth.authed,
     loading: state.auth.loading,
     open: state.auth.open,
-    user: state.user,
+    user: state.auth.user,
   }),
   Actions
 )(App)

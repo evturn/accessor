@@ -33,6 +33,6 @@ export class LinkAccounts extends Component {
 export default connect(
   state => ({
     error: state.auth.error,
-    user: state.user,
+    user: state.auth.user,
   })
 )(LinkAccounts)

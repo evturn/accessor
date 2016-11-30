@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Card from 'components/Card'
 import AuthButton from 'components/Buttons/AuthButton'
-import { signInWithPopup, promptUserWithService, link } from 'api/auth'
+import * as Auth from 'api/auth'
 import * as Actions from 'api/actions'
 
 export class Login extends Component {
@@ -10,30 +10,29 @@ export class Login extends Component {
     super(props)
     this.login = ::this.login
     this.throwError = ::this.throwError
+    this.initProviderSignIn = ::this.initProviderSignIn
     this.linkProviderAccounts = ::this.linkProviderAccounts
-    this.requireServiceAsProvider = ::this.requireServiceAsProvider
   }
 
   login(service) {
     return _ => this.props.error.credential
       ? this.linkProviderAccounts(service)
-      : this.requireServiceAsProvider(service)
+      : this.initProviderSignIn(service)
   }
 
   throwError(error) {
     this.props.authError({ error })
   }
 
-  linkProviderAccounts(service) {
-    signInWithPopup(service)
-      .then(_ => link(this.props.error.credential))
-      .catch(this.throwError)
+  initProviderSignIn(service) {
+    Auth.signInWithPopup(service)
+      .catch(e => this.throwError(Auth.promptUserWithService(e)))
   }
 
-  requireServiceAsProvider(service) {
-    signInWithPopup(service)
-      .catch(promptUserWithService)
-      .then(this.throwError)
+  linkProviderAccounts(service) {
+    Auth.signInWithPopup(service)
+      .then(_ => Auth.link(this.props.error.credential))
+      .catch(this.throwError)
   }
 
   render() {

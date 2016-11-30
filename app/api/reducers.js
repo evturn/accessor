@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-const authReducr = (state={authed: false, loading: true, open: false, error: {}}, action) => {
+const authReducr = (state={user: {}, authed: false, loading: true, open: false, error: {}}, action) => {
   switch (action.type) {
 
     case 'STYLE_UPDATE':
@@ -15,16 +15,6 @@ const authReducr = (state={authed: false, loading: true, open: false, error: {}}
         ...state,
         ...action.payload,
       }
-
-    default:
-      return state
-  }
-}
-
-const userReducer = (state={}, action) => {
-  switch (action.type) {
-    case 'INIT_USER':
-      return {...action.payload}
 
     default:
       return state
@@ -50,5 +40,4 @@ const uiReducer = (state={option: false}, action) => {
 export default combineReducers({
   auth: authReducr,
   ui: uiReducer,
-  user: userReducer,
 })

@@ -5,7 +5,7 @@ import LinkAccounts from 'containers/LinkAccounts'
 import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
-import { firebaseDatabase, firebaseAuth } from 'api/auth'
+import { firebaseDatabase, firebaseAuth } from 'api'
 import DashboardOptions from './DashboardOptions'
 import * as Actions from 'api/actions'
 import css from './style.css'
@@ -32,7 +32,8 @@ export class Dashboard extends Component {
   }
 
   updateData(snap) {
-    this.setState({records: this.flattenSnapshot(snap.val())})
+    const val = snap.val()
+    this.setState({records: !!val ? this.flattenSnapshot(val) : []})
   }
 
   handleClick(id) {
