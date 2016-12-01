@@ -1,28 +1,24 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { firebaseStorage, firebaseAuth } from 'api/auth'
 import css from './style.css'
 
 export class DropTarget extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      dragging: false,
-      files: [],
-      uploads: [],
-    }
     this.onDrop = ::this.onDrop
     this.onDragOver = ::this.onDragOver
     this.onDragEnter = ::this.onDragEnter
     this.onDragLeave = ::this.onDragLeave
-    this.readFile = ::this.readFile
+  }
+
+  state = {
+    dragging: false
   }
 
   componentDidMount() {
     window.addEventListener('mouseup', this.onDragLeave)
     window.addEventListener('dragenter', this.onDragEnter)
     window.addEventListener('dragover', this.onDragOver)
-    this.target.addEventListener('dragleave', this.onDragLeave)
+    this.containerRef.addEventListener('dragleave', this.onDragLeave)
     window.addEventListener('drop', this.onDrop)
   }
 
@@ -30,7 +26,7 @@ export class DropTarget extends Component {
     window.removeEventListener('mouseup', this.onDragLeave)
     window.removeEventListener('dragenter', this.onDragEnter)
     window.addEventListener('dragover', this.onDragOver)
-    this.target.removeEventListener('dragleave', this.onDragLeave)
+    this.containerRef.removeEventListener('dragleave', this.onDragLeave)
     window.removeEventListener('drop', this.onDrop)
   }
 
@@ -52,44 +48,19 @@ export class DropTarget extends Component {
   }
 
   onDrop(e) {
+    this.setState({dragging: false})
     e.preventDefault()
-    const reader = new FileReader()
-    this.setState({
-      dragging: false,
-      files: Array.from(e.dataTransfer.files),
-    })
-    this.state.files.map(this.readFile)
-  }
-
-  readFile(file) {
-    const reader = new FileReader()
-    reader.addEventListener('load', _ => {
-      this.setState({
-        uploads: this.state.uploads.concat({
-          name: file.name,
-          src: reader.result,
-        })
-      })
-    this.props.onUpload(file)
-    }, false)
-    if (file) { reader.readAsDataURL(file) }
+    this.props.onDrop(e)
   }
 
   render() {
-    const { dragging, files, uploads } = this.state
+    const { children } = this.props
+    const { dragging } = this.state
     return (
       <div className={css.root}>
-        {this.props.children}
-        {uploads.map((x, i) =>
-          <div key={i} className={css.preview}>
-            <div
-              className={css.img}
-              style={{backgroundImage: `url(${x.src})`}} />
-            <div className={css.name}>{x.name}</div>
-          </div>
-        )}
+        {children}
         <div
-          ref={x => this.target = x}
+          ref={x => this.containerRef = x}
           className={`${dragging ? css.show : css.hide}`}>
           Drop to upload
         </div>
@@ -98,8 +69,4 @@ export class DropTarget extends Component {
   }
 }
 
-export default connect(
-  state => ({
-    ...state
-  })
-)(DropTarget)
+export default DropTarget

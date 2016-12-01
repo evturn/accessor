@@ -6,33 +6,6 @@
   margin: 0 auto;
 }
 
-.img {
-  background-size: 150%;
-  background-position-y: 50%;
-  background-position-x: 50%;
-  background-repeat: no-repeat;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto;
-}
-
-.preview {
-  display: inline-block;
-  width: 50%;
-  padding: 10px;
-  text-align: center;
-  border-top: 1px solid #eee;
-  border-right: 1px solid #eee;
-}
-
-.name {
-  margin-top: 10px;
-  background-color: #eee;
-  color: #000;
-  font-size: 11px;
-  padding: 5px;
-}
-
 .target {
   display: block;
   position: absolute;

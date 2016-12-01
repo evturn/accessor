@@ -8,34 +8,64 @@ import css from './style.css'
 export class QuickUpload extends Component {
   constructor(props) {
     super(props)
-    this.onUpload = ::this.onUpload
-    this.onUploadComplete = ::this.onUploadComplete
+    this.onDrop = ::this.onDrop
+    this.handleFile = ::this.handleFile
+    this.handleStorageTask = ::this.handleStorageTask
+    this.showThumbnailPreview = ::this.showThumbnailPreview
+    this.onStorageTaskComplete = ::this.onStorageTaskComplete
   }
 
-  onUpload(file) {
-    const task = Database.storageRef().child(file.name).put(file)
-    const event = Database.firebaseStorage.TaskEvent.STATE_CHANGED
+  state = {
+    uploads: [],
+  }
 
-    task.on(event, {
+  onDrop(e) {
+    Array.from(e.dataTransfer.files).map(this.handleFile)
+  }
+
+  handleFile(file) {
+    const reader = new FileReader()
+    reader.addEventListener('load', _ => {
+      this.showThumbnailPreview({ name: file.name, src: reader.result})
+      this.handleStorageTask(file)
+    }, false)
+    reader.readAsDataURL(file)
+  }
+
+  showThumbnailPreview(data) {
+    const { uploads } = this.state
+    this.setState({uploads: [data].concat(uploads)})
+  }
+
+  handleStorageTask(file) {
+    const taskEvent = Database.firebaseStorage.TaskEvent.STATE_CHANGED
+    const task = Database.storageRef().child(file.name).put(file)
+    task.on(taskEvent, {
       next:     x => console.log((x.bytesTransferred / x.totalBytes) * 100),
       error:    e => console.log(e),
-      complete: _ => this.onUploadComplete(task.snapshot)
+      complete: _ => this.onStorageTaskComplete(task.snapshot)
     })
   }
 
-  onUploadComplete({ downloadURL, metadata }) {
-    if (!!downloadURL) {
-      const { contentType, timeCreated, name } = metadata
-      Database.recordsRef()
-        .child(this.props.pushKey)
-        .push({url: downloadURL, contentType, timeCreated, name})
+  onStorageTaskComplete({ downloadURL:url, metadata: { name } }) {
+    const { pushKey } = this.props
+    if (!!url) {
+      Database.recordsRef().child(pushKey).push({ url, name })
     }
   }
 
   render() {
+    const { uploads } = this.state
     return (
-      <DropTarget onUpload={this.onUpload}>
+      <DropTarget onDrop={this.onDrop}>
         <QuickHeader text='Upload' />
+        {uploads.map((x, i) =>
+          <div key={i} className={css.preview}>
+            <div
+              className={css.img}
+              style={{backgroundImage: `url(${x.src})`}} />
+            <div className={css.name}>{x.name}</div>
+          </div>)}
       </DropTarget>
     )
   }
