@@ -14,6 +14,7 @@
 }
 
 .li {
+  position: relative;
   height: 70px;
   text-align: center;
   line-height: 70px;

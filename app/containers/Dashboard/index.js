@@ -3,6 +3,7 @@ import DashboardAction from './DashboardAction'
 import DashboardGrid from './DashboardGrid'
 import DashboardList from './DashboardList'
 import DashboardOptions from './DashboardOptions'
+import { firebaseAuth } from 'api'
 import css from './style.css'
 
 export class Dashboard extends Component {
